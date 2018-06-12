@@ -1,0 +1,12 @@
+{
+  "name": "search-collector",
+  "version": "0.0.9",
+  "description": "Search Collector - Search metrics collection SDK",
+  "dependencies": {
+    "scrollmonitor": "^1.2.3",
+    "sentinel-js": "0.0.4"
+  },
+  "publishConfig" : {
+    "registry" : "https://nexus.commerce-experts.com/content/repositories/npm-hosted/"
+  }
+}

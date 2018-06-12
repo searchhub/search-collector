@@ -1,0 +1,31 @@
+{
+  "name": "search-collector",
+  "version": "0.0.9",
+  "description": "Search Collector - Search metrics collection SDK",
+  "scripts": {
+    "watch": "watchify src/main/main.js -o demo/search-collector.js -dv",
+    "server": "node src/test/util/server.js demo",
+    "start": "npm-run-all -p watch server",
+    "nodeunit": "nodeunit src/test/*Test.js",
+    "test-browserify": "browserify src/main/main.js > demo/search-collector.js",
+    "test": "npm-run-all -s test-browserify nodeunit",
+    "dist-prepare": "rm -rf build && mkdir -p build && cp package-dist.json build/package.json",
+    "dist-browserify": "browserify --standalone SearchCollector src/main/main.js | derequire > build/index.js",
+    "dist": "npm-run-all -s dist-prepare dist-browserify && cd build && npm pack"
+  },
+  "devDependencies": {
+    "browserify": "^5.10.0",
+    "chalk": "^2.4.1",
+    "decode-uri-component": "^0.2.0",
+    "derequire": "^2.0.6",
+    "nodeunit": "^0.11.1",
+    "npm-run-all": "^4.0.2",
+    "puppeteer": "^0.9.0",
+    "uglify-js": "^3.0.28",
+    "watchify": "^3.9.0"
+  },
+  "dependencies": {
+    "scrollmonitor": "^1.2.3",
+    "sentinel-js": "0.0.4"
+  }
+}
