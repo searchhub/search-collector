@@ -14,15 +14,15 @@
     "dist": "npm-run-all -s dist-prepare dist-browserify && cd build && npm pack"
   },
   "devDependencies": {
-    "browserify": "^5.10.0",
+    "browserify": "^16.2.2",
     "chalk": "^2.4.1",
     "decode-uri-component": "^0.2.0",
     "derequire": "^2.0.6",
-    "nodeunit": "^0.11.1",
+    "nodeunit": "^0.11.2",
     "npm-run-all": "^4.0.2",
-    "puppeteer": "^0.9.0",
+    "puppeteer": "^1.5.0",
     "uglify-js": "^3.0.28",
-    "watchify": "^3.9.0"
+    "watchify": "^3.11.0"
   },
   "dependencies": {
     "scrollmonitor": "^1.2.3",
