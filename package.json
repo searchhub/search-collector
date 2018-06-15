@@ -9,7 +9,7 @@
     "nodeunit": "nodeunit src/test/*Test.js",
     "test-browserify": "browserify src/main/main.js > demo/search-collector.js",
     "test": "npm-run-all -s test-browserify nodeunit",
-    "dist-prepare": "rm -rf build && mkdir -p build && cp package-dist.json build/package.json",
+    "dist-prepare": "rm -rf build && mkdir -p build && cp README.md LICENSE build/ && cp package-dist.json build/package.json",
     "dist-browserify": "browserify --standalone SearchCollector src/main/main.js | derequire > build/index.js",
     "dist": "npm-run-all -s dist-prepare dist-browserify && cd build && npm pack"
   },
