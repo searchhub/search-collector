@@ -9,6 +9,7 @@ var PositionResolver = require("./resolvers/PositionResolver");
 var FilterClickCollector = require("./collectors/FilterClickCollector");
 var ProductClickCollector = require("./collectors/ProductClickCollector");
 var SearchEventResultCollector = require("./collectors/SearchEventResultCollector");
+var GenericEventCollector = require("./collectors/GenericEventCollector");
 var Query = require("./query/Query");
 var Util = require("./utils/Util");
 
@@ -25,6 +26,7 @@ var SearchCollector = {
   "FilterClickCollector" : FilterClickCollector,
   "ProductClickCollector" : ProductClickCollector,
   "SearchEventResultCollector" : SearchEventResultCollector,
+  "GenericEventCollector" : GenericEventCollector,
   "Query" : Query,
   "Util" : Util
 }
