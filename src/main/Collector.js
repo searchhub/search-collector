@@ -23,7 +23,7 @@ class Collector {
 
     // Writer pipeline, add/remove pieces according to use case
     // This writer pipeline will send Base64 encoded array of json events
-    var writer =  isSQS(endpoint) ? new SQSEventWriter(endpoint) : new RestEventWriter(endpoint);
+    var writer =  isSQS(endpoint, this.options.sqs) ? new SQSEventWriter(endpoint) : new RestEventWriter(endpoint);
     writer = new Base64EncodeWriter(writer);
     writer = new BufferingWriter(writer);
     writer = new JSONEnvelopeWriter(writer, this.options);
@@ -35,7 +35,6 @@ class Collector {
 }
 module.exports = Collector;
 
-// TODO handle SQS compatible messaging system implementations, investigate parameter requirements
-function isSQS(endpoint) {
-  return endpoint.indexOf("sqs") != -1 && endpoint.indexOf("amazonaws.com") != -1;
+function isSQS(endpoint, forceSQS) {
+  return forceSQS || (endpoint.indexOf("sqs") != -1 && endpoint.indexOf("amazonaws.com") != -1);
 }
