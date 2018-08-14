@@ -7,7 +7,7 @@ var sentinel = require('sentinel-js');
  * When an element is found in the DOM, a function provided at construction time get invoked to collect data points
  * from the element.
  */
-class ProductClickCollector {
+class ProductListCollector {
 
   /**
    * Construct a click collector
@@ -49,4 +49,4 @@ class ProductClickCollector {
     sentinel.on(this.selectorExpression, handler);
   }
 }
-module.exports = ClickCollector;
+module.exports = ProductListCollector;
