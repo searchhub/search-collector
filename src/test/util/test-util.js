@@ -2,6 +2,7 @@ const urldecode = require('decode-uri-component');
 
 module.exports.decode = decode;
 module.exports.fetch = fetch;
+module.exports.fetchAll = fetchAll;
 
 function decode(data) {
   return urldecode(Buffer.from(data, 'base64').toString('utf-8'));
@@ -56,4 +57,28 @@ async function fetch(stack, type) {
     }
 
     return elem;
+}
+
+async function fetchAll(stack, type) {
+    var result = [];
+    while (result.length == 0) {
+      try {
+        let data = await block(stack);
+
+        // The pipeline uses buffering, pushing arrays even if there only a single data point
+        // This method unwraps only the first element
+        let arr = JSON.parse(decode(data));
+
+        for (let e of arr) {
+          if (!type || e.type == type) {
+            result.push(e);
+          }
+        }
+      } catch (e) {
+        // We'll end here if the block fails and the promise is rejected
+        break;
+      }
+    }
+
+    return result;
 }

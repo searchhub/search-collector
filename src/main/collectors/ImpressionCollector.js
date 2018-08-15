@@ -46,9 +46,16 @@ class ImpressionCollector {
       })
     };
 
+
+    // This section is commented because as of present, browsers will
+    // trigger reflow when the sentinel library attaches its animation css
+    // rules, effectively invoking itself even for elements that are already in
+    // the DOM. This makes the explicit call to the querySelector redundant, in
+    // fact it causes problems since it's firing events twice for the same element
+    
     // For all elements currently present in the DOM
-    var elements = document.querySelectorAll(this.selectorExpression);
-    elements.forEach(handler);
+    // var elements = document.querySelectorAll(this.selectorExpression);
+    // elements.forEach(handler);
 
     // For elements inserted dynamically in the DOM
     sentinel.on(this.selectorExpression, handler);

@@ -599,12 +599,8 @@
 				"position" : element.parentElement.getAttribute("data-myorder")
 			}
 		}));
-		collector.add(new SearchCollector.ProductListCollector(".cd-add-to-cart", element => {
-			return {
-				"id" : element.getAttribute("id"),
-				"position" : element.parentElement.getAttribute("data-myorder")
-			}
-		}));
+		collector.add(new SearchCollector.ProductListCollector(".cd-add-to-cart", element => element.getAttribute("id")));
+
 	  collector.start();
 	});
 </script>
