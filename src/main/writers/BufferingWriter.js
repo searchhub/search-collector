@@ -15,10 +15,11 @@ class BufferingWriter {
 
     var self = this;
 
-    // TODO check how hard it is to support older IE version here
-    window.addEventListener("beforeunload", function() {
-      self.flush(true);
-    })
+    // Disable temporary due to misfiring and causing double entries
+    // TODO investigate further
+    // window.addEventListener("beforeunload", function() {
+    //  self.flush(true);
+    // })
   }
 
   write(data) {
