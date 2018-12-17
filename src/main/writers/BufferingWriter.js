@@ -12,14 +12,6 @@ class BufferingWriter {
     this.delegate = delegate;
     this.queue = new LocalStorageQueue();
     this.timer = setTimeout(this.flush.bind(this), 1000);
-
-    var self = this;
-
-    // Disable temporary due to misfiring and causing double entries
-    // TODO investigate further
-    // window.addEventListener("beforeunload", function() {
-    //  self.flush(true);
-    // })
   }
 
   write(data) {
