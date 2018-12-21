@@ -1,0 +1,46 @@
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" href="css/main.css">
+    <script type="text/javascript" src="js/search-engine.js"></script>
+    <script type="text/javascript" src="js/render.js"></script>
+    <script type="text/javascript" src="js/basket.js"></script>
+    <script>
+      window.addEventListener('load', e => {
+        let engine = new SearchEngine();
+        let basket = new Basket();
+        let render = new Render();
+
+        let container = document.getElementById('basket-content');
+        for (let id of basket.list()) {
+          let item = engine.get(id);
+          render.basketEntry(container, item);
+        }
+      });
+    </script>
+  </head>
+<body>
+  <div class="details">
+      <header><h2>Basket</h2></header>
+
+      <table class="basket">
+          <thead>
+              <tr>
+                  <th>Item</th>
+                  <th>Name</th>
+                  <th>Price</th>
+              </tr>
+          </thead>
+          <tbody id="basket-content">
+          </tbody>
+          <tfoot>
+            <tr>
+              <td colspan="3" align="right">
+                <a href="index.html">Back to catalog</a> | <a href="checkout.html">Finalize order</a>
+              </td>
+            </tr>
+          </tfoot>
+      </table>
+  </div>
+</body>
+</html>
