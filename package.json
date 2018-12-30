@@ -6,7 +6,7 @@
   "homepage": "https://github.com/searchhub/search-collector",
   "scripts": {
     "watch": "watchify src/main/main.js -o demo/search-collector.js -dv",
-    "server": "node src/test/util/server.js demo",
+    "server": "node src/test/util/server.js demo /tmp",
     "start": "npm-run-all -p watch server",
     "nodeunit": "nodeunit src/test/*Test.js",
     "test-browserify": "browserify src/main/main.js > demo/search-collector.js",
