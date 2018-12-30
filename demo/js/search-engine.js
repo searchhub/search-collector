@@ -38,12 +38,12 @@ class SearchEngine {
       {id: 'product_1267', brand: 'Dummy', category: 'Men', name: 'Purple Unisex Jacket', price: 99, image: 'images/purple_jacket.png'},
       {id: 'product_1268', brand: 'Flare', category: 'Women', name: 'Yellow Women Sneaker', price: 99, image: 'images/yellow_sneaker.png'},
       {id: 'product_1269', brand: 'Dummy', category: 'Men', name: 'Brown Women Boot', price: 99, image: 'images/brown_boot.png'},
-
     ]
   }
 
   search(query, filter) {
-    return this.data.filter(e => {
+
+    let data = this.data.filter(e => {
       let match = query ? e.name.toLowerCase().indexOf(query.toLowerCase()) !== -1 : true;
 
       if (filter) {
@@ -54,6 +54,10 @@ class SearchEngine {
 
       return match;
     });
+
+    this.fireEvent(query, filter, data.length);
+
+    return data;
   }
 
   facets(result) {
@@ -78,5 +82,20 @@ class SearchEngine {
 
   get(id) {
     return this.data.find(e => e.id === id);
+  }
+
+  fireEvent(query, filter, count) {
+    let eventData = {"search" : query, "count" : count};
+
+    if (filter) {
+      let key = filter[0].toLowerCase();
+      let value = filter[1].toLowerCase();
+      eventData.filter = key + '=' + value;
+    } else {
+      eventData.filter = "";
+    }
+
+    var ev = new CustomEvent("filter", {"detail" : eventData});
+    window.dispatchEvent(ev);
   }
 }

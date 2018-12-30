@@ -6,6 +6,7 @@ class Render {
     div.addEventListener('click', e => {
       window.location.href = "product.html?id=" + item.id;
     });
+    div.setAttribute("id", item.id);
 
     let img = new Image(300,300);
     img.src = item.image;
@@ -25,6 +26,8 @@ class Render {
     for (let key of Object.keys(facet.values)) {
       let count = facet.values[key];
       let li = document.createElement('li');
+      li.classList.add('facet');
+      li.setAttribute('data-filter', facet.name.toLowerCase() + '=' + key);
       li.appendChild(document.createTextNode(key + ' (' + count + ')'));
       li.addEventListener('click', e => {
         listener([facet.name, key]);

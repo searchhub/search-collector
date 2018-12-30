@@ -5,6 +5,7 @@
   <script type="text/javascript" src="js/search-engine.js"></script>
   <script type="text/javascript" src="js/render.js"></script>
   <script type="text/javascript" src="js/basket.js"></script>
+  <script type="text/javascript" src="js/collector-integration.js"></script>
   <script>
     let engine = new SearchEngine();
     let render = new Render();
@@ -32,12 +33,16 @@
           search(phrase, filter);
         });
       }
+
+      return result;
     }
     
     window.addEventListener('load', e => {
       document.getElementById('search-button').addEventListener("click", e => {
         let phrase = document.getElementById('search-box').value;
-        search(phrase);
+
+        let result = search(phrase);
+        window.dispatchEvent(new CustomEvent("search", {"detail" : {"keywords" : phrase, "count" : result.length}}));
       });
       document.getElementById('basket-count').innerText = '(' + basket.list().length + ')';
 
@@ -58,5 +63,6 @@
       <section class="product-grid" id="product-grid">
       </section>
 </div>
+<script type="text/javascript" src="search-collector.js"></script>
 </body>
 </html>
