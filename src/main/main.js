@@ -11,6 +11,7 @@ var ProductClickCollector = require("./collectors/ProductClickCollector");
 var ProductListCollector = require("./collectors/ProductListCollector");
 var SearchEventResultCollector = require("./collectors/SearchEventResultCollector");
 var GenericEventCollector = require("./collectors/GenericEventCollector");
+var Trail = require("./query/Trail");
 var Query = require("./query/Query");
 var Util = require("./utils/Util");
 
@@ -29,6 +30,7 @@ var SearchCollector = {
   "ProductListCollector" : ProductListCollector,
   "SearchEventResultCollector" : SearchEventResultCollector,
   "GenericEventCollector" : GenericEventCollector,
+  "Trail" : Trail,
   "Query" : Query,
   "Util" : Util
 }

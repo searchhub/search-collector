@@ -2,7 +2,7 @@
  * Wrap the events in a JSON envelope, enrich each record with timestamp and if
  * available - session, query and channel information.
  *
- * If the options passed ot the writer contain debug=true, this writer will also 
+ * If the options passed ot the writer contain debug=true, this writer will also
  * log to the console
  */
 class JSONEnvelopeWriter {
@@ -11,6 +11,7 @@ class JSONEnvelopeWriter {
       this.delegate = delegate;
       this.sessionResolver = options.sessionResolver;
       this.queryResolver = options.queryResolver;
+      this.trailResolver = options.trailResolver;
       this.debug = options.debug ? true : false;
       this.channel = options.channel;
     }
@@ -25,7 +26,22 @@ class JSONEnvelopeWriter {
       }
 
       if (this.queryResolver) {
-        data.query = this.queryResolver().toString();
+        let q = this.queryResolver();
+        if (!q) {
+          // See if we have a product id and a trail for it. This means we
+          // are collecting data for an event that does not have a query context
+          // on the page anymore but we want to assosiate the event with the query
+          // context of the original search result
+          if (data.id && this.trailResolver) {
+            let trail = this.trailResolver.fetch(data.id);
+            if (trail && trail.query) {
+              data.query = trail.query;
+              data.queryTime = trail.timestamp;
+            }
+          }
+        } else {
+          data.query = q;
+        }
       }
 
       if (this.channel) {

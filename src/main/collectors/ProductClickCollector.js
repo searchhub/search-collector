@@ -5,8 +5,34 @@ var ClickCollector = require("./ClickCollector");
  */
 class ProductClickCollector extends ClickCollector {
 
-  constructor(selector, collector) {
-    super(selector, collector, "product");
+  constructor(selector, resolvers) {
+    super(selector, "product");
+    this.idResolver = resolvers.idResolver;
+    this.positionResolver = resolvers.positionResolver;
+    this.trailResolver = resolvers.trailResolver;
+    // TODO validate ^
+  }
+
+  /**
+  * Collect the product click information from the element
+  * @override
+  */
+  collect(element) {
+    let data = {
+      "id" : this.idResolver(element)
+    }
+
+    if (this.positionResolver) {
+      data.position = this.positionResolver(element);
+    }
+
+    if (this.trailResolver) {
+      // Register that this product journey into potential purchase started
+      // with this query
+      this.trailResolver.register(data.id);
+    }
+
+    return data;
   }
 }
 

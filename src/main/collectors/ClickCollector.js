@@ -17,10 +17,17 @@ class ClickCollector {
    * @param {function} attributeCollector - A function to be triggered on click of the element, intended to collect specific element data
    * @param {string} type - The type of element click to report
    */
-  constructor(selectorExpression, attributeCollector, type) {
+  constructor(selectorExpression, type) {
       this.selectorExpression = selectorExpression;
-      this.attributeCollector = attributeCollector;
       this.type = type ? type : "click";
+  }
+
+  /**
+  * Abstract collection method, must be overriden in the subclasses
+  * @abstract
+  */
+  collect(element) {
+    return undefined;
   }
 
   /**
@@ -33,7 +40,7 @@ class ClickCollector {
 
     var handler = el => {
       el.addEventListener("click", ev => {
-          var payload = this.attributeCollector(el);
+          var payload = this.collect(el);
           if (payload) {
             writer.write({
               "type" : this.type,
