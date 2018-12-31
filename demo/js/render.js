@@ -7,6 +7,7 @@ class Render {
       window.location.href = "product.html?id=" + item.id;
     });
     div.setAttribute("id", item.id);
+    div.setAttribute("data-price", item.price);
 
     let img = new Image(300,300);
     img.src = item.image;
@@ -52,6 +53,10 @@ class Render {
     container.appendChild(document.createElement('br'));
 
     let button = document.createElement("button");
+    button.setAttribute("id", "add-to-basket");
+    button.setAttribute("data-product", item.id);
+    button.setAttribute("data-price", item.price);
+
     button.type = "button";
     button.addEventListener('click', e => {
       basketListener(item.id);
@@ -63,12 +68,14 @@ class Render {
 
   basketEntry(container, item) {
     let tr = document.createElement("tr");
-          
+    tr.setAttribute("data-product", item.id);
+    tr.setAttribute("data-price", item.price);
+
     let img = new Image(100, 100);
     img.src = item.image;
 
     let td = document.createElement("td");
-    td.setAttribute("align", "center");
+    td.setAttribute("align", "center");    
     td.append(img);
     tr.appendChild(td);
 

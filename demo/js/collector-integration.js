@@ -25,10 +25,12 @@ window.addEventListener("load", function() {
 
       return q.toString();
   };
-
+  var sessionResolver = new SearchCollector.CookieSessionResolver();
+  var trailResolver = new SearchCollector.Trail(queryResolver, sessionResolver);
   var collector = new SearchCollector.Collector({
-    "sessionResolver" : new SearchCollector.CookieSessionResolver(),
+    "sessionResolver" : sessionResolver,
     "queryResolver" : queryResolver,
+    "trailResolver" : trailResolver,
     "endpoint" : "/collector",
     "debug" : true
   });
@@ -37,8 +39,18 @@ window.addEventListener("load", function() {
   collector.add(new SearchCollector.FilterClickCollector(".facet", element => element.getAttribute("data-filter")));
   collector.add(new SearchCollector.SearchEventResultCollector("search"));
   collector.add(new SearchCollector.ProductClickCollector(".grid-item", {
-      "idResolver" : element => element.getAttribute("id"),
-      "positionResolver" : element => new SearchCollector.PositionResolver(".grid-item", element).get()
+    "idResolver" : element => element.getAttribute("id"),
+    "positionResolver" : element => new SearchCollector.PositionResolver(".grid-item", element).get(),
+    "priceResolver" : element => element.getAttribute("data-price"),
+    "trailResolver" : trailResolver
+  }));
+  collector.add(new SearchCollector.BasketClickCollector("#add-to-basket", {
+    "idResolver" : element => element.getAttribute("data-product"),
+    "priceResolver" : element => element.getAttribute("data-price")
+  }));
+  collector.add(new SearchCollector.ProductListCollector("#checkout-content > tr", "checkout", {
+    "idResolver" : element => element.getAttribute("data-product"),
+    "priceResolver" : element => element.getAttribute("data-price")
   }));
   collector.start();
 });

@@ -28,12 +28,12 @@ class JSONEnvelopeWriter {
       if (this.queryResolver) {
         let q = this.queryResolver();
         if (!q) {
-          // See if we have a product id and a trail for it. This means we
+          // See if we have a payload id and a trail for it. This means we
           // are collecting data for an event that does not have a query context
           // on the page anymore but we want to assosiate the event with the query
           // context of the original search result
-          if (data.id && this.trailResolver) {
-            let trail = this.trailResolver.fetch(data.id);
+          if (data.data && data.data.id && this.trailResolver) {
+            let trail = this.trailResolver.fetch(data.data.id);
             if (trail && trail.query) {
               data.query = trail.query;
               data.queryTime = trail.timestamp;
