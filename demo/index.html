@@ -1,608 +1,68 @@
-<!doctype html>
-<html lang="en" class="no-js">
+<html>
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<meta name="description" content="Onlineshop - Experience our awesome fashion products and order online  !" />
-	<meta name="keywords" content="Shop, Online-Shop, safe, easy, online, shopping, cheap, sale" />
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+  <link rel="stylesheet" href="css/main.css">
+  <script type="text/javascript" src="js/search-engine.js"></script>
+  <script type="text/javascript" src="js/render.js"></script>
+  <script type="text/javascript" src="js/basket.js"></script>
+  <script type="text/javascript" src="js/collector-integration.js"></script>
+  <script>
+    let engine = new SearchEngine();
+    let render = new Render();
+    let basket = new Basket();
 
-	<!--link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700' rel='stylesheet' type='text/css'-->
+    function search(phrase, filter) {
+      let result = engine.search(phrase, filter);
 
-	<link rel="stylesheet" href="css/reset.css"> <!-- CSS reset -->
-	<link rel="stylesheet" href="css/style.css"> <!-- Resource style -->
+      let productContainter = document.getElementById('product-grid');
+      while (productContainter.firstChild) {
+        productContainter.removeChild(productContainter.firstChild);
+      }
 
-	<title>Search Collector | Adaptive Demo Shop</title>
+      for (let item of result) {
+        render.product(productContainter, item);
+      }
+
+      let facetContainer = document.getElementById('facet-container');
+      while (facetContainer.firstChild) {
+        facetContainer.removeChild(facetContainer.firstChild);
+      }
+
+      for (let facet of engine.facets(result)) {
+        render.facets(facetContainer, facet, filter => {
+          search(phrase, filter);
+        });
+      }
+
+      return result;
+    }
+    
+    window.addEventListener('load', e => {
+      document.getElementById('search-button').addEventListener("click", e => {
+        let phrase = document.getElementById('search-box').value;
+
+        let result = search(phrase);
+        window.dispatchEvent(new CustomEvent("search", {"detail" : {"keywords" : phrase, "count" : result.length}}));
+      });
+      document.getElementById('basket-count').innerText = '(' + basket.list().length + ')';
+
+      search();
+    });
+  </script>
 </head>
 <body>
-	<main class="cd-main-content">
-		<div class="cd-tab-filter-wrapper filterable">
-			<div class="cd-tab-filter">
-				<ul class="cd-filters">
-					<li class="placeholder">
-						<a data-type="all" href="#0">All</a> <!-- selected option on mobile -->
-					</li>
-					<li class="filter" id="All"><a class="selected" href="#all" data-type="all">All</a></li>
-					<li class="filter" data-filter=".Jackets" id="Jackets"><a href="#jackets" data-type="Jackets">Jackets</a></li>
-					<li class="filter" data-filter=".Shirts" id="Shirts"><a href="#shirts" data-type="Shirts">Shirts</a></li>
-					<li class="filter" data-filter=".Dresses" id="Dresses"><a href="#dresses" data-type="Dresses">Dresses</a></li>
-					<li class="filter" data-filter=".Trousers" id="Trousers"><a href="#trousers" data-type="Trousers">Trousers</a></li>
-					<li class="filter" data-filter=".Shoes" id="Shoes"><a href="#shoes" data-type="Shoes">Shoes</a></li>
-				</ul> <!-- cd-filters -->
-			</div> <!-- cd-tab-filter -->
-		</div> <!-- cd-tab-filter-wrapper -->
+  <div class="page">
+      <header>
+        <input id="search-box" type="search" placeholder="Search the catalog"><button id="search-button">Search</button>
+        <a href="basket.html" style="float: right">Basket <span id="basket-count"></span></a>
+      </header>
 
-		<section class="cd-gallery">
-			<ul>
-				<li class="mix Shirts Grey Dummy Men" data-myorder="1">
-					<a class="product-track-impression" id="product_1234" >
-					<img src="images/grey_polo.png" alt="Image 1">
-                <div class="meta">
-                    <h3 class="meta__title" >Grey Men Polo</h3>
-                    <span class="meta__brand" >Dummy</span>
-                    <span class="meta__price" >$79</span>
-                </div>
-            </a>
-            <a class="cd-add-to-cart" id="1234" data-title="Grey Men Polo" data-brand="Dummy" data-price="$79">Add To Cart</a>
-        </li>
-				<li class="mix Shoes Pink Dummy Women" data-myorder="2">
-					<a class="product-track-impression" id="product_1235" >
-					<img src="images/pink_sneaker.png" alt="Image 2">
-                    <div class="meta">
-                        <h3 class="meta__title">Pink Women Sneaker</h3>
-                        <span class="meta__brand">Dummy</span>
-                        <span class="meta__price">$99</span>
-                    </div>
-                	</a>
-                    <a class="cd-add-to-cart" id="1235" data-title="Pink Women Sneaker" data-brand="Dummy" data-price="$99">Add To Cart</a>
-				</li>
-				<li class="mix Dresses Green Dummy Women" data-myorder="3">
-					<a class="product-track-impression" id="product_1236" >
-					<img src="images/green_dress.png" alt="Image 3">
-                    <div class="meta">
-                        <h3 class="meta__title">Green Women Dress</h3>
-                        <span class="meta__brand">Dummy</span>
-                        <span class="meta__price">$199</span>
-                    </div>
-                    </a>
-                    <a class="cd-add-to-cart" id="1236" data-title="Green Women Dress" data-brand="Dummy" data-price="$199">Add To Cart</a>
-				</li>
-				<li class="mix Shirts Grey Dummy Men" data-myorder="4">
-					<a class="product-track-impression" id="product_1237" >
-					<img src="images/grey_tshirt.png" alt="Image 4">
-                    <div class="meta">
-                        <h3 class="meta__title">Grey Men T-Shirt</h3>
-                        <span class="meta__brand">Dummy</span>
-                        <span class="meta__price">$39</span>
-                    </div>
-                	</a>
-                    <a class="cd-add-to-cart" id="1237" data-title="Grey Men T-Shirt" data-brand="Dummy" data-price="$39">Add To Cart</a>
-				</li>
-				<li class="mix Trousers Brown Dummy Men" data-myorder="5">
-					<a class="product-track-impression" id="product_1238" >
-					<img src="images/brown_trousers.png" alt="Image 5">
-                    <div class="meta">
-                        <h3 class="meta__title">Brown Men Trousers</h3>
-                        <span class="meta__brand">Dummy</span>
-                        <span class="meta__price">$99</span>
-                    </div>
-                    </a>
-                    <a class="cd-add-to-cart" id="1238" data-title="Brown Men Trousers" data-brand="Dummy" data-price="$99">Add To Cart</a>
-				</li>
-				<li class="mix Jackets Green Dummy Women" data-myorder="6">
-					<a class="product-track-impression" id="product_1239" >
-					<img src="images/green_coat.png" alt="Image 6">
-                    <div class="meta">
-                        <h3 class="meta__title">Green Women Coat</h3>
-                        <span class="meta__brand">Dummy</span>
-                        <span class="meta__price">$299</span>
-                    </div>
-                    </a>
-                    <a class="cd-add-to-cart" id="1239" data-title="Green Women Coat" data-brand="Dummy" data-price="$299">Add To Cart</a>
-				</li>
-				<li class="mix Shoes Brown Dummy Men" data-myorder="7">
-					<a class="product-track-impression" id="product_1240" >
-					<img src="images/brown_leather_shoe.png" alt="Image 7">
-                    <div class="meta">
-                        <h3 class="meta__title">Brown Men Leather Shoe</h3>
-                        <span class="meta__brand">Dummy</span>
-                        <span class="meta__price">$129</span>
-                    </div>
-                    </a>
-                    <a class="cd-add-to-cart" id="1240" data-title="Brown Men Leather Shoe" data-brand="Dummy" data-price="$129">Add To Cart</a>
-				</li>
-				<li class="mix Shirts Green Dummy Men" data-myorder="8">
-					<a class="product-track-impression" id="product_1241" >
-					<img src="images/green_tshirt.png" alt="Image 8">
-                    <div class="meta">
-                        <h3 class="meta__title">Green Men T-Shirt</h3>
-                        <span class="meta__brand">Dummy</span>
-                        <span class="meta__price">$39</span>
-                    </div>
-                    </a>
-                    <a class="cd-add-to-cart" id="1241" data-title="Green Men T-Shirt" data-brand="Dummy" data-price="$39">Add To Cart</a>
-				</li>
-				<li class="mix Shoes Pink Dummy Women" data-myorder="9">
-					<a class="product-track-impression" id="product_1242" >
-					<img src="images/pink_sneaker_high.png" alt="Image 9">
-                    <div class="meta">
-                        <h3 class="meta__title">Pink Women Sneaker High</h3>
-                        <span class="meta__brand">Dummy</span>
-                        <span class="meta__price">$99</span>
-                    </div>
-                    </a>
-                    <a class="cd-add-to-cart" id="1242" data-title="Pink Women Sneaker High" data-brand="Dummy" data-price="$99">Add To Cart</a>
-				</li>
-				<li class="mix Dresses Pink Dummy Women" data-myorder="10">
-					<a class="product-track-impression" id="product_1243" >
-					<img src="images/pink_dress.png" alt="Image 10">
-                    <div class="meta">
-                        <h3 class="meta__title">Pink Women Dress</h3>
-                        <span class="meta__brand">Dummy</span>
-                        <span class="meta__price">$149</span>
-                    </div>
-                    </a>
-                    <a class="cd-add-to-cart" id="1243" data-title="Pink Women Dress" data-brand="Dummy" data-price="$149">Add To Cart</a>
-				</li>
-				<li class="mix Shirts Green Dummy Men" data-myorder="11">
-					<a class="product-track-impression" id="product_1244" >
-					<img src="images/green_polo.png" alt="Image 11">
-                    <div class="meta">
-                        <h3 class="meta__title">Green Men Polo</h3>
-                        <span class="meta__brand">Dummy</span>
-                        <span class="meta__price">$79</span>
-                    </div>
-                    </a>
-                    <a class="cd-add-to-cart" id="1244" data-title="Green Men Polo" data-brand="Dummy" data-price="$79">Add To Cart</a>
-				</li>
-				<li class="mix Trousers Grey Dummy Men" data-myorder="12">
-					<a class="product-track-impression" id="product_1245" >
-					<img src="images/grey_trousers.png" alt="Image 12">
-                    <div class="meta">
-                        <h3 class="meta__title">Grey Men Trousers</h3>
-                        <span class="meta__brand">Dummy</span>
-                        <span class="meta__price">$99</span>
-                    </div>
-                    </a>
-                    <a class="cd-add-to-cart" id="1245" data-title="Grey Men Polo" data-brand="Dummy" data-price="$99">Add To Cart</a>
-				</li>
-				<li class="mix Jackets Red Dummy Men" data-myorder="13">
-					<a class="product-track-impression" id="product_1246" >
-					<img src="images/red_down_jacket.png" alt="Image 13">
-                    <div class="meta">
-                        <h3 class="meta__title">Red Men Down Jacket</h3>
-                        <span class="meta__brand">Dummy</span>
-                        <span class="meta__price">$299</span>
-                    </div>
-                    </a>
-                    <a class="cd-add-to-cart" id="1246" data-title="Red Men Down Jacket" data-brand="Dummy" data-price="$299">Add To Cart</a>
-				</li>
-				<li class="mix Shoes Blue Dummy Women" data-myorder="14">
-					<a class="product-track-impression" id="product_1247" >
-					<img src="images/blue_high_heel.png" alt="Image 14">
-                    <div class="meta">
-                        <h3 class="meta__title">Blue Women High Heel</h3>
-                        <span class="meta__brand">Dummy</span>
-                        <span class="meta__price">$129</span>
-                    </div>
-                    </a>
-                    <a class="cd-add-to-cart" id="1247" data-title="Blue Women High Heel" data-brand="Dummy" data-price="$129">Add To Cart</a>
-				</li>
-				<li class="mix Dresses Purple Dummy Women" data-myorder="15">
-					<a class="product-track-impression" id="product_1248" >
-					<img src="images/purple_dress.png" alt="Image 15">
-                    <div class="meta">
-                        <h3 class="meta__title">Purple Women Dress</h3>
-                        <span class="meta__brand">Dummy</span>
-                        <span class="meta__price">$149</span>
-                    </div>
-                    </a>
-                    <a class="cd-add-to-cart" id="1248" data-title="Purple Women Dress" data-brand="Dummy" data-price="$149">Add To Cart</a>
-				</li>
-				<li class="mix Trousers Red Dummy Men" data-myorder="16">
-					<a class="product-track-impression" id="product_1249" >
-					<img src="images/red_jeans.png" alt="Image 16">
-                    <div class="meta">
-                        <h3 class="meta__title">Red Men Jeans</h3>
-                        <span class="meta__brand">Dummy</span>
-                        <span class="meta__price">$99</span>
-                    </div>
-                    </a>
-                    <a class="cd-add-to-cart" id="1249" data-title="Red Men Jeans" data-brand="Dummy" data-price="$99">Add To Cart</a>
+      <aside id="facet-container">
+      </aside>
 
-				</li>
-				<li class="mix Shoes Grey Dummy Men" data-myorder="17">
-					<a class="product-track-impression" id="product_1250" >
-					<img src="images/grey_leather_shoe.png" alt="Image 17">
-					<div class="meta">
-                        <h3 class="meta__title">Grey Men Leather Shoe</h3>
-                        <span class="meta__brand">Dummy</span>
-                        <span class="meta__price">$99</span>
-                    </div>
-                    </a>
-                    <a class="cd-add-to-cart" id="1250" data-title="Grey Men Leather Shoe" data-brand="Dummy" data-price="$99">Add To Cart</a>
-				</li>
-				<li class="mix Jackets Grey Dummy Men" data-myorder="18">
-					<a class="product-track-impression" id="product_1251" >
-					<img src="images/grey_down_jacket.png" alt="Image 18">
-                    <div class="meta">
-                        <h3 class="meta__title">Grey Men Down Jacket</h3>
-                        <span class="meta__brand">Dummy</span>
-                        <span class="meta__price">$299</span>
-                    </div>
-                    </a>
-                    <a class="cd-add-to-cart" id="1251" data-title="Grey Men Down Jacket" data-brand="Dummy" data-price="$299">Add To Cart</a>
-				</li>
-				<li class="mix Shirts Yellow Dummy Men" data-myorder="19">
-					<a class="product-track-impression" id="product_1252" >
-					<img src="images/yellow_polo.png" alt="Image 19">
-                    <div class="meta">
-                        <h3 class="meta__title">Yellow Men Polo</h3>
-                        <span class="meta__brand">Dummy</span>
-                        <span class="meta__price">$79</span>
-                    </div>
-                    </a>
-                    <a class="cd-add-to-cart" id="1252" data-title="Yellow Men Polo" data-brand="Dummy" data-price="$79">Add To Cart</a>
-				</li>
-				<li class="mix Shoes Brown Dummy Men" data-myorder="20">
-					<a class="product-track-impression" id="product_1253" >
-					<img src="images/brown_sneaker_high.png" alt="Image 20">
-                    <div class="meta">
-                        <h3 class="meta__title">Brown Men Sneaker High</h3>
-                        <span class="meta__brand">Dummy</span>
-                        <span class="meta__price">$99</span>
-                    </div>
-                    </a>
-                    <a class="cd-add-to-cart" id="1253" data-title="Brown Men Sneaker High" data-brand="Dummy" data-price="$99">Add To Cart</a>
-				</li>
-				<li class="mix Dresses Brown Dummy Women" data-myorder="21">
-					<a class="product-track-impression" id="product_1254" >
-					<img src="images/brown_dress.png" alt="Image 21">
-                    <div class="meta">
-                        <h3 class="meta__title">Brown Women Dress</h3>
-                        <span class="meta__brand">Dummy</span>
-                        <span class="meta__price">$119</span>
-                    </div>
-                    </a>
-                    <a class="cd-add-to-cart" id="1254" data-title="Brown Women Dress" data-brand="Dummy" data-price="$119">Add To Cart</a>
-				</li>
-				<li class="mix Shirts Green Dummy Men" data-myorder="22">
-					<a class="product-track-impression" id="product_1255" >
-					<img src="images/green_polo_1.png" alt="Image 22">
-                    <div class="meta">
-                        <h3 class="meta__title">Green Men Polo</h3>
-                        <span class="meta__brand">Dummy</span>
-                        <span class="meta__price">$79</span>
-                    </div>
-                    </a>
-                    <a class="cd-add-to-cart" id="1255" data-title="Green Men Polo" data-brand="Dummy" data-price="$79">Add To Cart</a>
-				</li>
-				<li class="mix Trousers Blue Dummy Women" data-myorder="23">
-					<a class="product-track-impression" id="product_1256" >
-					<img src="images/blue_trousers.png" alt="Image 23">
-                    <div class="meta">
-                        <h3 class="meta__title">Blue Women Trousers</h3>
-                        <span class="meta__brand">Dummy</span>
-                        <span class="meta__price">$99</span>
-                    </div>
-                    </a>
-                    <a class="cd-add-to-cart" id="1256" data-title="Blue Women Trousers" data-brand="Dummy" data-price="$99">Add To Cart</a>
-				</li>
-				<li class="mix Jackets Brown Dummy Unisex" data-myorder="24">
-					<a class="product-track-impression" id="product_1257" >
-					<img src="images/brown_jacket.png" alt="Image 24">
-                    <div class="meta">
-                        <h3 class="meta__title">Brown Unisex Jacket</h3>
-                        <span class="meta__brand">Dummy</span>
-                        <span class="meta__price">$119</span>
-                    </div>
-                    </a>
-                    <a class="cd-add-to-cart" id="1257" data-title="Brown Unisex Jacket" data-brand="Dummy" data-price="$119">Add To Cart</a>
-				</li>
-				<li class="mix Shoes Green Dummy Men" data-myorder="25">
-					<a class="product-track-impression" id="product_1258" >
-					<img src="images/green_leather_shoe.png" alt="Image 25">
-                    <div class="meta">
-                        <h3 class="meta__title">Green Men Leather Shoe</h3>
-                        <span class="meta__brand">Dummy</span>
-                        <span class="meta__price">$99</span>
-                    </div>
-                    </a>
-                    <a class="cd-add-to-cart" id="1258" data-title="Green Men Leather Shoe" data-brand="Dummy" data-price="$99">Add To Cart</a>
-				</li>
-				<li class="mix Shoes Green Dummy Men" data-myorder="26">
-					<a class="product-track-impression" id="product_1259" >
-					<img src="images/green_sneaker_high.png" alt="Image 26">
-                    <div class="meta">
-                        <h3 class="meta__title">Green Men Sneaker High</h3>
-                        <span class="meta__brand">Dummy</span>
-                        <span class="meta__price">$99</span>
-                    </div>
-                    </a>
-                    <a class="cd-add-to-cart" id="1259" data-title="Green Men Sneaker High" data-brand="Dummy" data-price="$99">Add To Cart</a>
-				</li>
-				<li class="mix Dresses Blue Dummy Women" data-myorder="27">
-					<a class="product-track-impression" id="product_1260" >
-					<img src="images/blue_dress.png" alt="Image 27">
-                    <div class="meta">
-                        <h3 class="meta__title">Blue Women Dress</h3>
-                        <span class="meta__brand">Dummy</span>
-                        <span class="meta__price">$99</span>
-                    </div>
-                    </a>
-                    <a class="cd-add-to-cart" id="1260" data-title="Blue Women Dress" data-brand="Dummy" data-price="$99">Add To Cart</a>
-				</li>
-				<li class="mix Trousers Purple Dummy Women" data-myorder="28">
-					<a class="product-track-impression" id="product_1261" >
-					<img src="images/purple_trousers.png" alt="Image 28">
-                    <div class="meta">
-                        <h3 class="meta__title">Purple Women Trousers</h3>
-                        <span class="meta__brand">Dummy</span>
-                        <span class="meta__price">$99</span>
-                    </div>
-                    </a>
-                    <a class="cd-add-to-cart" id="1261" data-title="Purple Women Trousers" data-brand="Dummy" data-price="$99">Add To Cart</a>
-				</li>
-				<li class="mix Jackets Pink Dummy Women" data-myorder="29">
-					<a class="product-track-impression" id="product_1262" >
-					<img src="images/pink_coat.png" alt="Image 29">
-                    <div class="meta">
-                        <h3 class="meta__title">Pink Women Coat</h3>
-                        <span class="meta__brand">Dummy</span>
-                        <span class="meta__price">$299</span>
-                    </div>
-                    </a>
-                    <a class="cd-add-to-cart" id="1262" data-title="Pink Women Coat" data-brand="Dummy" data-price="$299">Add To Cart</a>
-				</li>
-				<li class="mix Shoes Pink Dummy Women" data-myorder="30">
-					<a class="product-track-impression" id="product_1263" >
-					<img src="images/pink_high_heel.png" alt="Image 30">
-                    <div class="meta">
-                        <h3 class="meta__title">Pink Women High Heel</h3>
-                        <span class="meta__brand">Dummy</span>
-                        <span class="meta__price">$99</span>
-                    </div>
-                    </a>
-                    <a class="cd-add-to-cart" id="1263" data-title="Pink Women High Heel" data-brand="Dummy" data-price="$99">Add To Cart</a>
-				</li>
-				<li class="mix Dresses Grey Dummy Women" data-myorder="31">
-					<a class="product-track-impression" id="product_1264" >
-					<img src="images/grey_dress.png" alt="Image 31">
-                    <div class="meta">
-                        <h3 class="meta__title">Grey Women Dress</h3>
-                        <span class="meta__brand">Dummy</span>
-                        <span class="meta__price">$199</span>
-                    </div>
-                    </a>
-                    <a class="cd-add-to-cart" id="1264" data-title="Grey Women Dress" data-brand="Dummy" data-price="$199">Add To Cart</a>
-				</li>
-				<li class="mix Trousers Gold Dummy Men" data-myorder="32">
-					<a class="product-track-impression" id="product_1265" >
-					<img src="images/golden_jeans.png" alt="Image 32">
-                    <div class="meta">
-                        <h3 class="meta__title">Golden Men Jeans</h3>
-                        <span class="meta__brand">Dummy</span>
-                        <span class="meta__price">$99</span>
-                    </div>
-                    </a>
-                    <a class="cd-add-to-cart" id="1265" data-title="Golden Men Jeans" data-brand="Dummy" data-price="$99">Add To Cart</a>
-				</li>
-				<li class="mix Shoes Purple Dummy Women" data-myorder="33">
-					<a class="product-track-impression" id="product_1266" >
-					<img src="images/purple_boot.png" alt="Image 33">
-                    <div class="meta">
-                        <h3 class="meta__title">Purple Women Boot</h3>
-                        <span class="meta__brand">Dummy</span>
-                        <span class="meta__price">$99</span>
-                    </div>
-                    </a>
-                    <a class="cd-add-to-cart" id="1266" data-title="Purple Women Boot" data-brand="Dummy" data-price="$99">Add To Cart</a>
-				</li>
-				<li class="mix Jackets Purple Dummy Unisex" data-myorder="34">
-					<a class="product-track-impression" id="product_1267" >
-					<img src="images/purple_jacket.png" alt="Image 34">
-                    <div class="meta">
-                        <h3 class="meta__title">Purple Unisex Jacket</h3>
-                        <span class="meta__brand">Dummy</span>
-                        <span class="meta__price">$99</span>
-                    </div>
-                    </a>
-                    <a class="cd-add-to-cart" id="1267" data-title="Purple Unisex Jacket" data-brand="Dummy" data-price="$99">Add To Cart</a>
-				</li>
-                <li class="mix Shoes Yellow Dummy Women" data-myorder="35">
-                	<a class="product-track-impression" id="product_1268" >
-                	<img src="images/yellow_sneaker.png" alt="Image 35">
-                    <div class="meta">
-                        <h3 class="meta__title">Yellow Women Sneaker</h3>
-                        <span class="meta__brand">Dummy</span>
-                        <span class="meta__price">$99</span>
-                    </div>
-                    </a>
-                    <a class="cd-add-to-cart" id="1268" data-title="Yellow Women Sneaker" data-brand="Dummy" data-price="$99">Add To Cart</a>
-				</li>
-                <li class="mix Shoes Brown Dummy Women" data-myorder="36">
-                	<a class="product-track-impression" id="product_1269" >
-                	<img src="images/brown_boot.png" alt="Image 36">
-                    <div class="meta">
-                        <h3 class="meta__title">Brown Women Boot</h3>
-                        <span class="meta__brand">Dummy</span>
-                        <span class="meta__price">$99</span>
-                    </div>
-                    </a>
-                    <a class="cd-add-to-cart" id="1269" data-title="Brown Women Boot" data-brand="Dummy" data-price="$99">Add To Cart</a>
-				</li>
-				<li class="gap"></li>
-				<li class="gap"></li>
-				<li class="gap"></li>
-			</ul>
-			<div class="cd-fail-message">36 results found</div>
-		</section> <!-- cd-gallery -->
-
-		<div class="cd-filter filterable">
-			<form>
-				<div class="cd-filter-block">
-					<h4>Search by</h4>
-					<div class="cd-filter-content">
-						<input type="search" id="text" placeholder="Try Dress...">
-					</div> <!-- cd-filter-content -->
-				</div> <!-- cd-filter-block -->
-
-				<div class="cd-filter-block">
-					<h4>Sort by (to fix)</h4>
-
-					<ul class="cd-filter-content cd-filters list">
-						<li>
-							<input class="sort" data-sort="myorder:asc" type="radio" name="radioButton" id="radio1" checked>
-							<label class="radio-label" for="radio1">Asc</label>
-						</li>
-
-						<li>
-							<input class="sort" data-sort="myorder:desc" type="radio" name="radioButton" id="Unisex">
-							<label class="radio-label" for="Unisex">Desc</label>
-						</li>
-					</ul> <!-- cd-filter-content -->
-				</div> <!-- cd-filter-block -->
-
-				<div class="cd-filter-block">
-					<h4>Filter by Gender</h4>
-
-					<ul class="cd-filter-content cd-filters list">
-						<li>
-							<input class="filter" data-filter="" type="radio" name="radioButton" id="All" checked>
-							<label class="radio-label" for="radio1">All</label>
-						</li>
-
-						<li>
-							<input class="filter" data-filter=".Unisex" type="radio" name="radioButton" id="Unisex">
-							<label class="radio-label" for="Unisex">Unisex</label>
-						</li>
-
-						<li>
-							<input class="filter" data-filter=".Women" type="radio" name="radioButton" id="Women">
-							<label class="radio-label" for="Women">Women</label>
-						</li>
-
-						<li>
-							<input class="filter" data-filter=".Men" type="radio" name="radioButton" id="Men">
-							<label class="radio-label" for="men">Men</label>
-						</li>
-					</ul> <!-- cd-filter-content -->
-				</div> <!-- cd-filter-block -->
-
-				<div class="cd-filter-block">
-					<h4>Filter by Type</h4>
-
-					<ul class="cd-filter-content cd-filters list">
-						<li>
-							<input class="filter" data-filter=".Jackets" type="checkbox" id="checkbox1">
-			    			<label class="checkbox-label" for="checkbox1">Jackets</label>
-						</li>
-
-						<li>
-							<input class="filter" data-filter=".Shirts" type="checkbox" id="checkbox2">
-							<label class="checkbox-label" for="checkbox2">Shirts</label>
-						</li>
-
-						<li>
-							<input class="filter" data-filter=".Dresses" type="checkbox" id="checkbox3">
-							<label class="checkbox-label" for="checkbox3">Dresses</label>
-						</li>
-
-						<li>
-							<input class="filter" data-filter=".Trousers" type="checkbox" id="checkbox3">
-							<label class="checkbox-label" for="checkbox3">Trousers</label>
-						</li>
-
-						<li>
-							<input class="filter" data-filter=".Shoes" type="checkbox" id="checkbox3">
-							<label class="checkbox-label" for="checkbox3">Shoes</label>
-						</li>
-					</ul> <!-- cd-filter-content -->
-				</div> <!-- cd-filter-block -->
-
-				<div class="cd-filter-block">
-					<h4>Filter by Color</h4>
-
-					<div class="cd-filter-content">
-						<div class="cd-select cd-filters">
-							<select class="filter" name="selectThis" id="selectThis">
-								<option value="">All</option>
-								<option value=".Gold">Gold</option>
-								<option value=".Purple">Purple</option>
-								<option value=".Blue">Blue</option>
-								<option value=".Green">Green</option>
-								<option value=".Grey">Grey</option>
-								<option value=".Pink">Pink</option>
-								<option value=".Brown">Brown</option>
-								<option value=".Red">Red</option>
-								<option value=".Yellow">Yellow</option>
-							</select>
-						</div> <!-- cd-select -->
-					</div> <!-- cd-filter-content -->
-				</div> <!-- cd-filter-block -->
-
-			</form>
-
-			<a href="#0" class="cd-close">Close</a>
-		</div> <!-- cd-filter -->
-
-		<a href="#0" class="cd-filter-trigger">Filters</a>
-	</main> <!-- cd-main-content -->
-
-<script src="js/jquery-2.1.1.js"></script>
-<script src="js/jquery.mixitup.min.js"></script>
-<script src="js/main.js"></script> <!-- Resource jQuery -->
-
+      <section class="product-grid" id="product-grid">
+      </section>
+</div>
 <script type="text/javascript" src="search-collector.js"></script>
-<script>
-	window.addEventListener("load", function() {
-
-		// React on "filter" events sent by js/main.js to keep a query state
-		var queryState = {};
-		window.addEventListener("filter", e => {
-			if (e.detail.search) {
-				queryState.search = e.detail.search;
-			}
-
-			if (e.detail.filter) {
-				queryState.filter = e.detail.filter;
-			}
-		})
-
-		var queryResolver = () => {
-				var q = new SearchCollector.Query();
-
-				if (queryState.search) {
-					q.addSelection("$s", "=", queryState.search);
-				}
-
-				if (queryState.filter) {
-					q.addSelection("filter", "=", queryState.filter);
-				}
-
-				return q.toString();
-		};
-
-	  var collector = new SearchCollector.Collector({
-	    "sessionResolver" : new SearchCollector.CookieSessionResolver(),
-			"queryResolver" : queryResolver,
-			"endpoint" : "/collector",
-			"debug" : true
-	  });
-
-	  collector.add(new SearchCollector.BrowserCollector());
-	  collector.add(new SearchCollector.FilterClickCollector(".filter", element => element.getAttribute("data-filter")));
-		collector.add(new SearchCollector.InstantSearchQueryCollector(".cd-filter-content input[type='search']"));
-	  collector.add(new SearchCollector.ImpressionCollector(".product-track-impression", element => element.getAttribute("id")));
-		collector.add(new SearchCollector.ProductClickCollector(".cd-add-to-cart", element => {
-			return {
-				"id" : element.getAttribute("id"),
-				"position" : element.parentElement.getAttribute("data-myorder")
-			}
-		}));
-		collector.add(new SearchCollector.ProductListCollector(".cd-add-to-cart", element => element.getAttribute("id")));
-
-	  collector.start();
-	});
-</script>
 </body>
 </html>

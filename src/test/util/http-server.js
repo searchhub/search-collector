@@ -12,7 +12,7 @@ function stopHTTPServer() {
     console.log("[INFO] Shutting down HTTP server");
 }
 
-function startHTTPServer(collectorCallback, dataDir) {
+function startHTTPServer(collectorCallback, dataDir, storeDir) {
   // Small HTTP server for the static files. The tracking events are produced there and consumed
   // in the queue logic above
   server = http.createServer(function(req, res) {
@@ -65,6 +65,18 @@ function startHTTPServer(collectorCallback, dataDir) {
 
           if (collectorCallback) {
             collectorCallback(data);
+          }
+
+          if (storeDir) {
+            let content = "";
+            for (let r of JSON.parse(decoded)) {
+              content += JSON.stringify(r) + "\n";
+            }
+
+            let target = storeDir.endsWith("/") ? storeDir : storeDir + "/";
+            target += "collector.log";
+            
+            fs.appendFile(target, content, err => {if (err) throw err;});
           }
         }
         res.writeHead(204);

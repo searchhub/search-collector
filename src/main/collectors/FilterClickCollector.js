@@ -6,7 +6,16 @@ var ClickCollector = require("./ClickCollector");
 class FilterClickCollector extends ClickCollector {
 
   constructor(selector, collector) {
-    super(selector, collector, "filter");
+    super(selector, "filter");
+    this.collector = collector;
+  }
+
+  /**
+  * Collect the product click information from the element
+  * @override
+  */
+  collect(element) {
+    return {"query" : this.collector(element)};
   }
 }
 

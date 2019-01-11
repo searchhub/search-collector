@@ -1,0 +1,44 @@
+body {
+  font-family: Arial, Helvetica, sans-serif
+}
+.page {
+  display: grid;
+  grid: 100px auto / repeat(5, 1fr);
+  grid-template-areas:
+    "header header header header header"
+    "sidebar products products products products";
+    grid-gap: 20px;
+}
+
+header {
+  grid-area: header;
+}
+
+aside {
+  grid-area: sidebar;
+}
+
+.product-grid {
+  grid-area: products;
+  display: grid;
+  grid: auto / repeat(4, 1fr);
+  grid-gap: 40px 20px;
+}
+
+.grid-item {
+  justify-self: center;
+  align-self: center;
+  text-align: center;
+  cursor: pointer;
+}
+
+.product-details {
+  justify-self: center;
+  align-self: center;
+  text-align: center;
+}
+
+.basket {
+  width: 80%;
+  align-self: center;
+}

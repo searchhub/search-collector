@@ -1,0 +1,36 @@
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" href="css/main.css">
+    <script type="text/javascript" src="js/search-engine.js"></script>
+    <script type="text/javascript" src="js/render.js"></script>
+    <script type="text/javascript" src="js/basket.js"></script>
+    <script type="text/javascript" src="js/collector-integration.js"></script>
+    <script>
+      window.addEventListener('load', e => {
+        const params = new URLSearchParams(window.location.search);
+        const id = params.get('id');
+
+        let engine = new SearchEngine();
+        let item = engine.get(id);
+
+        let basket = new Basket();
+        
+        let container = document.getElementById('product-details');
+        let render = new Render();
+        render.details(container, item, id => {
+          basket.add(id);
+        });
+      });
+    </script>
+  </head>
+<body>
+  <div class="details">
+      <header><h2>Product details</h2></header>
+
+      <div class="product-details" id="product-details">
+      </div>
+  </div>
+  <script type="text/javascript" src="search-collector.js"></script>
+</body>
+</html>

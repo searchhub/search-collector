@@ -17,10 +17,11 @@ class ProductListCollector {
    * @param {function} attributeCollector - A function to be triggered, intended to collect specific element data
    * @param {string} type - The type of element/context to report
    */
-  constructor(selectorExpression, attributeCollector, type) {
+  constructor(selectorExpression, type, resolvers) {
       this.selectorExpression = selectorExpression;
-      this.attributeCollector = attributeCollector;
       this.type = type ? type : "product-list";
+      this.idResolver = resolvers.idResolver;
+      this.priceResolver = resolvers.priceResolver;
   }
 
   /**
@@ -32,14 +33,19 @@ class ProductListCollector {
   attach(writer) {
 
     var handler = el => {
-        var payload = this.attributeCollector(el);
-        if (payload) {
-          writer.write({
-            "type" : this.type,
-            "data" : payload
-          });
-        }
-    }
+      let payload = {
+        "id" : this.idResolver(el)
+      }
+  
+      if (this.priceResolver) {
+        payload.price = this.priceResolver(el);
+      }
+
+      writer.write({
+        "type" : this.type,
+        "data" : payload
+      });
+  }
 
     // This section is commented because as of present, browsers will
     // trigger reflow when the sentinel library attaches its animation css

@@ -8,9 +8,11 @@ var CookieSessionResolver = require("./resolvers/CookieSessionResolver");
 var PositionResolver = require("./resolvers/PositionResolver");
 var FilterClickCollector = require("./collectors/FilterClickCollector");
 var ProductClickCollector = require("./collectors/ProductClickCollector");
+var BasketClickCollector = require("./collectors/BasketClickCollector");
 var ProductListCollector = require("./collectors/ProductListCollector");
 var SearchEventResultCollector = require("./collectors/SearchEventResultCollector");
 var GenericEventCollector = require("./collectors/GenericEventCollector");
+var Trail = require("./query/Trail");
 var Query = require("./query/Query");
 var Util = require("./utils/Util");
 
@@ -26,9 +28,11 @@ var SearchCollector = {
   "InstantSearchQueryCollector" : InstantSearchQueryCollector,
   "FilterClickCollector" : FilterClickCollector,
   "ProductClickCollector" : ProductClickCollector,
+  "BasketClickCollector" : BasketClickCollector,
   "ProductListCollector" : ProductListCollector,
   "SearchEventResultCollector" : SearchEventResultCollector,
   "GenericEventCollector" : GenericEventCollector,
+  "Trail" : Trail,
   "Query" : Query,
   "Util" : Util
 }
