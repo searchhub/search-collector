@@ -15,7 +15,7 @@ class FilterClickCollector extends ClickCollector {
   * @override
   */
   collect(element) {
-    return this.collector(element);
+    return {"query" : this.collector(element)};
   }
 }
 
