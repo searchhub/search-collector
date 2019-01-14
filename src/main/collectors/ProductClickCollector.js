@@ -19,22 +19,27 @@ class ProductClickCollector extends ClickCollector {
   * @override
   */
   collect(element) {
-    let data = {
-      "id" : this.idResolver(element)
-    }
+    let id = this.idResolver(element);
 
-    if (this.positionResolver) {
-      data.position = this.positionResolver(element);
-    }
-
-    if (this.priceResolver) {
-      data.price = this.priceResolver(element);
-    }
-
-    if (this.trailResolver) {
-      // Register that this product journey into potential purchase started
-      // with this query
-      this.trailResolver.register(data.id);
+    let data = undefined;
+    if (id) {
+      data = {
+        "id" : this.idResolver(element)
+      }
+  
+      if (this.positionResolver) {
+        data.position = this.positionResolver(element);
+      }
+  
+      if (this.priceResolver) {
+        data.price = this.priceResolver(element);
+      }
+  
+      if (this.trailResolver) {
+        // Register that this product journey into potential purchase started
+        // with this query
+        this.trailResolver.register(data.id);
+      }
     }
 
     return data;

@@ -16,12 +16,17 @@ class BasketClickCollector extends ClickCollector {
   * @override
   */
   collect(element) {
-    let data = {
-      "id" : this.idResolver(element)
-    }
+    let id = this.idResolver(element);
 
-    if (this.priceResolver) {
-      data.price = this.priceResolver(element);
+    let data = undefined;
+    if (id) {
+      data = {
+        "id" : id
+      }
+  
+      if (this.priceResolver) {
+        data.price = this.priceResolver(element);
+      }
     }
 
     return data;

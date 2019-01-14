@@ -33,18 +33,22 @@ class ProductListCollector {
   attach(writer) {
 
     var handler = el => {
-      let payload = {
-        "id" : this.idResolver(el)
-      }
-  
-      if (this.priceResolver) {
-        payload.price = this.priceResolver(el);
-      }
+      let id = this.idResolver(el);
 
-      writer.write({
-        "type" : this.type,
-        "data" : payload
-      });
+      if (id) {
+        let payload = {
+          "id" : id
+        }
+    
+        if (this.priceResolver) {
+          payload.price = this.priceResolver(el);
+        }
+  
+        writer.write({
+          "type" : this.type,
+          "data" : payload
+        });
+      }
   }
 
     // This section is commented because as of present, browsers will
