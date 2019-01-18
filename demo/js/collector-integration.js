@@ -52,5 +52,9 @@ window.addEventListener("load", function() {
     "idResolver" : element => element.getAttribute("data-product"),
     "priceResolver" : element => element.getAttribute("data-price")
   }));
+  collector.add(new SearchCollector.CheckoutClickCollector("#purchase-button", "#checkout-content > tr", {
+    "idResolver" : element => element.getAttribute("data-product"),
+    "priceResolver" : element => element.getAttribute("data-price")
+  }));
   collector.start();
 });
