@@ -17,16 +17,16 @@ class BrowserCollector extends AbstractCollector {
    * @param {object} writer - The writer to send the data to
    */
   attach(writer) {
-    let w = this.getContext() ? this.getContext().getWindow() : window;
-    let d = this.getContext() ? this.getContext().getDocument() : document;
+    let win = this.getContext() ? this.getContext().getWindow() : window;
+    let doc = this.getContext() ? this.getContext().getDocument() : document;
     
     writer.write({
       "type" : this.getType(),
-      "location" : w.location.href,
-      "referrer" : d.referer,
-      "language" : w.navigator.userLanguage || w.navigator.language,
-      "width" : w.screen.width,
-      "height" : w.screen.height,
+      "location" : win.location.href,
+      "referrer" : doc.referer,
+      "language" : win.navigator.userLanguage || win.navigator.language,
+      "width" : win.screen.width,
+      "height" : win.screen.height,
     });
   }
 }
