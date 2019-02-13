@@ -1,9 +1,11 @@
+var AbstractCollector = require("./AbstractCollector");
+
 /**
  * Collect the basic search information - the keywords used for the search and
  * the number of results. Synchronous i.e. the writing happens directly when a writer is attached.
  * See the other search collectors for dynamic ones.
  */
-class SearchResultCollector {
+class SearchResultCollector extends AbstractCollector {
 
   /**
    * Construct search result collector
@@ -13,6 +15,7 @@ class SearchResultCollector {
    * @param {function} countResolver - Function that should return the numnber of results in the search
    */
   constructor(phraseResolver, countResolver) {
+    super("search");
     this.phraseResolver = phraseResolver;
     this.countResolver = countResolver;
   }

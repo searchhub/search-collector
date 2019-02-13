@@ -15,6 +15,11 @@ class Collector {
   }
 
   add(collector) {
+    
+    if (this.options.contextResolver) {
+      collector.setContext(this.options.contextResolver);
+    }
+
     this.collectors.push(collector);
   }
 

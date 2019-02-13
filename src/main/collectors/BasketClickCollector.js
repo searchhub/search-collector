@@ -5,8 +5,8 @@ var ClickCollector = require("./ClickCollector");
  */
 class BasketClickCollector extends ClickCollector {
 
-  constructor(selector, resolvers) {
-    super(selector, "basket");
+  constructor(selector, resolvers, documentObject = document) {
+    super(selector, "basket", documentObject);
     this.idResolver = resolvers.idResolver;
     this.priceResolver = resolvers.priceResolver;
   }

@@ -1,3 +1,4 @@
+var AbstractCollector = require("./AbstractCollector");
 
 // Don't consider search phrases shorter than this
 const MIN_LENGTH = 2;
@@ -8,7 +9,7 @@ const MIN_LENGTH = 2;
  * type speed patterns - we expect that the interval between key strokes would be
  * less than 400ms
  */
-class InstantSearchQueryCollector {
+class InstantSearchQueryCollector extends AbstractCollector {
 
   /**
    * Construct instant search collector
@@ -17,6 +18,7 @@ class InstantSearchQueryCollector {
    * @param {string} searchFieldSelector - Document query selector identifying the elements to attach to
    */
   constructor(searchFieldSelector) {
+    super("search");
     this.searchFieldSelector = searchFieldSelector;
   }
 
@@ -27,7 +29,8 @@ class InstantSearchQueryCollector {
    * @param {object} writer - The writer to send the data to
    */
   attach(writer) {
-    var searchBox = document.querySelector(this.searchFieldSelector);
+    var doc = this.getContext() ? this.getContext().getDocument() : document;
+    var searchBox = doc.querySelector(this.searchFieldSelector);
 
     if (searchBox) {
       searchBox.addEventListener("keyup", e => {

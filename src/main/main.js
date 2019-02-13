@@ -6,6 +6,7 @@ var BrowserCollector = require("./collectors/BrowserCollector");
 var ImpressionCollector = require("./collectors/ImpressionCollector");
 var CookieSessionResolver = require("./resolvers/CookieSessionResolver");
 var PositionResolver = require("./resolvers/PositionResolver");
+var ContextResolver = require("./resolvers/ContextResolver");
 var FilterClickCollector = require("./collectors/FilterClickCollector");
 var ProductClickCollector = require("./collectors/ProductClickCollector");
 var BasketClickCollector = require("./collectors/BasketClickCollector");
@@ -26,6 +27,7 @@ var SearchCollector = {
   "ImpressionCollector" : ImpressionCollector,
   "CookieSessionResolver" : CookieSessionResolver,
   "PositionResolver" : PositionResolver,
+  "ContextResolver" : ContextResolver,
   "InstantSearchQueryCollector" : InstantSearchQueryCollector,
   "FilterClickCollector" : FilterClickCollector,
   "ProductClickCollector" : ProductClickCollector,

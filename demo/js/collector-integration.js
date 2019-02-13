@@ -27,15 +27,18 @@ window.addEventListener("load", function() {
   };
   var sessionResolver = new SearchCollector.CookieSessionResolver();
   var trailResolver = new SearchCollector.Trail(queryResolver, sessionResolver);
+  var contextResolver = new SearchCollector.ContextResolver(window, window.document);
+
   var collector = new SearchCollector.Collector({
     "sessionResolver" : sessionResolver,
     "queryResolver" : queryResolver,
     "trailResolver" : trailResolver,
+    "contextResolver" : contextResolver,
     "endpoint" : "/collector",
     "debug" : true
   });
 
-  collector.add(new SearchCollector.BrowserCollector());
+  // collector.add(new SearchCollector.BrowserCollector());
   collector.add(new SearchCollector.FilterClickCollector(".facet", element => element.getAttribute("data-filter")));
   collector.add(new SearchCollector.SearchEventResultCollector("search"));
   collector.add(new SearchCollector.ProductClickCollector(".grid-item", {
