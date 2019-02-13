@@ -1,13 +1,13 @@
-var ClickCollector = require("./ClickCollector");
+var AbstractCollector = require("./AbstractCollector");
 
 /**
  * Triggered by a clickSelector, the collector will fire the contentSelector to select elements to collect
  * information from and write to the collector writer
  */
-class CheckoutClickCollector {
+class CheckoutClickCollector extends AbstractCollector {
 
   constructor(clickSelector, contentSelector, resolvers) {
-    this.type = "checkout";
+    super("checkout");
     this.clickSelector = clickSelector
     this.contentSelector = contentSelector;
     this.idResolver = resolvers.idResolver;
@@ -21,10 +21,11 @@ class CheckoutClickCollector {
    * @param {object} writer - The writer to send the data to
    */
   attach(writer) {
+    var doc = this.getDocument();
 
     // Activates on click of the element selected using the clickSelector
     var handler = element => {
-      var items = document.querySelectorAll(this.contentSelector);
+      var items = doc.querySelectorAll(this.contentSelector);
       items.forEach(item => {
         let id = this.idResolver(item);
   
@@ -41,14 +42,14 @@ class CheckoutClickCollector {
           // thus when we try to resolve the trail for each of them we need to have them
           // as separate records
           writer.write({
-            "type" : this.type,
+            "type" : this.getType(),
             "data" : data
           });
         }
       })
     }
 
-    var nodeList = document.querySelectorAll(this.clickSelector);
+    var nodeList = doc.querySelectorAll(this.clickSelector);
     nodeList.forEach(el => el.addEventListener("click", handler));
   }
 }

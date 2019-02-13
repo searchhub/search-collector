@@ -1,4 +1,5 @@
-var sentinel = require('sentinel-js');
+var Sentinel = require('../utils/Sentinel');
+var AbstractCollector = require("./AbstractCollector");
 
 /**
  * Registers appearance of elements matching a query selector. Handles both DOM elements
@@ -7,7 +8,7 @@ var sentinel = require('sentinel-js');
  * When an element is found in the DOM, a function provided at construction time get invoked to collect data points
  * from the element.
  */
-class ProductListCollector {
+class ProductListCollector extends AbstractCollector {
 
   /**
    * Construct a click collector
@@ -18,8 +19,8 @@ class ProductListCollector {
    * @param {string} type - The type of element/context to report
    */
   constructor(selectorExpression, type, resolvers) {
+      super(type ? type : "product-list");
       this.selectorExpression = selectorExpression;
-      this.type = type ? type : "product-list";
       this.idResolver = resolvers.idResolver;
       this.priceResolver = resolvers.priceResolver;
   }
@@ -45,23 +46,13 @@ class ProductListCollector {
         }
   
         writer.write({
-          "type" : this.type,
+          "type" : this.getType(),
           "data" : payload
         });
       }
-  }
+    }
 
-    // This section is commented because as of present, browsers will
-    // trigger reflow when the sentinel library attaches its animation css
-    // rules, effectively invoking itself even for elements that are already in
-    // the DOM. This makes the explicit call to the querySelector redundant, in
-    // fact it causes problems since it's firing events twice for the same element
-    
-    // Non-live list of nodes matching the expression.
-    // var nodeList = document.querySelectorAll(this.selectorExpression);
-    // nodeList.forEach(handler);
-
-    // For elements inserted dynamically in the DOM
+    var sentinel = new Sentinel(this.getDocument());
     sentinel.on(this.selectorExpression, handler);
   }
 }

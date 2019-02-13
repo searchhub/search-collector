@@ -1,5 +1,6 @@
 var scrollMonitor = require("scrollmonitor");
-var sentinel = require('sentinel-js');
+var Sentinel = require('../utils/Sentinel');
+var AbstractCollector = require("./AbstractCollector");
 
 /**
  * Collect impressions - a disply of a product in the browser viewport. If the product is shown multiple
@@ -7,7 +8,7 @@ var sentinel = require('sentinel-js');
  *
  * Handles both DOM elements present in the DOM and elements inserted after the page load / collector construction.
  */
-class ImpressionCollector {
+class ImpressionCollector extends AbstractCollector {
 
   /**
    * Construct impression collector
@@ -17,6 +18,7 @@ class ImpressionCollector {
    * @param {function} attributeCollector - A function to be triggered on click of the element, intended to collect specific element data
    */
   constructor(selectorExpression, attributeCollector) {
+    super("impression");
     this.selectorExpression = selectorExpression;
     this.attributeCollector = attributeCollector;
   }
@@ -46,19 +48,8 @@ class ImpressionCollector {
       })
     };
 
-
-    // This section is commented because as of present, browsers will
-    // trigger reflow when the sentinel library attaches its animation css
-    // rules, effectively invoking itself even for elements that are already in
-    // the DOM. This makes the explicit call to the querySelector redundant, in
-    // fact it causes problems since it's firing events twice for the same element
-    
-    // For all elements currently present in the DOM
-    // var elements = document.querySelectorAll(this.selectorExpression);
-    // elements.forEach(handler);
-
-    // For elements inserted dynamically in the DOM
-    sentinel.on(this.selectorExpression, handler);
+    var sentinel = new Sentinel(this.getDocument());
+    sentinel.on(this.selectorExpression, handler);    
   }
 }
 module.exports = ImpressionCollector;

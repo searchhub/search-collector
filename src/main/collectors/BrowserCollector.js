@@ -1,10 +1,14 @@
+var AbstractCollector = require("./AbstractCollector");
+
 /**
  * Collect basic browser information. Note that depending on how you use this you may
  * need to consult the GDPR guidelines
  */
-class BrowserCollector {
+class BrowserCollector extends AbstractCollector {
 
-  constructor() {}
+  constructor() {
+    super("browser");
+  }
 
   /**
    * Attach a writer, note that this collector is not asynchronous and will write
@@ -13,13 +17,16 @@ class BrowserCollector {
    * @param {object} writer - The writer to send the data to
    */
   attach(writer) {
+    let win = this.getContext() ? this.getContext().getWindow() : window;
+    let doc = this.getContext() ? this.getContext().getDocument() : document;
+    
     writer.write({
-      "type" : "browser",
-      "location" : window.location.href,
-      "referrer" : document.referer,
-      "language" : window.navigator.userLanguage || window.navigator.language,
-      "width" : window.screen.width,
-      "height" : window.screen.height,
+      "type" : this.getType(),
+      "location" : win.location.href,
+      "referrer" : doc.referrer,
+      "language" : win.navigator.userLanguage || win.navigator.language,
+      "width" : win.screen.width,
+      "height" : win.screen.height,
     });
   }
 }

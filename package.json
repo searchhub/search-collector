@@ -1,6 +1,6 @@
 {
   "name": "search-collector",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Search Collector - Search metrics collection SDK",
   "license": "MIT",
   "homepage": "https://github.com/searchhub/search-collector",
@@ -27,7 +27,6 @@
     "watchify": "^3.11.0"
   },
   "dependencies": {
-    "scrollmonitor": "^1.2.3",
-    "sentinel-js": "0.0.4"
+    "scrollmonitor": "^1.2.3"
   }
 }

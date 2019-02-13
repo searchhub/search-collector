@@ -1,4 +1,5 @@
-var sentinel = require('sentinel-js');
+var Sentinel = require('../utils/Sentinel');
+var AbstractCollector = require("./AbstractCollector");
 
 /**
  * Collect clicks on elements matching a query selector. Handles both DOM elements
@@ -7,7 +8,7 @@ var sentinel = require('sentinel-js');
  * When a click occurs, a function provided at construction time get invoked to collect data points
  * from the element.
  */
-class ClickCollector {
+class ClickCollector extends AbstractCollector {
 
   /**
    * Construct a click collector
@@ -18,8 +19,8 @@ class ClickCollector {
    * @param {string} type - The type of element click to report
    */
   constructor(selectorExpression, type) {
+      super(type ? type : "click")
       this.selectorExpression = selectorExpression;
-      this.type = type ? type : "click";
   }
 
   /**
@@ -50,17 +51,7 @@ class ClickCollector {
       });
     }
 
-    // This section is commented because as of present, browsers will
-    // trigger reflow when the sentinel library attaches its animation css
-    // rules, effectively invoking itself even for elements that are already in
-    // the DOM. This makes the explicit call to the querySelector redundant, in
-    // fact it causes problems since it's firing events twice for the same element
-
-    // Non-live list of nodes matching the expression.
-    // var nodeList = document.querySelectorAll(this.selectorExpression);
-    // nodeList.forEach(handler);
-
-    // For elements inserted dynamically in the DOM
+    var sentinel = new Sentinel(this.getDocument());
     sentinel.on(this.selectorExpression, handler);
   }
 }
