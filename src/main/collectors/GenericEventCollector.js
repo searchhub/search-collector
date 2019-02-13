@@ -15,6 +15,7 @@ class GenericEventCollector extends AbstractCollector {
    * @param {string} eventName - the name of the event to react on
    */
   constructor(eventName) {
+    super();
     this.eventName = eventName;
   }
 
