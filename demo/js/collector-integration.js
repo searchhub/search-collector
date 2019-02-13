@@ -38,7 +38,6 @@ window.addEventListener("load", function() {
     "debug" : true
   });
 
-  // collector.add(new SearchCollector.BrowserCollector());
   collector.add(new SearchCollector.FilterClickCollector(".facet", element => element.getAttribute("data-filter")));
   collector.add(new SearchCollector.SearchEventResultCollector("search"));
   collector.add(new SearchCollector.ProductClickCollector(".grid-item", {
