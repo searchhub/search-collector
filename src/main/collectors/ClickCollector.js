@@ -1,4 +1,4 @@
-var sentinel = require('sentinel-js');
+var Sentinel = require('../utils/Sentinel');
 var AbstractCollector = require("./AbstractCollector");
 
 /**
@@ -51,7 +51,7 @@ class ClickCollector extends AbstractCollector {
       });
     }
 
-    // TODO pass proper context window and document
+    var sentinel = new Sentinel(this.getContext() ? this.getContext().getDocument() : document);
     sentinel.on(this.selectorExpression, handler);
   }
 }
