@@ -25,7 +25,7 @@ class GenericEventCollector extends AbstractCollector {
    * @param {object} writer - The writer to send the data to
    */
   attach(writer) {
-    var win = this.getContext() ? this.getContext().getWindow() : window;
+    var win = this.getWindow();
 
     win.addEventListener(this.eventName, e => {
       writer.write({

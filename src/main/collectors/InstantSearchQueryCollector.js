@@ -29,7 +29,7 @@ class InstantSearchQueryCollector extends AbstractCollector {
    * @param {object} writer - The writer to send the data to
    */
   attach(writer) {
-    var doc = this.getContext() ? this.getContext().getDocument() : document;
+    var doc = this.getDocument();
     var searchBox = doc.querySelector(this.searchFieldSelector);
 
     if (searchBox) {

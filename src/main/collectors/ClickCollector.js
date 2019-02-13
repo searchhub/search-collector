@@ -51,7 +51,7 @@ class ClickCollector extends AbstractCollector {
       });
     }
 
-    var sentinel = new Sentinel(this.getContext() ? this.getContext().getDocument() : document);
+    var sentinel = new Sentinel(this.getDocument());
     sentinel.on(this.selectorExpression, handler);
   }
 }

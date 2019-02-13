@@ -15,6 +15,14 @@ class AbstractCollector {
   getContext() {
     return this.contextResolver;
   }
+
+  getWindow() {
+    return this.contextResolver ? this.contextResolver.getWindow() : window;
+  }
+
+  getDocument() {
+    return this.contextResolver ? this.contextResolver.getDocument() : window.document;
+  }
 }
 
 module.exports = AbstractCollector;
