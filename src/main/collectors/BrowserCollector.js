@@ -23,7 +23,7 @@ class BrowserCollector extends AbstractCollector {
     writer.write({
       "type" : this.getType(),
       "location" : win.location.href,
-      "referrer" : doc.referer,
+      "referrer" : doc.referrer,
       "language" : win.navigator.userLanguage || win.navigator.language,
       "width" : win.screen.width,
       "height" : win.screen.height,
