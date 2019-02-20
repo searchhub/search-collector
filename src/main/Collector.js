@@ -16,7 +16,7 @@ class Collector {
 
   add(collector) {
     
-    if (this.options.contextResolver) {
+    if (this.options.contextResolver && typeof collector.setContext === "function") {
       collector.setContext(this.options.contextResolver);
     }
 
