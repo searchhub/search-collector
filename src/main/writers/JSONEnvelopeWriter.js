@@ -14,6 +14,8 @@ class JSONEnvelopeWriter {
       this.trailResolver = options.trailResolver;
       this.debug = options.debug ? true : false;
       this.channel = options.channel;
+      this.recordUrl = options.recordUrl ? true : false;
+      this.contextResolver = options.contextResolver;
     }
 
     write(data) {
@@ -50,6 +52,11 @@ class JSONEnvelopeWriter {
 
       if (this.debug) {
         console.log(JSON.stringify(data));
+      }
+
+      if (this.recordUrl) {
+        let win = this.contextResolver ? this.contextResolver.getWindow() : window;
+        data.url = win.location.href;
       }
 
       this.delegate.write(data);

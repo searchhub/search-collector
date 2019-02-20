@@ -35,7 +35,8 @@ window.addEventListener("load", function() {
     "trailResolver" : trailResolver,
     "contextResolver" : contextResolver,
     "endpoint" : "/collector",
-    "debug" : true
+    "debug" : true,
+    "recordUrl" : true
   });
 
   collector.add(new SearchCollector.FilterClickCollector(".facet", element => element.getAttribute("data-filter")));
