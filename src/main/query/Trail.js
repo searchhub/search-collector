@@ -1,5 +1,9 @@
 const KEY = "search-collector-trail";
-const TTL = 1000 * 60 * 30;
+
+// Let the product search trails live for 2 days. Note that
+// the product trail is independent from any session, thus we should be 
+// able to identify the source query for a product even across sessions
+const TTL = 1000 * 60 * 60 * 24 * 2; 
 
 class Trail {
 
@@ -37,11 +41,13 @@ class Trail {
 
   /**
   * Register this product id as starting a purchase journey at this session/query
+  * Possible trail types are "main" and "associated"
   */
-  register(id) {
+  register(id, trailType = Trail.Type.Main, query) {
     var trail = {
       "timestamp" : new Date().getTime(),
-      "query" : this.queryResolver()
+      "query" : query || this.queryResolver(),
+      "type" : trailType
     };
 
     for (let storage of [localStorage, sessionStorage]) {
@@ -64,6 +70,11 @@ class Trail {
   _save(storage, data) {
     storage.setItem(KEY, JSON.stringify(data));
   }
+}
+
+Trail.Type = {
+  Main : "main",
+  Associated : "associated"
 }
 
 module.exports = Trail;

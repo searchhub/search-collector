@@ -60,6 +60,19 @@ class SearchEngine {
     return data;
   }
 
+
+  recommend(id) {
+    let result = [];
+
+    while (result.length < 4) {
+      let i = Math.floor((Math.random() * this.data.length));
+      result.push(this.data[i]);
+    }
+
+    return result;
+  }
+
+
   facets(result) {
     let brands = {};
     let categories = {};

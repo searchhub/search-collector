@@ -21,6 +21,11 @@
         render.details(container, item, id => {
           basket.add(id);
         });
+
+        let recos = document.getElementById('associated-products');
+        for (let item of engine.recommend(id)) {
+          render.product(recos, item);
+        }
       });
     </script>
   </head>
@@ -31,6 +36,12 @@
       <div class="product-details" id="product-details">
       </div>
   </div>
+
+  <br><br>
+  Recommended products
+  <section class="associated-products product-grid" id="associated-products">
+  </section>
+  
   <script type="text/javascript" src="search-collector.js"></script>
 </body>
 </html>

@@ -27,7 +27,7 @@ class JSONEnvelopeWriter {
         data.session = this.sessionResolver.get();
       }
 
-      if (this.queryResolver) {
+      if (!data.query && this.queryResolver) {
         let q = this.queryResolver();
         if (!q) {
           // See if we have a payload id and a trail for it. This means we
@@ -39,6 +39,7 @@ class JSONEnvelopeWriter {
             if (trail && trail.query) {
               data.query = trail.query;
               data.queryTime = trail.timestamp;
+              data.trailType = trail.type;
             }
           }
         } else {

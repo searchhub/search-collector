@@ -42,3 +42,9 @@ aside {
   width: 80%;
   align-self: center;
 }
+
+.associated-products > div > img {
+  width: 200px;
+  height: 200px;
+  display: block;
+}

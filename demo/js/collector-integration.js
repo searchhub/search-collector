@@ -41,12 +41,26 @@ window.addEventListener("load", function() {
 
   collector.add(new SearchCollector.FilterClickCollector(".facet", element => element.getAttribute("data-filter")));
   collector.add(new SearchCollector.SearchEventResultCollector("search"));
-  collector.add(new SearchCollector.ProductClickCollector(".grid-item", {
-    "idResolver" : element => element.getAttribute("id"),
-    "positionResolver" : element => new SearchCollector.PositionResolver(".grid-item", element).get(),
-    "priceResolver" : element => element.getAttribute("data-price"),
-    "trailResolver" : trailResolver
-  }));
+  
+  if (window.location.pathname == "/product.html") {
+    let params = new URLSearchParams(window.location.search);
+    let mainProductId = params.get('id');
+
+    collector.add(new SearchCollector.AssociatedProductCollector(".grid-item", mainProductId, {
+      "idResolver" : element => element.getAttribute("id"),
+      "positionResolver" : element => new SearchCollector.PositionResolver(".grid-item", element).get(),
+      "priceResolver" : element => element.getAttribute("data-price"),
+      "trailResolver" : trailResolver
+    }));
+  } else {
+    collector.add(new SearchCollector.ProductClickCollector(".grid-item", {
+      "idResolver" : element => element.getAttribute("id"),
+      "positionResolver" : element => new SearchCollector.PositionResolver(".grid-item", element).get(),
+      "priceResolver" : element => element.getAttribute("data-price"),
+      "trailResolver" : trailResolver
+    }));
+  }
+
   collector.add(new SearchCollector.BasketClickCollector("#add-to-basket", {
     "idResolver" : element => element.getAttribute("data-product"),
     "priceResolver" : element => element.getAttribute("data-price")

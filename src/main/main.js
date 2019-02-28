@@ -11,6 +11,7 @@ var FilterClickCollector = require("./collectors/FilterClickCollector");
 var ProductClickCollector = require("./collectors/ProductClickCollector");
 var BasketClickCollector = require("./collectors/BasketClickCollector");
 var ProductListCollector = require("./collectors/ProductListCollector");
+var AssociatedProductCollector = require("./collectors/AssociatedProductCollector");
 var SearchEventResultCollector = require("./collectors/SearchEventResultCollector");
 var GenericEventCollector = require("./collectors/GenericEventCollector");
 var CheckoutClickCollector = require("./collectors/CheckoutClickCollector")
@@ -33,6 +34,7 @@ var SearchCollector = {
   "ProductClickCollector" : ProductClickCollector,
   "BasketClickCollector" : BasketClickCollector,
   "ProductListCollector" : ProductListCollector,
+  "AssociatedProductCollector" : AssociatedProductCollector,
   "SearchEventResultCollector" : SearchEventResultCollector,
   "GenericEventCollector" : GenericEventCollector,
   "CheckoutClickCollector" : CheckoutClickCollector,
