@@ -39,8 +39,9 @@ class CookieSessionResolver {
         session = generateId();
       }
 
-      // Expire after 30 min of inactivity
-      setCookie(name, session, 30);
+      // Expire after 1 day of inactivity, we don't need our sessions
+      // for security purpose, but to rather stitch search actions.
+      setCookie(name, session, 60 * 24);
     }
 
     return session;
