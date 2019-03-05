@@ -39,6 +39,7 @@ window.addEventListener("load", function() {
     "recordUrl" : true
   });
 
+  collector.add(new SearchCollector.BrowserCollector());
   collector.add(new SearchCollector.FilterClickCollector(".facet", element => element.getAttribute("data-filter")));
   collector.add(new SearchCollector.SearchEventResultCollector("search"));
   

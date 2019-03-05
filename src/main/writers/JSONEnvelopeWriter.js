@@ -55,7 +55,7 @@ class JSONEnvelopeWriter {
         console.log(JSON.stringify(data));
       }
 
-      if (this.recordUrl) {
+      if (this.recordUrl & !data.url) {
         let win = this.contextResolver ? this.contextResolver.getWindow() : window;
         data.url = win.location.href;
       }
