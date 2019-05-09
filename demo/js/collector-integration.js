@@ -42,6 +42,7 @@ window.addEventListener("load", function() {
   collector.add(new SearchCollector.BrowserCollector());
   collector.add(new SearchCollector.FilterClickCollector(".facet", element => element.getAttribute("data-filter")));
   collector.add(new SearchCollector.SearchEventResultCollector("search"));
+  collector.add(new SearchCollector.InstantSearchQueryCollector("#search-box", "instant-search"));
   
   if (window.location.pathname == "/product.html") {
     let params = new URLSearchParams(window.location.search);

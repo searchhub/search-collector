@@ -17,8 +17,8 @@ class InstantSearchQueryCollector extends AbstractCollector {
    * @constructor
    * @param {string} searchFieldSelector - Document query selector identifying the elements to attach to
    */
-  constructor(searchFieldSelector) {
-    super("search");
+  constructor(searchFieldSelector, type) {
+    super(type || "search");
     this.searchFieldSelector = searchFieldSelector;
   }
 
@@ -31,9 +31,15 @@ class InstantSearchQueryCollector extends AbstractCollector {
   attach(writer) {
     var doc = this.getDocument();
     var searchBox = doc.querySelector(this.searchFieldSelector);
+    var type = this.getType();
 
     if (searchBox) {
-      searchBox.addEventListener("keyup", e => {
+      searchBox.addEventListener("keypress", e => {
+        
+        // Ignore shift, ctrl, etc. presses, react only on characters
+        if (e.which === 0) {
+          return;
+        }
 
         // Delay the reaction of the event, clean the timeout if the event fires
         // again and start counting from 0
@@ -42,7 +48,7 @@ class InstantSearchQueryCollector extends AbstractCollector {
           var keywords = searchBox.value;
           if (keywords && keywords.length > MIN_LENGTH) {
             writer.write({
-              "type" : "search",
+              "type" : type,
               "data" : keywords
             });
           }
