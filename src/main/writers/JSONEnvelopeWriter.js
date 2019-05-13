@@ -15,6 +15,7 @@ class JSONEnvelopeWriter {
       this.debug = options.debug ? true : false;
       this.channel = options.channel;
       this.recordUrl = options.recordUrl ? true : false;
+      this.recordReferrer = options.recordReferrer ? true : false;
       this.contextResolver = options.contextResolver;
     }
 
@@ -55,9 +56,14 @@ class JSONEnvelopeWriter {
         console.log(JSON.stringify(data));
       }
 
-      if (this.recordUrl & !data.url) {
+      if (this.recordUrl && !data.url) {
         let win = this.contextResolver ? this.contextResolver.getWindow() : window;
         data.url = win.location.href;
+      }
+
+      if (this.recordReferrer && !data.ref) {
+        let doc = this.contextResolver ? this.contextResolver.getDocument() : document;
+        data.ref = doc.referrer;
       }
 
       this.delegate.write(data);

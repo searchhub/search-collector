@@ -36,7 +36,8 @@ window.addEventListener("load", function() {
     "contextResolver" : contextResolver,
     "endpoint" : "/collector",
     "debug" : true,
-    "recordUrl" : true
+    "recordUrl" : true,
+    "recordReferrer" : true
   });
 
   collector.add(new SearchCollector.BrowserCollector());
