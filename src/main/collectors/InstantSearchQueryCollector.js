@@ -49,7 +49,7 @@ class InstantSearchQueryCollector extends AbstractCollector {
           if (keywords && keywords.length > MIN_LENGTH) {
             writer.write({
               "type" : type,
-              "data" : keywords
+              "keywords" : keywords
             });
           }
         }, 400);
