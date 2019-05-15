@@ -2,6 +2,7 @@ var AbstractCollector = require("./AbstractCollector");
 
 // Don't consider search phrases shorter than this
 const MIN_LENGTH = 2;
+const DELAY = 500;
 
 /**
  * Collect search information from a field that has a "as-you-type" trigger and
@@ -46,13 +47,13 @@ class InstantSearchQueryCollector extends AbstractCollector {
         delay(function() {
 
           var keywords = searchBox.value;
-          if (keywords && keywords.length > MIN_LENGTH) {
+          if (keywords && keywords.length >= MIN_LENGTH) {
             writer.write({
               "type" : type,
               "keywords" : keywords
             });
           }
-        }, 400);
+        }, DELAY);
       });
     }
   }
