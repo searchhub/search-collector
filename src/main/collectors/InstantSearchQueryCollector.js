@@ -18,8 +18,8 @@ class InstantSearchQueryCollector extends AbstractCollector {
    * @constructor
    * @param {string} searchFieldSelector - Document query selector identifying the elements to attach to
    */
-  constructor(searchFieldSelector, type) {
-    super(type || "search");
+  constructor(searchFieldSelector) {
+    super("instant-search");
     this.searchFieldSelector = searchFieldSelector;
   }
 

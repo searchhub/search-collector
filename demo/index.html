@@ -36,13 +36,17 @@
 
       return result;
     }
+
+    function doSearch(words) {
+      let phrase = words || document.getElementById('search-box').value;
+
+      let result = search(phrase);
+      window.dispatchEvent(new CustomEvent("search", {"detail" : {"keywords" : phrase, "count" : result.length}}));
+    }
     
     window.addEventListener('load', e => {
       document.getElementById('search-button').addEventListener("click", e => {
-        let phrase = document.getElementById('search-box').value;
-
-        let result = search(phrase);
-        window.dispatchEvent(new CustomEvent("search", {"detail" : {"keywords" : phrase, "count" : result.length}}));
+        doSearch();
       });
       document.getElementById('basket-count').innerText = '(' + basket.list().length + ')';
 
@@ -53,7 +57,7 @@
 <body>
   <div class="page">
       <header>
-        <input id="search-box" type="search" placeholder="Search the catalog"><button id="search-button">Search</button>
+        <input id="search-box" type="search" placeholder="Search the catalog"><button id="search-button">Search</button> suggestion : <a href="javascript:doSearch('dress')" id="suggestion" style="cursor: pointer; text-decoration: underline">dress</a>
         <a href="basket.html" style="float: right">Basket <span id="basket-count"></span></a>
       </header>
 

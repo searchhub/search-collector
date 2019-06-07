@@ -43,7 +43,18 @@ window.addEventListener("load", function() {
   collector.add(new SearchCollector.BrowserCollector());
   collector.add(new SearchCollector.FilterClickCollector(".facet", element => element.getAttribute("data-filter")));
   collector.add(new SearchCollector.SearchEventResultCollector("search"));
-  collector.add(new SearchCollector.InstantSearchQueryCollector("#search-box", "instant-search"));
+  collector.add(new SearchCollector.InstantSearchQueryCollector("#search-box"));
+  collector.add(new SearchCollector.SuggestSearchCollector((writer, type, context) => {
+    let element = context.getDocument().getElementById("suggestion");
+
+    element.addEventListener("click", e => {
+      let words = element.innerText;
+      writer.write({
+        "type" : type,
+        "keywords" : words
+      }); 
+    });
+  }));
   
   if (window.location.pathname == "/product.html") {
     let params = new URLSearchParams(window.location.search);

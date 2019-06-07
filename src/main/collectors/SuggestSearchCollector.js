@@ -13,7 +13,7 @@ class SuggestSearchCollector extends AbstractCollector {
    */
   constructor(resolver) {
     super("suggest-search");
-    this.reslver = resolver;
+    this.resolver = resolver;
   }
 
   /**
@@ -23,7 +23,7 @@ class SuggestSearchCollector extends AbstractCollector {
    * @param {object} writer - The writer to send the data to
    */
   attach(writer) {
-    resolver(writer);
+    this.resolver(writer, this.getType(), this.getContext());
   }
 }
 module.exports = SuggestSearchCollector;
