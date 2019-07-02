@@ -22,9 +22,9 @@
     "derequire": "^2.0.6",
     "nodeunit": "^0.11.3",
     "npm-run-all": "^4.0.2",
-    "puppeteer": "^1.5.0",
+    "puppeteer": "^1.18.1",
     "uglify-js": "^3.0.28",
-    "watchify": "^3.11.0"
+    "watchify": "^3.11.1"
   },
   "dependencies": {
     "scrollmonitor": "^1.2.3"
