@@ -20,6 +20,7 @@ var SuggestSearchCollector = require("./collectors/SuggestSearchCollector");
 var Trail = require("./query/Trail");
 var Query = require("./query/Query");
 var Util = require("./utils/Util");
+var Sentinel = require("./utils/Sentinel");
 
 // Main entry and global export point
 var SearchCollector = {
@@ -44,7 +45,8 @@ var SearchCollector = {
   "AbstractCollector" : AbstractCollector,
   "Trail" : Trail,
   "Query" : Query,
-  "Util" : Util
+  "Util" : Util,
+  "Sentinel" : Sentinel
 }
 
 // When running through watchify, this gets called directly. When going through the build process
