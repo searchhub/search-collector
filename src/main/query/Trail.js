@@ -1,5 +1,3 @@
-const KEY = "search-collector-trail";
-
 // Let the product search trails live for 2 days. Note that
 // the product trail is independent from any session, thus we should be 
 // able to identify the source query for a product even across sessions
@@ -7,9 +5,10 @@ const TTL = 1000 * 60 * 60 * 24 * 2;
 
 class Trail {
 
-  constructor(queryResolver, sessionResolver) {
+  constructor(queryResolver, sessionResolver, id) {
       this.queryResolver = queryResolver;
       this.sessionResolver = sessionResolver;
+      this.key = "search-collector-trail" + (id ? "-" + id : "");
 
       try {
         let localTrails = this._load(localStorage);
@@ -63,12 +62,12 @@ class Trail {
   }
 
   _load(storage) {
-    var data = storage.getItem(KEY);
+    var data = storage.getItem(this.key);
     return data ? JSON.parse(data) : {};
   }
 
   _save(storage, data) {
-    storage.setItem(KEY, JSON.stringify(data));
+    storage.setItem(this.key, JSON.stringify(data));
   }
 }
 

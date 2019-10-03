@@ -25,8 +25,10 @@ window.addEventListener("load", function() {
 
       return q.toString();
   };
+
+  var endpoint = "/collector";
   var sessionResolver = new SearchCollector.CookieSessionResolver();
-  var trailResolver = new SearchCollector.Trail(queryResolver, sessionResolver);
+  var trailResolver = new SearchCollector.Trail(queryResolver, sessionResolver, endpoint);
   var contextResolver = new SearchCollector.ContextResolver(window, window.document);
 
   var collector = new SearchCollector.Collector({
@@ -34,7 +36,7 @@ window.addEventListener("load", function() {
     "queryResolver" : queryResolver,
     "trailResolver" : trailResolver,
     "contextResolver" : contextResolver,
-    "endpoint" : "/collector",
+    "endpoint" : endpoint,
     "debug" : true,
     "recordUrl" : true,
     "recordReferrer" : true
@@ -46,14 +48,15 @@ window.addEventListener("load", function() {
   collector.add(new SearchCollector.InstantSearchQueryCollector("#search-box"));
   collector.add(new SearchCollector.SuggestSearchCollector((writer, type, context) => {
     let element = context.getDocument().getElementById("suggestion");
-
-    element.addEventListener("click", e => {
-      let words = element.innerText;
-      writer.write({
-        "type" : type,
-        "keywords" : words
-      }); 
-    });
+    if (element) {
+      element.addEventListener("click", e => {
+        let words = element.innerText;
+        writer.write({
+          "type" : type,
+          "keywords" : words
+        }); 
+      });
+    }
   }));
   
   if (window.location.pathname == "/product.html") {

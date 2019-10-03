@@ -8,10 +8,11 @@
  */
 class BufferingWriter {
 
-  constructor(delegate) {
+  constructor(delegate, id) {
     this.delegate = delegate;
-    this.queue = new LocalStorageQueue();
+    this.queue = new LocalStorageQueue(id);
     this.timer = setTimeout(this.flush.bind(this), 1000);
+    this.id = id;
   }
 
   write(data) {
@@ -34,11 +35,11 @@ class BufferingWriter {
 
 class LocalStorageQueue {
 
-    constructor() {
-      this.QUEUE_NAME = "search-collector-queue";
+    constructor(id) {
+      this.name = "search-collector-queue" + (id ? "-" + id : "");
       this.queue = [];
 
-      var storedQueue = localStorage.getItem(this.QUEUE_NAME);
+      var storedQueue = localStorage.getItem(this.name);
       if (storedQueue) {
         try {
           this.queue = JSON.parse(storedQueue);
@@ -66,7 +67,7 @@ class LocalStorageQueue {
     }
 
     _save() {
-      localStorage.setItem(this.QUEUE_NAME, JSON.stringify(this.queue));
+      localStorage.setItem(this.name, JSON.stringify(this.queue));
     }
 }
 

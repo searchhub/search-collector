@@ -30,7 +30,7 @@ class Collector {
     // This writer pipeline will send Base64 encoded array of json events
     var writer =  isSQS(endpoint, this.options.sqs) ? new SQSEventWriter(endpoint) : new RestEventWriter(endpoint);
     writer = new Base64EncodeWriter(writer);
-    writer = new BufferingWriter(writer);
+    writer = new BufferingWriter(writer, this.options.endpoint);
     writer = new JSONEnvelopeWriter(writer, this.options);
 
     this.collectors.forEach(function(collector) {
