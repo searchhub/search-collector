@@ -1,6 +1,6 @@
 {
   "name": "search-collector",
-  "version": "0.1.15",
+  "version": "0.1.16",
   "description": "Search Collector - Search metrics collection JavaScript SDK",
   "license" : "MIT",
   "homepage" : "https://github.com/searchhub/search-collector"
