@@ -58,6 +58,15 @@ window.addEventListener("load", function() {
       });
     }
   }));
+  collector.add(new SearchCollector.FiredSearchCollector((writer, type, context) => {
+    context.getWindow().addEventListener("search", e => {
+      let words = context.getDocument().querySelector("#search-box").value;
+      writer.write({
+        "type" : type,
+        "keywords" : words
+      }); 
+    });
+  }));
   
   if (window.location.pathname == "/product.html") {
     let params = new URLSearchParams(window.location.search);
