@@ -57,7 +57,16 @@ function setCookie(name, value, minutes) {
         expires = "; expires=" + date.toUTCString();
     }
 
-    document.cookie = name + "=" + (value || "")  + expires + "; path=/";
+    // Handle the upcoming forced switch to SameSite & Secure params https://www.chromestatus.com/feature/5633521622188032
+    // Since this is a generic library, we can't restrict the domain under which it's beeing served, thus not setting domain
+    // for the cookie. It's usually loaded and subsequently requested from a third-party domain, thus we need to specify SameSite=None which
+    // per the latest specifications requires the Secure attribute. 
+    //
+    // To allow local debugging, we won't set these when loaded on localhost. Note, after this change, you won't be able to serve
+    // the collector to real clients over non-https connections - the session cookies won't match
+    var sameSite = window.location.hostname === "localhost" ? "" : "; SameSite=None; Secure";
+
+    document.cookie = name + "=" + (value || "")  + expires + "; path=/" + sameSite;
 }
 
 function getCookie(cname) {
