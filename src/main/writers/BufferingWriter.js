@@ -1,3 +1,5 @@
+var LocalStorageQueue = require("../utils/LocalStorageQueue");
+
 /**
  * A writer that buffers the incoming events in a local storage queue and writes
  * them out in batches every second. If the queue is not empty, when the timer ticks
@@ -31,44 +33,6 @@ class BufferingWriter {
       this.timer = setTimeout(this.flush.bind(this), 1000);
     }
   }
-}
-
-class LocalStorageQueue {
-
-    constructor(id) {
-      this.name = "search-collector-queue" + (id ? "-" + id : "");
-      this.queue = [];
-
-      var storedQueue = localStorage.getItem(this.name);
-      if (storedQueue) {
-        try {
-          this.queue = JSON.parse(storedQueue);
-        } catch (e) {
-          console.log("Error parsing stored event queue " + e);
-        }
-      }
-    }
-
-    push(data) {
-      this.queue.push(data);
-      this._save();
-    }
-
-    drain() {
-      var buffer = this.queue;
-      this.queue = [];
-      this._save();
-
-      return buffer;
-    }
-
-    size() {
-      return this.queue.length;
-    }
-
-    _save() {
-      localStorage.setItem(this.name, JSON.stringify(this.queue));
-    }
 }
 
 module.exports = BufferingWriter;

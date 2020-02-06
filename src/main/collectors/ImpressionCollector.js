@@ -1,6 +1,7 @@
 var scrollMonitor = require("scrollmonitor");
 var Sentinel = require('../utils/Sentinel');
 var AbstractCollector = require("./AbstractCollector");
+var LocalStorageQueue = require("../utils/LocalStorageQueue");
 
 /**
  * Collect impressions - a disply of a product in the browser viewport. If the product is shown multiple
@@ -21,35 +22,56 @@ class ImpressionCollector extends AbstractCollector {
     super("impression");
     this.selectorExpression = selectorExpression;
     this.attributeCollector = attributeCollector;
+    
+    this.queue = new LocalStorageQueue("impressions");
+    this.timer = setTimeout(this.flush.bind(this), 1000);
   }
 
   /**
    * Add impression event listeners to the identified elements, write the data
-   * when the event occurs
+   * when the event occurs, with a delay of 1s - we could gather many events within this timeframe
    *
    * @param {object} writer - The writer to send the data to
    */
   attach(writer) {
-    var handler = el => {
+    this.writer = writer;
+
+    
+    const handler = el => {
       var data = this.attributeCollector(el);
       var watcher = scrollMonitor.create(el);
 
-      watcher.enterViewport(function() {
+      watcher.enterViewport(() => {
         // Figure out if we need to check the visibility of an element i.e.
         // guard against elements that enter the viewport but have display=hidden
         // if (el.offsetParent === null) {
         //  return;
         // }
 
-        writer.write({
-          "type" : "impression",
-          "data" : data
-        });
+        this.queue.push(data);
       })
     };
 
     var sentinel = new Sentinel(this.getDocument());
     sentinel.on(this.selectorExpression, handler);    
   }
+
+
+  flush(cancelTimer) {
+    if (this.queue.size() > 0) {
+      // TODO organize drain and write via callbacks to ensure no data is lost
+      // if the browser shutsdown before the write is complete
+      var data = this.queue.drain();
+      
+      this.writer.write({
+        "type" : "impression",
+        "data" : data
+      });
+    }
+
+    if (!cancelTimer) {
+      this.timer = setTimeout(this.flush.bind(this), 1000);
+    }
+  }  
 }
 module.exports = ImpressionCollector;

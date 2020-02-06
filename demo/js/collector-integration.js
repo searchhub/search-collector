@@ -85,6 +85,13 @@ window.addEventListener("load", function() {
       "priceResolver" : element => element.getAttribute("data-price"),
       "trailResolver" : trailResolver
     }));
+
+    collector.add(new SearchCollector.ImpressionCollector(".grid-item", element => {
+      return {
+        "id" : element.getAttribute("id"),
+        "position" : new SearchCollector.PositionResolver(".grid-item", element).get()
+      };
+    }));
   }
 
   collector.add(new SearchCollector.BasketClickCollector("#add-to-basket", {
