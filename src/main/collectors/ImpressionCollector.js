@@ -1,4 +1,3 @@
-var scrollMonitor = require("scrollmonitor");
 var Sentinel = require('../utils/Sentinel');
 var AbstractCollector = require("./AbstractCollector");
 var LocalStorageQueue = require("../utils/LocalStorageQueue");
@@ -36,8 +35,12 @@ class ImpressionCollector extends AbstractCollector {
   attach(writer) {
     this.writer = writer;
 
+    const document = this.getDocument();
+    const window = this.getWindow();
     
     const handler = el => {
+      var scrollMonitor = require("scrollmonitor");
+      
       var data = this.attributeCollector(el);
       var watcher = scrollMonitor.create(el);
 
@@ -47,7 +50,6 @@ class ImpressionCollector extends AbstractCollector {
         // if (el.offsetParent === null) {
         //  return;
         // }
-
         this.queue.push(data);
       })
     };
