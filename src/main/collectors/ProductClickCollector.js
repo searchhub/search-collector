@@ -11,6 +11,7 @@ class ProductClickCollector extends ClickCollector {
     this.positionResolver = resolvers.positionResolver;
     this.trailResolver = resolvers.trailResolver;
     this.priceResolver = resolvers.priceResolver;
+    this.imageResolver = resolvers.imageResolver;
     // TODO validate ^
   }
 
@@ -34,7 +35,11 @@ class ProductClickCollector extends ClickCollector {
       if (this.priceResolver) {
         data.price = this.priceResolver(element);
       }
-  
+
+      if (this.imageResolver) {
+        data.image = this.imageResolver(element);
+      }
+
       if (this.trailResolver) {
         // Register that this product journey into potential purchase started
         // with this query

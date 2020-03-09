@@ -79,10 +79,21 @@ window.addEventListener("load", function() {
       "trailResolver" : trailResolver
     }));
   } else {
+    const imageCollector = element => {
+      for (let elem of element.children) {
+        if ("IMG" == elem.nodeName) {
+          return elem.src;
+        }
+      }
+
+      return undefined;
+    }
+
     collector.add(new SearchCollector.ProductClickCollector(".grid-item", {
       "idResolver" : element => element.getAttribute("id"),
       "positionResolver" : element => new SearchCollector.PositionResolver(".grid-item", element).get(),
       "priceResolver" : element => element.getAttribute("data-price"),
+      "imageResolver" : element => imageCollector(element),
       "trailResolver" : trailResolver
     }));
 
