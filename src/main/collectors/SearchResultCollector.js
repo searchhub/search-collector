@@ -13,11 +13,14 @@ class SearchResultCollector extends AbstractCollector {
    * @constructor
    * @param {function} phraseResolver - Function that should return the search phrase used for the search
    * @param {function} countResolver - Function that should return the numnber of results in the search
+   * @param {function} actionResolver - A search result may be refined or a client may browse 2,3,4 page. 
+   * This function should provide a text represantion of the action
    */
-  constructor(phraseResolver, countResolver) {
+  constructor(phraseResolver, countResolver, actionResolver) {
     super("search");
     this.phraseResolver = phraseResolver;
     this.countResolver = countResolver;
+    this.actionResolver = actionResolver;
   }
 
   /**
@@ -30,7 +33,8 @@ class SearchResultCollector extends AbstractCollector {
     writer.write({
       "type" : "search",
       "keywords" : this.phraseResolver(),
-      "count" : this.countResolver()
+      "count" : this.countResolver(),
+      "action" : this.actionResolver ? this.actionResolver() : "search"
     });
   }
 }

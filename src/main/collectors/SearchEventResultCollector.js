@@ -3,7 +3,8 @@ var AbstractCollector = require("./AbstractCollector");
 /**
  * Collect the basic search information - the keywords used for the search and
  * the number of result via a custom event. The custom event should hold the properties
- * "keywords" and "count" in the custom payload.
+ * "keywords" and "count" in the custom payload. It may hold the action property in case
+ * we have a pagination or refinement of the search result.
  *
  * See https://developer.mozilla.org/en-US/docs/Web/Guide/Events/Creating_and_triggering_events for guidance
  */
@@ -33,7 +34,8 @@ class SearchEventResultCollector extends AbstractCollector {
       writer.write({
         "type" : "search",
         "keywords" : e.detail.keywords,
-        "count" : e.detail.count
+        "count" : e.detail.count,
+        "action" : e.detail.action ? e.detail.action : "search" 
       });
     })
   }
