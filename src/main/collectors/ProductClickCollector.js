@@ -12,7 +12,7 @@ class ProductClickCollector extends ClickCollector {
     this.trailResolver = resolvers.trailResolver;
     this.priceResolver = resolvers.priceResolver;
     this.imageResolver = resolvers.imageResolver;
-    // TODO validate ^
+    this.metadataResolver = resolvers.metadataResolver;
   }
 
   /**
@@ -38,6 +38,10 @@ class ProductClickCollector extends ClickCollector {
 
       if (this.imageResolver) {
         data.image = this.imageResolver(element);
+      }
+
+      if (this.metadataResolver) {
+        data.metadata = this.metadataResolver(element);
       }
 
       if (this.trailResolver) {
