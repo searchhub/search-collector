@@ -39,6 +39,13 @@
 
     function doSearch(words) {
       let phrase = words || document.getElementById('search-box').value;
+      window.dispatchEvent(new CustomEvent("fired-search", {"detail" : {"keywords" : phrase}}));
+
+      // Simulate redirect
+      if (phrase == "basket") {
+        window.location.href = "basket.html";
+        return;
+      }
 
       let result = search(phrase);
       window.dispatchEvent(new CustomEvent("search", {"detail" : {"keywords" : phrase, "count" : result.length}}));

@@ -52,18 +52,19 @@ class JSONEnvelopeWriter {
         data.channel = this.channel;
       }
 
-      if (this.debug) {
-        console.log(JSON.stringify(data));
-      }
-
+      
       if (this.recordUrl && !data.url) {
         let win = this.contextResolver ? this.contextResolver.getWindow() : window;
         data.url = win.location.href;
       }
-
+      
       if (this.recordReferrer && !data.ref) {
         let doc = this.contextResolver ? this.contextResolver.getDocument() : document;
         data.ref = doc.referrer;
+      }
+      
+      if (this.debug) {
+        console.log(JSON.stringify(data));
       }
 
       this.delegate.write(data);

@@ -18,6 +18,7 @@ var CheckoutClickCollector = require("./collectors/CheckoutClickCollector");
 var AbstractCollector = require("./collectors/AbstractCollector");
 var SuggestSearchCollector = require("./collectors/SuggestSearchCollector");
 var FiredSearchCollector = require("./collectors/FiredSearchCollector");
+var RedirectCollector = require("./collectors/RedirectCollector");
 var Trail = require("./query/Trail");
 var Query = require("./query/Query");
 var Util = require("./utils/Util");
@@ -45,6 +46,7 @@ var SearchCollector = {
   "SuggestSearchCollector" : SuggestSearchCollector,
   "FiredSearchCollector" : FiredSearchCollector,  
   "AbstractCollector" : AbstractCollector,
+  "RedirectCollector" : RedirectCollector,
   "Trail" : Trail,
   "Query" : Query,
   "Util" : Util,

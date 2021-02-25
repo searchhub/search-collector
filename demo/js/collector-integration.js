@@ -59,14 +59,17 @@ window.addEventListener("load", function() {
     }
   }));
   collector.add(new SearchCollector.FiredSearchCollector((writer, type, context) => {
-    context.getWindow().addEventListener("search", e => {
-      let words = context.getDocument().querySelector("#search-box").value;
+    context.getWindow().addEventListener("fired-search", e => {
       writer.write({
         "type" : type,
-        "keywords" : words
+        "keywords" : e.detail.keywords
       }); 
     });
   }));
+
+  let isSearchPage = () => window.location.pathname == "" || window.location.pathname == "index.hml";
+  let firedSearchCallback = callback => window.addEventListener("fired-search", e => callback(e.detail.keywords));
+  collector.add(new SearchCollector.RedirectCollector(firedSearchCallback, isSearchPage));
   
   if (window.location.pathname == "/product.html") {
     let params = new URLSearchParams(window.location.search);
