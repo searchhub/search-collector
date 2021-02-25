@@ -14,9 +14,9 @@ class RedirectCollector extends AbstractCollector {
    */
   constructor(triggerResolver, expectedPageResolver, contextResolver) {
     super("search");
-    this.contextResolver = contextResolver;
     this.triggerResolver = triggerResolver;
     this.expectedPageResolver = expectedPageResolver;
+    this.contextResolver = contextResolver;
   }
 
   /**
@@ -25,7 +25,7 @@ class RedirectCollector extends AbstractCollector {
    * @param {object} writer - The writer to send the data to
    */
   attach(writer) {
-    let win = this.contextResolver.getWindow();
+    let win = this.contextResolver ? this.contextResolver.getWindow() : window;
 
     this.triggerResolver(keyword => {
       win.sessionStorage.setItem("lastSearch", keyword);
