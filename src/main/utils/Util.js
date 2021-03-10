@@ -8,7 +8,7 @@ module.exports = {
    * @return {object}
    */
   parseQueryString : function(q) {
-      var string = q || window.location.search.substring(1);
+      var string = decodeURIComponent(q || window.location.search.substring(1));
 
       var queryString = {};
       string.replace(
