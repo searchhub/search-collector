@@ -39,6 +39,17 @@ class ClickCollector extends AbstractCollector {
    * @param {object} writer - The writer to send the data to
    */
   attach(writer) {
+
+    let handler = (element, writer) => {
+      var payload = this.collect(element);
+      if (payload) {
+        writer.write({
+          "type" : this.type,
+          "data" : payload
+        });
+      }
+    }
+
     // The Sentiel library uses animationstart event listeners which may interfere with
     // animations attached on elemenets. The in-library provided workaround mechanism does not work
     // 100%, thus we provide the listenerType choice below. The tradeoffs
@@ -46,21 +57,11 @@ class ClickCollector extends AbstractCollector {
     // "sentinel (default)" - works on elements inserted in the DOM anytime, but interferes with CSS animations on these elements 
     if (this.listenerType == "dom") {
       var nodeList = document.querySelectorAll(this.selectorExpression);
-      nodeList.forEach(el => el.addEventListener("click", ev => this.doCollect(el, writer)));
+      nodeList.forEach(el => el.addEventListener("click", ev => handler(el, writer)));
     } else {
       var sentinel = new Sentinel(this.getDocument());
-      sentinel.on(this.selectorExpression, el => el.addEventListener("click", ev => this.doCollect(el, writer)));  
+      sentinel.on(this.selectorExpression, el => el.addEventListener("click", ev => handler(el, writer)));  
     }   
-  }
-
-  doCollect(element, writer) {
-    var payload = this.collect(element);
-    if (payload) {
-      writer.write({
-        "type" : this.type,
-        "data" : payload
-      });
-    }
   }
 }
 module.exports = ClickCollector;
