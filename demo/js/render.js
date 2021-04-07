@@ -63,6 +63,7 @@ class Render {
       window.location.href = "basket.html";
     });
     button.innerText = "Add to basket";
+    button.classList.add("button");
     container.appendChild(button);
   }
 

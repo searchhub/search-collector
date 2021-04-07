@@ -5,8 +5,8 @@ var ClickCollector = require("./ClickCollector");
  */
 class ProductClickCollector extends ClickCollector {
 
-  constructor(selector, resolvers) {
-    super(selector, "product");
+  constructor(selector, resolvers, listenerType) {
+    super(selector, "product", listenerType);
     this.idResolver = resolvers.idResolver;
     this.positionResolver = resolvers.positionResolver;
     this.trailResolver = resolvers.trailResolver;

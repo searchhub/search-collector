@@ -5,29 +5,6 @@
     <script type="text/javascript" src="js/search-engine.js"></script>
     <script type="text/javascript" src="js/render.js"></script>
     <script type="text/javascript" src="js/basket.js"></script>
-    <script type="text/javascript" src="js/collector-integration.js"></script>
-    <script>
-      window.addEventListener('load', e => {
-        const params = new URLSearchParams(window.location.search);
-        const id = params.get('id');
-
-        let engine = new SearchEngine();
-        let item = engine.get(id);
-
-        let basket = new Basket();
-        
-        let container = document.getElementById('product-details');
-        let render = new Render();
-        render.details(container, item, id => {
-          basket.add(id);
-        });
-
-        let recos = document.getElementById('associated-products');
-        for (let item of engine.recommend(id)) {
-          render.product(recos, item);
-        }
-      });
-    </script>
   </head>
 <body>
   <div class="details">
@@ -42,6 +19,27 @@
   <section class="associated-products product-grid" id="associated-products">
   </section>
   
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get('id');
+
+    let engine = new SearchEngine();
+    let item = engine.get(id);
+
+    let basket = new Basket();
+    
+    let container = document.getElementById('product-details');
+    let render = new Render();
+    render.details(container, item, id => {
+      basket.add(id);
+    });
+
+    let recos = document.getElementById('associated-products');
+    for (let item of engine.recommend(id)) {
+      render.product(recos, item);
+    }
+  </script>
   <script type="text/javascript" src="search-collector.js"></script>
+  <script type="text/javascript" src="js/collector-integration.js"></script>
 </body>
 </html>

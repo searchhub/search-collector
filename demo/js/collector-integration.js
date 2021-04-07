@@ -107,11 +107,11 @@ window.addEventListener("load", function() {
       };
     }));
   }
-
+  
   collector.add(new SearchCollector.BasketClickCollector("#add-to-basket", {
     "idResolver" : element => element.getAttribute("data-product"),
     "priceResolver" : element => element.getAttribute("data-price")
-  }));
+  }, "dom"));
   collector.add(new SearchCollector.ProductListCollector("#checkout-content > tr", "checkout", {
     "idResolver" : element => element.getAttribute("data-product"),
     "priceResolver" : element => element.getAttribute("data-price")

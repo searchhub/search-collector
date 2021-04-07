@@ -18,9 +18,10 @@ class ClickCollector extends AbstractCollector {
    * @param {function} attributeCollector - A function to be triggered on click of the element, intended to collect specific element data
    * @param {string} type - The type of element click to report
    */
-  constructor(selectorExpression, type) {
+  constructor(selectorExpression, type, listenerType) {
       super(type ? type : "click")
       this.selectorExpression = selectorExpression;
+      this.listenerType = listenerType;
   }
 
   /**
@@ -38,21 +39,28 @@ class ClickCollector extends AbstractCollector {
    * @param {object} writer - The writer to send the data to
    */
   attach(writer) {
+    // The Sentiel library uses animationstart event listeners which may interfere with
+    // animations attached on elemenets. The in-library provided workaround mechanism does not work
+    // 100%, thus we provide the listenerType choice below. The tradeoffs
+    // "dom" - no animation interference, only onclick attached, but does not handle elements inserted in the DOM later
+    // "sentinel (default)" - works on elements inserted in the DOM anytime, but interferes with CSS animations on these elements 
+    if (this.listenerType == "dom") {
+      var nodeList = document.querySelectorAll(this.selectorExpression);
+      nodeList.forEach(el => el.addEventListener("click", ev => this.doCollect(el, writer)));
+    } else {
+      var sentinel = new Sentinel(this.getDocument());
+      sentinel.on(this.selectorExpression, el => el.addEventListener("click", ev => this.doCollect(el, writer)));  
+    }   
+  }
 
-    var handler = el => {
-      el.addEventListener("click", ev => {
-          var payload = this.collect(el);
-          if (payload) {
-            writer.write({
-              "type" : this.type,
-              "data" : payload
-            });
-          }
+  doCollect(element, writer) {
+    var payload = this.collect(element);
+    if (payload) {
+      writer.write({
+        "type" : this.type,
+        "data" : payload
       });
     }
-
-    var sentinel = new Sentinel(this.getDocument());
-    sentinel.on(this.selectorExpression, handler);
   }
 }
 module.exports = ClickCollector;

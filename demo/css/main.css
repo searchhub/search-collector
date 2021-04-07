@@ -48,3 +48,19 @@ aside {
   height: 200px;
   display: block;
 }
+
+.button {
+  animation-duration: 3s;
+  animation-name: colourshift, basket-button;
+  background-color: green;
+}
+
+@keyframes colourshift {
+  from {
+    background-color: green;
+  }
+
+  to {
+    background-color: red;
+  }
+}
