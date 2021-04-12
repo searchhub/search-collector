@@ -56,7 +56,7 @@ class ClickCollector extends AbstractCollector {
     // "dom" - no animation interference, only onclick attached, but does not handle elements inserted in the DOM later
     // "sentinel (default)" - works on elements inserted in the DOM anytime, but interferes with CSS animations on these elements 
     if (this.listenerType == "dom") {
-      var nodeList = document.querySelectorAll(this.selectorExpression);
+      var nodeList = this.getDocument().querySelectorAll(this.selectorExpression);
       nodeList.forEach(el => el.addEventListener("click", ev => handler(el, writer)));
     } else {
       var sentinel = new Sentinel(this.getDocument());
