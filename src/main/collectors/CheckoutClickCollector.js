@@ -1,4 +1,5 @@
 var AbstractCollector = require("./AbstractCollector");
+var Sentinel = require('../utils/Sentinel');
 
 /**
  * Triggered by a clickSelector, the collector will fire the contentSelector to select elements to collect
@@ -6,12 +7,13 @@ var AbstractCollector = require("./AbstractCollector");
  */
 class CheckoutClickCollector extends AbstractCollector {
 
-  constructor(clickSelector, contentSelector, resolvers) {
+  constructor(clickSelector, contentSelector, resolvers, listenerType) {
     super("checkout");
     this.clickSelector = clickSelector
     this.contentSelector = contentSelector;
     this.idResolver = resolvers.idResolver;
     this.priceResolver = resolvers.priceResolver;
+    this.listenerType = listenerType;
   }
 
   /**
@@ -49,8 +51,19 @@ class CheckoutClickCollector extends AbstractCollector {
       })
     }
 
-    var nodeList = doc.querySelectorAll(this.clickSelector);
-    nodeList.forEach(el => el.addEventListener("click", handler));
+
+    // The Sentiel library uses animationstart event listeners which may interfere with
+    // animations attached on elemenets. The in-library provided workaround mechanism does not work
+    // 100%, thus we provide the listenerType choice below. The tradeoffs
+    // "dom" - no animation interference, only onclick attached, but does not handle elements inserted in the DOM later
+    // "sentinel (default)" - works on elements inserted in the DOM anytime, but interferes with CSS animations on these elements 
+    if (this.listenerType == "dom") {
+      var nodeList = doc.querySelectorAll(this.clickSelector);
+      nodeList.forEach(el => el.addEventListener("click", handler));
+    } else {
+      var sentinel = new Sentinel(this.getDocument());
+      sentinel.on(this.clickSelector, el => el.addEventListener("click", ev => handler(el)));  
+    }       
   }
 }
 
