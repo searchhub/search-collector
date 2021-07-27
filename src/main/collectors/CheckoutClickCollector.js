@@ -13,6 +13,7 @@ class CheckoutClickCollector extends AbstractCollector {
     this.contentSelector = contentSelector;
     this.idResolver = resolvers.idResolver;
     this.priceResolver = resolvers.priceResolver;
+    this.amountResolver = resolvers.amountResolver;
     this.listenerType = listenerType;
   }
 
@@ -38,6 +39,9 @@ class CheckoutClickCollector extends AbstractCollector {
       
           if (this.priceResolver) {
             data.price = this.priceResolver(item);
+          }
+          if (this.amountResolver) {
+            data.amount = this.amountResolver(item);
           }
 
           // We write each item separately - they may be coming from different queries
