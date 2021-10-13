@@ -8,8 +8,42 @@ window.addEventListener("load", function () {
 	try {
 		var SearchCollector = require("search-collector");
 
+		// these selectors are used at several places
+		const searchFormSelector = 'TODO: search-form-selector';
+		const searchInputSelector = 'TODO: search-input-selector';
+
+		// the query resolves the current search-query in a standardized format
 		var queryResolver = () => {
-			// TODO: return current search-query as string
+			// use SearchCollector.Query to build the 'query' string
+			var query = new SearchCollector.Query();
+
+			// TODO: retrieve search keywords that were used for a search result page
+			// possible implementation:
+			var qField = document.querySelector(searchInputSelector);
+			if (qField && qField.value) {
+				query.setSearch(qField.value);
+			} else {
+				var urlQuery = SearchCollector.Util.parseQueryString(window.location.search);
+				// TODO: use correct query parameter
+				if (urlQuery.q) query.setSearch(urlQuery.q);
+			}
+
+			// TODO
+			// optionaly you can track selected filters as well.
+			// if you don't need that, you can remove that block.
+			//
+			// examples:
+			// standard filter:
+			// query.addSelection("brand", "=", "puma");
+			//
+			// track filter with multiple values:
+			// query.addSelection("color", "=", "red", null, "or");
+			// query.addSelection("color", "=", "black", null, "or");
+			//
+			// numeric range:
+			// query.addSelection("price", "><", 20, 42.99);
+
+			return query.toString();
 		}
 		var sessionResolver = new SearchCollector.CookieSessionResolver();
 		var trailResolver = new SearchCollector.Trail(queryResolver, sessionResolver);
@@ -21,6 +55,7 @@ window.addEventListener("load", function () {
 		const endpoint = "TODO";
 		const debug = SearchCollector.Util.parseQueryString().debug === "true";
 
+		// init collector
 		var collector = new SearchCollector.Collector({
 			"sessionResolver" : sessionResolver,
 			"queryResolver" : queryResolver,
@@ -36,15 +71,13 @@ window.addEventListener("load", function () {
 		// Follow the typing in the input
 		collector.add(new SearchCollector.InstantSearchQueryCollector("TODO"));
 
-		let isSearchPage = () => { /*TODO: return boolean; */ };
+		var isSearchPage = () => { /*TODO: return boolean; */ };
 
-		const searchFormSelector = 'TODO: search-form-selector';
-		const searchInputSelector = 'TODO: search-input-selector';
-		let firedSearchCallback = (callback) => { 
-			let searchForm = doc.querySelector(searchFormSelector);
+		var firedSearchCallback = (callback) => { 
+			var searchForm = doc.querySelector(searchFormSelector);
 			if (searchForm) {
 				searchForm.addEventListener("submit", function() {
-					let input = doc.querySelector(searchInputSelector);
+					var input = doc.querySelector(searchInputSelector);
 					if (input) {
 						callback(input.value);
 					}
@@ -52,7 +85,7 @@ window.addEventListener("load", function () {
 			}
 		};
 
-		let firedSearchResolver = (writer, type, context) => { 
+		var firedSearchResolver = (writer, type, context) => { 
 			firedSearchCallback( (query) => {
 						writer.write({
 							"type" : type,
@@ -68,10 +101,10 @@ window.addEventListener("load", function () {
 
 		collector.add(new SearchCollector.InstantSearchQueryCollector(searchInputSelector));
 
-		let suggestSearchResolver = (writer, type, context) => {
+		var suggestSearchResolver = (writer, type, context) => {
 			context.getWindow().addEventListener("TODO: suggest-click-event", event => {
 				// TODO: get selected suggest keywords from event or elsewhere..
-				let keywords = "TODO";
+				var keywords = "TODO";
 				writer.write({
 					"type": type,
 					"keywords": keywords,
@@ -83,15 +116,15 @@ window.addEventListener("load", function () {
 
 		// special collectors for search result page
 		if (isSearchPage()) {
-			let countResolver = () => { /*TODO: return int;*/ };
+			var countResolver = () => { /*TODO: return int;*/ };
 			
 			collector.add(new SearchCollector.SearchResultCollector(() => {
-				let phrase = new SearchCollector.Query(queryResolver()).getSearch();
+				var phrase = new SearchCollector.Query(queryResolver()).getSearch();
 				return phrase;
 			}, countResolver));
 
-			let productIdResolver = (element) => { /*TODO: return id; */ };
-			let positionResolver = (element) => { /*TODO: return int; */ };
+			var productIdResolver = (element) => { /*TODO: return id; */ };
+			var positionResolver = (element) => { /*TODO: return int; */ };
 			collector.add(new SearchCollector.ProductClickCollector('TODO: click-element-selector', {
 				"idResolver": productIdResolver, 
 				"positionResolver": positionResolver,
@@ -101,7 +134,7 @@ window.addEventListener("load", function () {
 			// if there are several links that lead to the product detail page, add several ProductClickCollector
 			
 			// Optional in case there are basket-links to the SRP, otherwise delete this block
-			//let productPriceResolver = (element) => { /*TODO: return float; */ };
+			//var productPriceResolver = (element) => { /*TODO: return float; */ };
 			//collector.add(new SearchCollector.BasketClickCollector("TODO: cart-button-selector", {
 			//	"idResolver": productIdResolver,
 			//	"priceResolver": productPriveResolver
@@ -115,11 +148,11 @@ window.addEventListener("load", function () {
 			}));
 
 			// Optional: Add selector for associated products, e.g. recommendations, cross-sellings etc.
-			//let mainProductId = 'TODO';
+			//var mainProductId = 'TODO';
 			// The items selector should match all single associated products
-			//let associatedItemsSelector = 'TODO';
+			//var associatedItemsSelector = 'TODO';
 			// The ID resolver will be called for each one of those matching elements
-			//let associatedItemsResolver = {
+			//var associatedItemsResolver = {
 			//	"idResolver": (element) => { /*TODO: return id; */},
 			//	"trailResolver": trailResolver
 			//};
@@ -129,10 +162,10 @@ window.addEventListener("load", function () {
 		// special collector for checkout page
 		else if (window.location.pathname.indexOf("TODO: /checkout/page") !== -1) {
 			// Selector of the "buy now" button or similar
-			let checkoutSubmitSelector = 'TODO';
+			var checkoutSubmitSelector = 'TODO';
 			// The cart-item-selector should match every single item in the cart.
 			// For each item/element the idResolver and priceResolver are called.
-			let cartItemSelector = 'TODO';
+			var cartItemSelector = 'TODO';
 			collector.add(new SearchCollector.CheckoutClickCollector(checkoutSubmitSelector, cartItemSelector, {
 				"idResolver" : (element) => { /*TODO: return id; */},
 				"priceResolver" : (element) => { /*TODO: return float */ }
