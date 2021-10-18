@@ -5,7 +5,7 @@ class SplitStreamWriter {
     }
   
     write(data) {
-        for (let writer of writers) {
+        for (let writer of this.writers) {
             writer.write(data);
         }
     }
