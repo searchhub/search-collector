@@ -30,7 +30,7 @@ class Collector {
     });
   }
 
-  writers(replacementWriters) {
+  setWriters(replacementWriters) {
     for (w of replacementWriters) {
       this.writers.push(w);
     }
