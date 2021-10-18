@@ -31,7 +31,7 @@ class Collector {
   }
 
   setWriters(replacementWriters) {
-    for (w of replacementWriters) {
+    for (let w of replacementWriters) {
       this.writers.push(w);
     }
   }
