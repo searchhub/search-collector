@@ -1,4 +1,5 @@
 const DefaultWriter = require("./writers/DefaultWriter");
+const SplitStreamWriter = require("./writers/SplitStreamWriter");
 
 /**
  * Default assembly point of collectors and writers.
