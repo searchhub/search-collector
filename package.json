@@ -27,6 +27,6 @@
     "watchify": "^3.11.1"
   },
   "dependencies": {
-    "scrollmonitor": "^1.2.3"
+    "scrollmonitor": "^1.2.4"
   }
 }

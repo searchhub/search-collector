@@ -1,0 +1,3 @@
+node_modules/
+package-lock.json
+searchhub-collector.out.js
