@@ -19,6 +19,8 @@ var AbstractCollector = require("./collectors/AbstractCollector");
 var SuggestSearchCollector = require("./collectors/SuggestSearchCollector");
 var FiredSearchCollector = require("./collectors/FiredSearchCollector");
 var RedirectCollector = require("./collectors/RedirectCollector");
+var DefaultWriter = require("./writers/DefaultWriter");
+var SplitStreamWriter = require("./writers/SplitStreamWriter");
 var Trail = require("./query/Trail");
 var Query = require("./query/Query");
 var Util = require("./utils/Util");
@@ -47,6 +49,8 @@ var SearchCollector = {
   "FiredSearchCollector" : FiredSearchCollector,  
   "AbstractCollector" : AbstractCollector,
   "RedirectCollector" : RedirectCollector,
+  "DefaultWriter" : DefaultWriter,
+  "SplitStreamWriter" : SplitStreamWriter,
   "Trail" : Trail,
   "Query" : Query,
   "Util" : Util,
