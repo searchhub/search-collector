@@ -74,10 +74,10 @@ window.addEventListener("load", function () {
 		var isSearchPage = () => { /*TODO: return boolean; */ };
 
 		var firedSearchCallback = (callback) => { 
-			var searchForm = doc.querySelector(searchFormSelector);
+			var searchForm = document.querySelector(searchFormSelector);
 			if (searchForm) {
 				searchForm.addEventListener("submit", function() {
-					var input = doc.querySelector(searchInputSelector);
+					var input = document.querySelector(searchInputSelector);
 					if (input) {
 						callback(input.value);
 					}
@@ -171,6 +171,7 @@ window.addEventListener("load", function () {
 				"priceResolver" : (element) => { /*TODO: return float */ }
 			}));
 		}
+        collector.start();
 
 	} catch (e) {
 		console.log("Failed loading search-collector " + e);
