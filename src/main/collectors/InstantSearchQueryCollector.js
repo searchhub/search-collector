@@ -1,4 +1,5 @@
-var AbstractCollector = require("./AbstractCollector");
+const AbstractCollector = require("./AbstractCollector");
+const Sentinel = require('../utils/Sentinel');
 
 // Don't consider search phrases shorter than this
 const MIN_LENGTH = 2;
@@ -16,11 +17,12 @@ class InstantSearchQueryCollector extends AbstractCollector {
    * Construct instant search collector
    *
    * @constructor
-   * @param {string} searchFieldSelector - Document query selector identifying the elements to attach to
+   * @param {string} selectorExpression - Document query selector identifying the elements to attach to
    */
-  constructor(searchFieldSelector) {
+  constructor(selectorExpression, listenerType) {
     super("instant-search");
-    this.searchFieldSelector = searchFieldSelector;
+    this.selectorExpression = selectorExpression;
+    this.listenerType = listenerType;
   }
 
   /**
@@ -30,13 +32,9 @@ class InstantSearchQueryCollector extends AbstractCollector {
    * @param {object} writer - The writer to send the data to
    */
   attach(writer) {
-    var doc = this.getDocument();
-    var searchBox = doc.querySelector(this.searchFieldSelector);
     var type = this.getType();
+    let handler = (searchBox, e, writer) => {
 
-    if (searchBox) {
-      searchBox.addEventListener("keypress", e => {
-        
         // Ignore shift, ctrl, etc. presses, react only on characters
         if (e.which === 0) {
           return;
@@ -54,7 +52,19 @@ class InstantSearchQueryCollector extends AbstractCollector {
             });
           }
         }, DELAY);
-      });
+    }
+
+    // The Sentiel library uses animationstart event listeners which may interfere with
+    // animations attached on elemenets. The in-library provided workaround mechanism does not work
+    // 100%, thus we provide the listenerType choice below. The tradeoffs
+    // "dom" - no animation interference, only onclick attached, but does not handle elements inserted in the DOM later
+    // "sentinel (default)" - works on elements inserted in the DOM anytime, but interferes with CSS animations on these elements 
+    if (this.listenerType == "dom") {
+      var nodeList = this.getDocument().querySelectorAll(this.selectorExpression);
+      nodeList.forEach(el => el.addEventListener("keypress", ev => handler(el, ev, writer)));
+    } else {
+      var sentinel = new Sentinel(this.getDocument());
+      sentinel.on(this.selectorExpression, el => el.addEventListener("keypress", ev => handler(el, ev, writer)));  
     }
   }
 }
