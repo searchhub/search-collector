@@ -53,7 +53,7 @@ window.addEventListener("load", function () {
 
 		// TODO: specify http endpoint where the collected data should be sent
 		const endpoint = "TODO";
-		const debug = SearchCollector.Util.parseQueryString().debug === "true";
+		const debug = SearchCollector.Util.parseQueryString().debug === "true" || sessionStorage.getItem("searchhub-collector-debug") === "true";
 
 		// init collector
 		var collector = new SearchCollector.Collector({
