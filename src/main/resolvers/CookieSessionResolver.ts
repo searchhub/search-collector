@@ -2,7 +2,7 @@ import {Util} from "../utils/Util";
 import {cookieResolver} from "./CookieResolver";
 
 const MINUTES_ONE_DAY = 60 * 24;
-const MINUTES_HALF_HOUR = 60 * 24;
+const MINUTES_HALF_HOUR = 30;
 
 /**
  * Resolve the id of the current search session. A search session is defined as
