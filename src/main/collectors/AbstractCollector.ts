@@ -1,5 +1,6 @@
 import {Context} from "../utils/Context";
 import {Writer} from "../writers/Writer";
+import {Logger} from "../logger/Logger";
 
 export class AbstractCollector {
 	type: string;
@@ -30,7 +31,7 @@ export class AbstractCollector {
 		return this.context.getDocument();
 	}
 
-	attach(writer: Writer) {
+	attach(writer: Writer, log: Logger) {
 		// override in subclass
 	}
 }
