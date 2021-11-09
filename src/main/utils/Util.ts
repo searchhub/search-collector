@@ -1,5 +1,3 @@
-let localStorageState = {};
-
 /**
  * Parse the browser query string or the passed string into a javascript object
  * with keys the query parameter names and values the corresponding values.
@@ -23,26 +21,45 @@ export const parseQueryString = (q = window.location.search.substring(1)) => {
 	return queryString;
 }
 
-//TODO maybe its worth implementing a localStorage mock which relies on cookies or something similar to track state across page reloads
 /**
  * Some browser like Safari prevent accessing localStorage in private mode by throwing exceptions.
  * Use this method to retrieve a mock impl which will at least prevent errors.
  */
 export const getLocalStorage = (): Storage => {
-	return localStorage || {
+	return localStorage || cookieLocalStorage();
+}
+
+function cookieLocalStorage() {
+	const LOCAL_STORAGE_COOKIE_NAME = "__localStorageMock";
+
+	function getStorageFromCookie() {
+		return JSON.parse(getCookie(LOCAL_STORAGE_COOKIE_NAME || "{}"));
+	}
+
+	function saveStorageToCookie(data) {
+		setCookie(LOCAL_STORAGE_COOKIE_NAME, JSON.stringify(data), 30);
+	}
+
+	return {
 		getItem(key: string) {
-			return localStorageState[key] || null;
+			return getStorageFromCookie()[key] || null;
 		},
 		setItem(key: string, value: string) {
+			const localStorageState = getStorageFromCookie();
 			localStorageState[key] = value;
+			saveStorageToCookie(JSON.stringify(localStorageState));
 		},
 		removeItem(key: string) {
+			const localStorageState = getStorageFromCookie();
 			delete localStorageState[key];
+			saveStorageToCookie(JSON.stringify(localStorageState));
 		},
 		clear() {
-			localStorageState = {};
+			const localStorageState = {};
+			saveStorageToCookie(JSON.stringify(localStorageState));
 		},
 		key(n: number) {
+			const localStorageState = getStorageFromCookie();
 			const keys = Object.keys(localStorageState);
 			if (n > keys.length - 1)
 				return null;
@@ -50,9 +67,10 @@ export const getLocalStorage = (): Storage => {
 			return keys[n];
 		},
 		get length() {
+			const localStorageState = getStorageFromCookie()
 			return Object.keys(localStorageState).length;
 		}
-	};
+	}
 }
 
 export const setCookie = (name: string, value: string, ttlMinutes ?: number): string => {
