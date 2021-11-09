@@ -25,6 +25,10 @@ export * from "./query/TrailResolver";
 export * from "./query/Query";
 export * from "./utils/Util";
 export * from "./utils/Sentinel";
+export {cookieSessionResolver} from "./resolvers/Resolver";
+export {MINUTES_HALF_HOUR} from "./resolvers/Resolver";
+export {MINUTES_ONE_DAY} from "./resolvers/Resolver";
+export {positionResolver} from "./resolvers/Resolver";
 
 // Main entry and global export point
 // export const SearchCollector = {
