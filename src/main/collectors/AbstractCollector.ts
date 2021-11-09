@@ -1,4 +1,5 @@
 import {ContextResolver} from "../resolvers/ContextResolver";
+import {Writer} from "../writers/Writer";
 
 export class AbstractCollector {
 	type: string;
@@ -26,5 +27,9 @@ export class AbstractCollector {
 
 	getDocument(): Document {
 		return this.contextResolver?.getDocument() || window.document;
+	}
+
+	attach(writer: Writer) {
+		// override in subclass
 	}
 }

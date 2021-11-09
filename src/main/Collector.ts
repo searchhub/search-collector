@@ -1,5 +1,7 @@
 import {DefaultWriter} from "./writers/DefaultWriter";
 import {SplitStreamWriter} from "./writers/SplitStreamWriter";
+import {Writer} from "./writers/Writer";
+import {AbstractCollector} from "./collectors/AbstractCollector";
 
 
 /**
@@ -9,8 +11,8 @@ export class Collector {
 
 	//TODO remove all any
 	options: any;
-	collectors: Array<any>;
-	writers: any;
+	collectors: Array<AbstractCollector>;
+	writers: Array<Writer>;
 
 
 	constructor(options) {
@@ -19,7 +21,7 @@ export class Collector {
 		this.writers = [];
 	}
 
-	add(collector) {
+	add(collector: AbstractCollector) {
 		if (this.options.contextResolver && typeof collector.setContext === "function") {
 			collector.setContext(this.options.contextResolver);
 		}
@@ -32,12 +34,12 @@ export class Collector {
 			? new DefaultWriter(this.options)
 			: new SplitStreamWriter(this.writers);
 
-		this.collectors.forEach(function (collector) {
+		this.collectors.forEach(collector => {
 			collector.attach(writer);
 		});
 	}
 
-	setWriters(replacementWriters) {
+	setWriters(replacementWriters: Array<Writer>) {
 		for (let w of replacementWriters) {
 			this.writers.push(w);
 		}

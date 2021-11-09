@@ -27,7 +27,7 @@ export class BrowserCollector extends AbstractCollector {
 		const win = this.getWindow();
 		const doc = this.getDocument();
 
-		let data: any = {
+		const data: any = {
 			"type": this.getType(),
 			//@ts-ignore
 			"touch": (('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || (navigator.msMaxTouchPoints > 0))

@@ -2,14 +2,13 @@ import {Writer} from "./Writer";
 
 export class SplitStreamWriter implements Writer {
 
-	//TODO remove any
-	writers: any;
+	writers: Array<Writer>;
 
-	constructor(writers) {
+	constructor(writers: Array<Writer>) {
 		this.writers = writers;
 	}
 
-	write(data) {
+	write(data: any) {
 		for (let writer of this.writers) {
 			writer.write(data);
 		}

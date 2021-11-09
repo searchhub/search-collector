@@ -1,5 +1,6 @@
 import {AbstractCollector} from "./AbstractCollector";
 import {Sentinel} from "../utils/Sentinel";
+import {NumberResolver, StringResolver} from "../resolvers/Resolver";
 
 /**
  * Registers appearance of elements matching a query selector. Handles both DOM elements
@@ -10,9 +11,9 @@ import {Sentinel} from "../utils/Sentinel";
  */
 export class ProductListCollector extends AbstractCollector {
 
-	selectorExpression;
-	idResolver;
-	priceResolver;
+	selectorExpression: string;
+	idResolver: StringResolver;
+	priceResolver: NumberResolver;
 
 	/**
 	 * Construct a click collector
@@ -22,8 +23,8 @@ export class ProductListCollector extends AbstractCollector {
 	 * @param {function} attributeCollector - A function to be triggered, intended to collect specific element data
 	 * @param {string} type - The type of element/context to report
 	 */
-	constructor(selectorExpression, type, resolvers) {
-		super(type ? type : "product-list");
+	constructor(selectorExpression, type = "product-list", resolvers) {
+		super(type);
 		this.selectorExpression = selectorExpression;
 		this.idResolver = resolvers.idResolver;
 		this.priceResolver = resolvers.priceResolver;
@@ -36,12 +37,10 @@ export class ProductListCollector extends AbstractCollector {
 	 * @param {object} writer - The writer to send the data to
 	 */
 	attach(writer) {
-
-		var handler = el => {
-			let id = this.idResolver(el);
-
+		const handler = el => {
+			const id = this.idResolver(el);
 			if (id) {
-				let payload: any = {
+				const payload: any = {
 					"id": id
 				}
 
@@ -56,7 +55,6 @@ export class ProductListCollector extends AbstractCollector {
 			}
 		}
 
-		var sentinel = new Sentinel(this.getDocument());
-		sentinel.on(this.selectorExpression, handler);
+		new Sentinel(this.getDocument()).on(this.selectorExpression, handler);
 	}
 }
