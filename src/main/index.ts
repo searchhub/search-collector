@@ -22,7 +22,7 @@ export * from "./query/TrailResolver";
 export * from "./query/Query";
 export * from "./utils/Context";
 export * from "./utils/Sentinel";
-
+export * from "./writers/Writer";
 
 import * as _Util from "./utils/Util";
 import * as _Resolver from "./resolvers/Resolver";

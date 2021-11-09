@@ -5,7 +5,7 @@
  * If the options passed ot the writer contain debug=true, this writer will also
  * log to the console
  */
-import {Writer} from "./Writer";
+import {Writer, WriterOptions} from "./Writer";
 import {Context} from "../utils/Context";
 import {TrailResolver} from "../query/TrailResolver";
 
@@ -19,18 +19,18 @@ export class JSONEnvelopeWriter implements Writer {
 	channel: string;
 	recordUrl: boolean;
 	recordReferrer: boolean;
-	contextResolver: Context;
+	context: Context;
 
-	constructor(delegate, options) {
+	constructor(delegate: Writer, options: WriterOptions) {
 		this.delegate = delegate;
-		this.sessionResolver = options.sessionResolver;
-		this.queryResolver = options.queryResolver;
-		this.trailResolver = options.trailResolver;
+		this.sessionResolver = options.resolver.sessionResolver;
+		this.queryResolver = options.resolver.queryResolver;
+		this.trailResolver = options.resolver.trailResolver;
 		this.debug = !!options.debug;
 		this.channel = options.channel;
 		this.recordUrl = !!options.recordUrl;
 		this.recordReferrer = !!options.recordReferrer;
-		this.contextResolver = options.contextResolver;
+		this.context = options.context;
 	}
 
 	write(data) {
@@ -68,17 +68,17 @@ export class JSONEnvelopeWriter implements Writer {
 
 
 		if (this.recordUrl && !data.url) {
-			let win = this.contextResolver ? this.contextResolver.getWindow() : window;
+			let win = this.context ? this.context.getWindow() : window;
 			data.url = win.location.href;
 		}
 
 		if (this.recordReferrer && !data.ref) {
-			let doc = this.contextResolver ? this.contextResolver.getDocument() : document;
+			let doc = this.context ? this.context.getDocument() : document;
 			data.ref = doc.referrer;
 		}
 
 		if (this.debug) {
-			console.log(JSON.stringify(data));
+			console.debug(JSON.stringify(data));
 		}
 
 		this.delegate.write(data);

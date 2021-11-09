@@ -3,7 +3,7 @@ import {RestEventWriter} from "./RestEventWriter";
 import {BufferingWriter} from "./BufferingWriter";
 import {Base64EncodeWriter} from "./Base64EncodeWriter";
 import {JSONEnvelopeWriter} from "./JSONEnvelopeWriter";
-import {Writer} from "./Writer";
+import {Writer, WriterOptions} from "./Writer";
 
 export class DefaultWriter implements Writer {
 
@@ -25,11 +25,6 @@ export class DefaultWriter implements Writer {
 	write(data) {
 		this.writer.write(data);
 	}
-}
-
-export type WriterOptions = {
-	sqs?: boolean,
-	endpoint: string
 }
 
 function isSQS(endpoint: string, forceSQS: boolean) {
