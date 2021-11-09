@@ -4,9 +4,6 @@ export * from "./collectors/SearchResultCollector";
 export * from "./collectors/InstantSearchQueryCollector";
 export * from "./collectors/BrowserCollector";
 export * from "./collectors/ImpressionCollector";
-export * from "./resolvers/CookieSessionResolver";
-export * from "./resolvers/PositionResolver";
-export * from "./utils/Context";
 export * from "./collectors/FilterClickCollector";
 export * from "./collectors/ProductClickCollector";
 export * from "./collectors/BasketClickCollector";
@@ -23,12 +20,15 @@ export * from "./writers/DefaultWriter";
 export * from "./writers/SplitStreamWriter";
 export * from "./query/TrailResolver";
 export * from "./query/Query";
-export * from "./utils/Util";
+export * from "./utils/Context";
 export * from "./utils/Sentinel";
-export {cookieSessionResolver} from "./resolvers/Resolver";
-export {MINUTES_HALF_HOUR} from "./resolvers/Resolver";
-export {MINUTES_ONE_DAY} from "./resolvers/Resolver";
-export {positionResolver} from "./resolvers/Resolver";
+
+
+import * as _Util from "./utils/Util";
+import * as _Resolver from "./resolvers/Resolver";
+
+export const Resolver = _Resolver;
+export const Util = _Util;
 
 // Main entry and global export point
 // export const SearchCollector = {

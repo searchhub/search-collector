@@ -1,4 +1,4 @@
-import {Util} from "./Util";
+import {getLocalStorage} from "./Util";
 
 export class LocalStorageQueue {
 	name: string;
@@ -8,7 +8,7 @@ export class LocalStorageQueue {
 		this.name = "search-collector-queue" + (id ? "-" + id : "");
 		this.queue = [];
 
-		const storedQueue = Util.getLocalStorage().getItem(this.name);
+		const storedQueue = getLocalStorage().getItem(this.name);
 		if (storedQueue) {
 			try {
 				this.queue = JSON.parse(storedQueue);
@@ -36,6 +36,6 @@ export class LocalStorageQueue {
 	}
 
 	private _save() {
-		Util.getLocalStorage().setItem(this.name, JSON.stringify(this.queue));
+		getLocalStorage().setItem(this.name, JSON.stringify(this.queue));
 	}
 }

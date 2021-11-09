@@ -1,6 +1,6 @@
 import {Writer} from "../writers/Writer";
 import {Context} from "../utils/Context";
-import {Util} from "../utils/Util";
+import {generateId, getCookie, setCookie} from "../utils/Util";
 
 const MINUTES_ONE_DAY = 60 * 24;
 const MINUTES_HALF_HOUR = 30;
@@ -15,7 +15,7 @@ export type NumberResolver = (element?: HTMLElement) => number;
  * Read the cookie with the provided name
  * @param name the name of the cookie
  */
-export const cookieResolver = (name: string = ""): string => Util.getCookie(name);
+export const cookieResolver = (name: string = ""): string => getCookie(name);
 
 /**
  * * Resolve the id of the current search session. A search session is defined as
@@ -28,7 +28,7 @@ export const cookieResolver = (name: string = ""): string => Util.getCookie(name
  *
  * @param name the name of the session cookie
  */
-export const cookieSessionResolver = (name = "SearchCollectorSession"): string => cookieResolver(name) || Util.setCookie(name, Util.generateId(), MINUTES_HALF_HOUR);
+export const cookieSessionResolver = (name = "SearchCollectorSession"): string => cookieResolver(name) || setCookie(name, generateId(), MINUTES_HALF_HOUR);
 
 /**
  * Find the position of a DOM element relative to other DOM elements of the same type.

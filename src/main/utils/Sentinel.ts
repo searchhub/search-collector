@@ -145,4 +145,4 @@ export class Sentinel {
 		if (styleEl) styleEl.parentNode.removeChild(styleEl);
 		styleEl = 0;
 	}
-};
+}
