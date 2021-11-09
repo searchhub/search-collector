@@ -6,7 +6,7 @@ export * from "./collectors/BrowserCollector";
 export * from "./collectors/ImpressionCollector";
 export * from "./resolvers/CookieSessionResolver";
 export * from "./resolvers/PositionResolver";
-export * from "./resolvers/ContextResolver";
+export * from "./resolvers/Context";
 export * from "./collectors/FilterClickCollector";
 export * from "./collectors/ProductClickCollector";
 export * from "./collectors/BasketClickCollector";

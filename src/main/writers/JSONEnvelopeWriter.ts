@@ -6,7 +6,7 @@
  * log to the console
  */
 import {Writer} from "./Writer";
-import {ContextResolver} from "../resolvers/ContextResolver";
+import {Context} from "../resolvers/Context";
 import {TrailResolver} from "../query/TrailResolver";
 
 export class JSONEnvelopeWriter implements Writer {
@@ -19,7 +19,7 @@ export class JSONEnvelopeWriter implements Writer {
 	channel: string;
 	recordUrl: boolean;
 	recordReferrer: boolean;
-	contextResolver: ContextResolver;
+	contextResolver: Context;
 
 	constructor(delegate, options) {
 		this.delegate = delegate;

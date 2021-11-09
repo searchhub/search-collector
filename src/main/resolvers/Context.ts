@@ -1,4 +1,4 @@
-export class ContextResolver {
+export class Context {
 	private readonly window: Window;
 	private readonly document: Document;
 

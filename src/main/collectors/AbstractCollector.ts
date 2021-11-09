@@ -1,32 +1,33 @@
-import {ContextResolver} from "../resolvers/ContextResolver";
+import {Context} from "../resolvers/Context";
 import {Writer} from "../writers/Writer";
 
 export class AbstractCollector {
 	type: string;
-	contextResolver: ContextResolver;
+	context: Context;
 
-	constructor(type: string) {
+	constructor(type: string, context: Context = new Context(window, document)) {
 		this.type = type;
+		this.context = context;
 	}
 
 	getType() {
 		return this.type;
 	}
 
-	setContext(contextResolver: ContextResolver) {
-		this.contextResolver = contextResolver;
+	setContext(context: Context) {
+		this.context = context;
 	}
 
 	getContext() {
-		return this.contextResolver;
+		return this.context;
 	}
 
 	getWindow(): Window {
-		return this.contextResolver?.getWindow() || window;
+		return this.context.getWindow();
 	}
 
 	getDocument(): Document {
-		return this.contextResolver?.getDocument() || window.document;
+		return this.context.getDocument();
 	}
 
 	attach(writer: Writer) {

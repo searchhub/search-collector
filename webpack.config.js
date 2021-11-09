@@ -6,7 +6,7 @@ const {CleanWebpackPlugin} = require('clean-webpack-plugin');
 module.exports = (env, argv) => {
     const {mode} = argv;
     //"window", "commonjs", "amd", "module"
-    const type = "window";
+    const type = "commonjs";
     const name = type === "window" ? "SearchCollector" : void 0;
     return {
         entry: "./dist/index.js",

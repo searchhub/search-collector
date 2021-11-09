@@ -4,8 +4,8 @@
  */
 export class PositionResolver {
 
-	selector: any;
-	element: any;
+	selector: string;
+	element: HTMLElement;
 
 	/**
 	 * @constructor
@@ -23,12 +23,12 @@ export class PositionResolver {
 	 * @returns {number|undefined}
 	 */
 	get() {
-		var nodes = document.querySelectorAll(this.selector);
+		const nodes = document.querySelectorAll(this.selector);
 
 		if (nodes.length > 0) {
-			var position = 0;
-			for (var i = 0; i < nodes.length; i++) {
-				var item = nodes[i];
+			let position = 0;
+			for (let i = 0; i < nodes.length; i++) {
+				const item = nodes[i];
 				if (item === this.element) {
 					position = i;
 				}

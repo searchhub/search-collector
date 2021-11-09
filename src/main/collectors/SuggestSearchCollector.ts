@@ -1,5 +1,5 @@
 import {AbstractCollector} from "./AbstractCollector";
-import {Resolver} from "../resolvers/Resolver";
+import {WriterResolver} from "../resolvers/Resolver";
 
 
 /**
@@ -7,7 +7,7 @@ import {Resolver} from "../resolvers/Resolver";
  */
 export class SuggestSearchCollector extends AbstractCollector {
 
-	resolver: Resolver;
+	resolver: WriterResolver;
 
 	/**
 	 * Construct suggest search collector
@@ -15,7 +15,7 @@ export class SuggestSearchCollector extends AbstractCollector {
 	 * @constructor
 	 * @param {function} resolver - Function that triggers the writing. Suggest might be complex, leave to the implementation to determine when/how
 	 */
-	constructor(resolver: Resolver) {
+	constructor(resolver: WriterResolver) {
 		super("suggest-search");
 		this.resolver = resolver;
 	}

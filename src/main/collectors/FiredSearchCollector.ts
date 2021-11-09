@@ -1,5 +1,5 @@
 import {AbstractCollector} from "./AbstractCollector";
-import {Resolver} from "../resolvers/Resolver";
+import {WriterResolver} from "../resolvers/Resolver";
 
 /**
  * Triggered when the client has triggered/fired a search
@@ -7,7 +7,7 @@ import {Resolver} from "../resolvers/Resolver";
  */
 export class FiredSearchCollector extends AbstractCollector {
 
-	resolver: Resolver;
+	resolver: WriterResolver;
 
 	/**
 	 * Construct fired search collector
@@ -15,7 +15,7 @@ export class FiredSearchCollector extends AbstractCollector {
 	 * @constructor
 	 * @param {function} resolver - Function that triggers the writing. We can't always determine when search triggers, leave to the implementation to determine when/how
 	 */
-	constructor(resolver: Resolver) {
+	constructor(resolver: WriterResolver) {
 		super("fired-search");
 		this.resolver = resolver;
 	}
