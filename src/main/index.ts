@@ -6,7 +6,7 @@ export * from "./collectors/BrowserCollector";
 export * from "./collectors/ImpressionCollector";
 export * from "./resolvers/CookieSessionResolver";
 export * from "./resolvers/PositionResolver";
-export * from "./resolvers/Context";
+export * from "./utils/Context";
 export * from "./collectors/FilterClickCollector";
 export * from "./collectors/ProductClickCollector";
 export * from "./collectors/BasketClickCollector";
@@ -55,12 +55,4 @@ export * from "./utils/Sentinel";
 // 	"Query": Query,
 // 	"Util": Util,
 // 	"Sentinel": Sentinel
-// }
-
-// When running through watchify, this gets called directly. When going through the build process
-// browserify --standalone would produce the SearchCollector global. If you change the name of the global,
-// change here and in package.json
-// if (window) {
-// 	//@ts-ignore
-// 	window.SearchCollector = SearchCollector;
 // }

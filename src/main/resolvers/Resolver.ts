@@ -1,5 +1,5 @@
 import {Writer} from "../writers/Writer";
-import {Context} from "./Context";
+import {Context} from "../utils/Context";
 
 export type CallbackResolver = (callback: (param: any) => void) => void;
 export type WriterResolver = (writer: Writer, type: string, context: Context) => void

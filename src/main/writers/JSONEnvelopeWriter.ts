@@ -6,7 +6,7 @@
  * log to the console
  */
 import {Writer} from "./Writer";
-import {Context} from "../resolvers/Context";
+import {Context} from "../utils/Context";
 import {TrailResolver} from "../query/TrailResolver";
 
 export class JSONEnvelopeWriter implements Writer {
@@ -26,10 +26,10 @@ export class JSONEnvelopeWriter implements Writer {
 		this.sessionResolver = options.sessionResolver;
 		this.queryResolver = options.queryResolver;
 		this.trailResolver = options.trailResolver;
-		this.debug = options.debug ? true : false;
+		this.debug = !!options.debug;
 		this.channel = options.channel;
-		this.recordUrl = options.recordUrl ? true : false;
-		this.recordReferrer = options.recordReferrer ? true : false;
+		this.recordUrl = !!options.recordUrl;
+		this.recordReferrer = !!options.recordReferrer;
 		this.contextResolver = options.contextResolver;
 	}
 

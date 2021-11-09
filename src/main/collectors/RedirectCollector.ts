@@ -1,5 +1,5 @@
 import {AbstractCollector} from "./AbstractCollector";
-import {Context} from "../resolvers/Context";
+import {Context} from "../utils/Context";
 import {BooleanResolver, CallbackResolver} from "../resolvers/Resolver";
 
 /**

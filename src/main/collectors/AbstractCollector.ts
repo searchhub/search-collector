@@ -1,4 +1,4 @@
-import {Context} from "../resolvers/Context";
+import {Context} from "../utils/Context";
 import {Writer} from "../writers/Writer";
 
 export class AbstractCollector {
