@@ -56,7 +56,7 @@ export const Util = {
 		};
 	},
 
-	setCookie(name, value, ttlMinutes): void {
+	setCookie(name: string, value: string, ttlMinutes?: number): string {
 		let expires = "";
 
 		if (ttlMinutes) {
@@ -75,6 +75,7 @@ export const Util = {
 		const sameSite = window.location.hostname === "localhost" ? "" : "; SameSite=None; Secure";
 
 		document.cookie = name + "=" + (value || "") + expires + "; path=/" + sameSite;
+		return value;
 	},
 
 	getCookie(cname: string): string | "" {
