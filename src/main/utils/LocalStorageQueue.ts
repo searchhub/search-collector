@@ -1,19 +1,19 @@
-export class LocalStorageQueue {
+import {Util} from "./Util";
 
-	//TODO localStorage throws exception on safari private mode
-	name: any;
+export class LocalStorageQueue {
+	name: string;
 	queue: Array<any>;
 
 	constructor(id) {
 		this.name = "search-collector-queue" + (id ? "-" + id : "");
 		this.queue = [];
 
-		var storedQueue = localStorage.getItem(this.name);
+		const storedQueue = Util.getLocalStorage().getItem(this.name);
 		if (storedQueue) {
 			try {
 				this.queue = JSON.parse(storedQueue);
 			} catch (e) {
-				console.log("Error parsing stored event queue " + e);
+				console.error("Error parsing stored event queue " + e);
 			}
 		}
 	}
@@ -24,7 +24,7 @@ export class LocalStorageQueue {
 	}
 
 	drain() {
-		var buffer = this.queue;
+		const buffer = this.queue;
 		this.queue = [];
 		this._save();
 
@@ -35,7 +35,7 @@ export class LocalStorageQueue {
 		return this.queue.length;
 	}
 
-	_save() {
-		localStorage.setItem(this.name, JSON.stringify(this.queue));
+	private _save() {
+		Util.getLocalStorage().setItem(this.name, JSON.stringify(this.queue));
 	}
 }
