@@ -44,37 +44,29 @@ export class AssociatedProductCollector extends AbstractCollector {
 	 * @param {object} writer - The writer to send the data to
 	 */
 	attach(writer) {
+		const collect = element => {
+			const id = this.idResolver(element);
 
-		let collect = element => {
-			let id = this.idResolver(element);
-
-			let data = undefined;
 			if (id) {
-				data = {
-					"id": this.idResolver(element)
-				}
+				const position = this.positionResolver ? this.positionResolver(element) : void 0;
+				const price = this.priceResolver ? this.priceResolver(element) : void 0;
 
 				if (this.trailResolver) {
 					// Find out the query source of the main product. Note that despite being a
 					// "main" product, it could be a 2nd or 3rd, 4th level of associated product browsing
-					let trail = this.trailResolver.fetch(this.mainProductId);
+					const trail = this.trailResolver.fetch(this.mainProductId);
 					if (trail) {
-
 						// Upon a follow-up event for this product (ex. basket), we would pick this trail
 						this.trailResolver.register(id, TrailType.Associated, trail.query);
 					}
 				}
 
-				if (this.positionResolver) {
-					data.position = this.positionResolver(element);
-				}
-
-				if (this.priceResolver) {
-					data.price = this.priceResolver(element);
-				}
+				return {
+					id,
+					position,
+					price
+				};
 			}
-
-			return data;
 		}
 
 		const handler = el => {
