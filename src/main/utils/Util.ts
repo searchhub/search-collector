@@ -54,5 +54,53 @@ export const Util = {
 				return Object.keys(localStorageState).length;
 			}
 		};
+	},
+
+	setCookie(name, value, ttlMinutes): void {
+		let expires = "";
+
+		if (ttlMinutes) {
+			const date = new Date();
+			date.setTime(date.getTime() + (ttlMinutes * 60 * 1000));
+			expires = "; expires=" + date.toUTCString();
+		}
+
+		// Handle the upcoming forced switch to SameSite & Secure params https://www.chromestatus.com/feature/5633521622188032
+		// Since this is a generic library, we can't restrict the domain under which it's beeing served, thus not setting domain
+		// for the cookie. It's usually loaded and subsequently requested from a third-party domain, thus we need to specify SameSite=None which
+		// per the latest specifications requires the Secure attribute.
+		//
+		// To allow local debugging, we won't set these when loaded on localhost. Note, after this change, you won't be able to serve
+		// the collector to real clients over non-https connections - the session cookies won't match
+		const sameSite = window.location.hostname === "localhost" ? "" : "; SameSite=None; Secure";
+
+		document.cookie = name + "=" + (value || "") + expires + "; path=/" + sameSite;
+	},
+
+	getCookie(cname: string): string | "" {
+		const name = cname + "=";
+		const decodedCookie = decodeURIComponent(document.cookie);
+
+		const ca = decodedCookie.split(';');
+		for (let i = 0; i < ca.length; i++) {
+			let c = ca[i];
+			while (c.charAt(0) == ' ') {
+				c = c.substring(1);
+			}
+
+			if (c.indexOf(name) == 0) {
+				return c.substring(name.length, c.length);
+			}
+		}
+		return "";
+	},
+
+	generateId() {
+		const possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+		let text = "";
+		for (let i = 0; i < 7; i++) {
+			text += possible.charAt(Math.floor(Math.random() * possible.length));
+		}
+		return text;
 	}
 }
