@@ -13,4 +13,4 @@ const MINUTES_HALF_HOUR = 30;
  * will be governed by the lifecycle of that cookie. Otherwise the resolver will
  * set its own cookie.
  */
-export const cookieSessionResolver = (name = "SearchCollectorSession"): string => cookieResolver(name) || Util.setCookie(name, Util.generateId(), MINUTES_HALF_HOUR)
+export const cookieSessionResolver = (name = "SearchCollectorSession"): string => cookieResolver(name) || Util.setCookie(name, Util.generateId(), MINUTES_HALF_HOUR);
