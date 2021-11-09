@@ -10,7 +10,7 @@ export class TrailResolver {
 	sessionResolver;
 	key: string;
 
-	constructor(queryResolver: StringResolver, sessionResolver, id?: string) {
+	constructor(queryResolver: StringResolver, sessionResolver: StringResolver, id?: string) {
 		this.queryResolver = queryResolver;
 		this.sessionResolver = sessionResolver;
 		this.key = "search-collector-trail" + (id ? "-" + id : "");

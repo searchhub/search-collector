@@ -10,7 +10,6 @@ import {Context} from "../utils/Context";
 import {TrailResolver} from "../query/TrailResolver";
 
 export class JSONEnvelopeWriter implements Writer {
-
 	delegate: Writer;
 	sessionResolver: any;
 	queryResolver: any;

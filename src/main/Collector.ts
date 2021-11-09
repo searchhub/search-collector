@@ -19,7 +19,6 @@ type CollectorOptions = {
  * Default assembly point of collectors and writers.
  */
 export class Collector {
-
 	options: CollectorOptions;
 	collectors: Array<AbstractCollector> = [];
 	writers: Array<Writer> = [];
@@ -33,12 +32,7 @@ export class Collector {
 		if (this.options.context && typeof collector.setContext === "function") {
 			collector.setContext(this.options.context);
 		}
-
 		this.collectors.push(collector);
-	}
-
-	addLogTransport(transport: LoggerTransport) {
-		this.transports.push(transport);
 	}
 
 	start() {
@@ -52,6 +46,14 @@ export class Collector {
 				logger.error("Unexpected Exception during collector attach: ", e);
 			}
 		});
+	}
+
+	addLogTransport(transport: LoggerTransport) {
+		this.transports.push(transport);
+	}
+
+	setTransports(transports: Array<LoggerTransport>) {
+		this.transports = transports || [];
 	}
 
 	setWriters(replacementWriters: Array<Writer>) {
