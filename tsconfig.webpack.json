@@ -2,15 +2,16 @@
   "compilerOptions": {
     "allowSyntheticDefaultImports": true,
     "target": "ES2015",
-    "declarationDir": "./dist/cjs",
-    "outDir": "./dist/cjs",
-    "module": "CommonJS",
+    "outDir": "./dist",
+    "module": "ESNext",
     "moduleResolution": "node",
     "esModuleInterop": true,
-    "declaration": true,
     "allowJs": true
   },
   "include": [
     "src/main"
+  ],
+  "exclude": [
+    "dist"
   ]
 }

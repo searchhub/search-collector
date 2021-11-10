@@ -1,33 +1,46 @@
 const path = require('path');
-const {CleanWebpackPlugin} = require('clean-webpack-plugin');
 
-
-module.exports = (env, argv) => {
-	const {mode} = argv;
-	//"window", "commonjs", "amd", "module"
-	const type = "commonjs";
-	const name = type === "window" ? "SearchCollector" : void 0;
+/**
+ * webpack is used to generate the different bundles for browser (window), commonjs and amd module loader
+ * bundles will be placed to /dist
+ */
+const confFactory = (mode, type, name) => {
 	return {
-		entry: "./dist/index.js",
+		entry: "./src/main/index.ts",
 		target: "web",
 		mode,
+		module: {
+			rules: [
+				{
+					test: /\.tsx?$/,
+					use: [
+						{
+							loader: 'ts-loader',
+							options: {
+								configFile: "tsconfig.webpack.json"
+							}
+						}
+					]
+				}
+			]
+		},
 		resolve: {
-			extensions: ['.js']
+			extensions: ['.ts', '.tsx', '.js']
 		},
 		output: {
 			filename: `index.${type}.js`,
-			path: path.resolve(__dirname, './dist/dist/'),
+			path: path.join(__dirname, './dist'),
 			library: {
 				name,
 				type
 			}
 		},
-		plugins: [
-			new CleanWebpackPlugin()
-		],
 		optimization: {
-			minimize: false,
-			usedExports: false
+			minimize: false
 		}
 	};
-};
+}
+
+module.exports = (env, {mode}) => ["window", "commonjs", "amd"].map(
+	libType => confFactory(mode, libType, libType === "window" ? "SearchCollector" : void 0)
+);

@@ -29,34 +29,3 @@ import * as _Resolver from "./resolvers/Resolver";
 
 export const Resolver = _Resolver;
 export const Util = _Util;
-
-// Main entry and global export point
-// export const SearchCollector = {
-// 	"Collector": Collector,
-// 	"ClickCollector": ClickCollector,
-// 	"SearchResultCollector": SearchResultCollector,
-// 	"BrowserCollector": BrowserCollector,
-// 	"ImpressionCollector": ImpressionCollector,
-// 	"CookieSessionResolver": CookieSessionResolver,
-// 	"PositionResolver": PositionResolver,
-// 	"ContextResolver": ContextResolver,
-// 	"InstantSearchQueryCollector": InstantSearchQueryCollector,
-// 	"FilterClickCollector": FilterClickCollector,
-// 	"ProductClickCollector": ProductClickCollector,
-// 	"BasketClickCollector": BasketClickCollector,
-// 	"ProductListCollector": ProductListCollector,
-// 	"AssociatedProductCollector": AssociatedProductCollector,
-// 	"SearchEventResultCollector": SearchEventResultCollector,
-// 	"GenericEventCollector": GenericEventCollector,
-// 	"CheckoutClickCollector": CheckoutClickCollector,
-// 	"SuggestSearchCollector": SuggestSearchCollector,
-// 	"FiredSearchCollector": FiredSearchCollector,
-// 	"AbstractCollector": AbstractCollector,
-// 	"RedirectCollector": RedirectCollector,
-// 	"DefaultWriter": DefaultWriter,
-// 	"SplitStreamWriter": SplitStreamWriter,
-// 	"Trail": TrailResolver,
-// 	"Query": Query,
-// 	"Util": Util,
-// 	"Sentinel": Sentinel
-// }

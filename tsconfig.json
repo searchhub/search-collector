@@ -12,5 +12,8 @@
   },
   "include": [
     "src/main"
+  ],
+  "exclude": [
+    "dist"
   ]
 }
