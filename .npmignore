@@ -1,0 +1,16 @@
+blueprint
+demo
+
+**/*.ts
+
+# definitions
+!**/*.d.ts
+!*.d.ts
+
+package-dist.json
+package-lock.json
+jest.config.js
+jest-puppeteer.config.js
+webpack.config
+tsconfig.json
+tsconfig.webpack.json
