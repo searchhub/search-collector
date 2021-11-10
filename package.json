@@ -4,7 +4,7 @@
   "description": "Search Collector - Search metrics collection SDK",
   "license": "MIT",
   "main": "src/main/index.js",
-  "types": "src/main/dist/index.d.ts",
+  "types": "src/main/index.d.ts",
   "author": "CXP Commerce Experts GmbH",
   "homepage": "https://github.com/searchhub/search-collector",
   "scripts": {

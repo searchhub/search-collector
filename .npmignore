@@ -1,11 +1,10 @@
-blueprint
-demo
+# ignore the .ts files
+**.ts
 
-**/*.ts
-
-# definitions
+# include the .d.ts files
 !**/*.d.ts
 !*.d.ts
+
 
 package-dist.json
 package-lock.json
@@ -14,3 +13,13 @@ jest-puppeteer.config.js
 webpack.config
 tsconfig.json
 tsconfig.webpack.json
+webpack.config.js
+
+# for local dry-run testing
+.idea
+src/test/**
+
+blueprint/**
+demo/**
+
+*.tgz
