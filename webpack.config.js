@@ -28,7 +28,7 @@ const confFactory = (mode, type, name) => {
 			extensions: ['.ts', '.tsx', '.js']
 		},
 		output: {
-			filename: `index.${type}.js`,
+			filename: `index.${type}.bundle.js`,
 			path: path.join(__dirname, './dist'),
 			library: {
 				name,
@@ -36,7 +36,8 @@ const confFactory = (mode, type, name) => {
 			}
 		},
 		optimization: {
-			minimize: false
+			minimize: mode === "production",
+			usedExports: false
 		}
 	};
 }

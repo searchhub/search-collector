@@ -4,5 +4,5 @@ build
 dist
 .idea
 
-/src/*.d.ts
-/src/*.js
+src/**/*.d.ts
+src/**/*.js
