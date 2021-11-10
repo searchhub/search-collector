@@ -1,4 +1,4 @@
-var Query = require("../main/query/Query.js");
+var Query = require("../../main/query/Query.ts");
 
 module.exports = {
 
