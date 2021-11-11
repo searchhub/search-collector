@@ -13,6 +13,6 @@ export class RestEventWriter implements Writer {
 
 	write(data) {
 		const img = new Image();
-		img.src = this.endpoint + "?" + data;
+		img.src = this.endpoint + "?data=" + JSON.stringify(data);
 	}
 }
