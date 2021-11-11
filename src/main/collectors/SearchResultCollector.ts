@@ -21,7 +21,9 @@ export class SearchResultCollector extends AbstractCollector {
 	 * @param {function} actionResolver - A search result may be refined or a client may browse 2,3,4 page.
 	 * This function should provide a text represantion of the action
 	 */
-	constructor(phraseResolver: StringResolver, countResolver: NumberResolver, actionResolver?: StringResolver) {
+	constructor(phraseResolver: StringResolver,
+							countResolver: NumberResolver,
+							actionResolver?: StringResolver) {
 		super("search");
 		this.phraseResolver = phraseResolver;
 		this.countResolver = countResolver;
@@ -33,13 +35,18 @@ export class SearchResultCollector extends AbstractCollector {
 	 * the data immediatelly
 	 *
 	 * @param {object} writer - The writer to send the data to
+	 * @param {object} log - The logger
 	 */
-	attach(writer) {
+	attach(writer, log) {
+		const keywords = this.resolve(this.phraseResolver, log);
+		const count = this.resolve(this.countResolver, log);
+		const action = this.actionResolver ? this.resolve(this.actionResolver, log) : "search";
+
 		writer.write({
-			"type": "search",
-			"keywords": this.phraseResolver(),
-			"count": this.countResolver(),
-			"action": this.actionResolver ? this.actionResolver() : "search"
+			type: "search",
+			keywords,
+			count,
+			action
 		});
 	}
 }
