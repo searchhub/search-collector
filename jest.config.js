@@ -1,6 +1,6 @@
 module.exports = {
 	preset: "jest-puppeteer",
-	testTimeout: 5000,
+	testTimeout: 30000,
 	globals: {
 		URL: "http://localhost:8081"
 	},
@@ -10,6 +10,7 @@ module.exports = {
 	transform: {
 		"^.+\\.(t|j)s$": "ts-jest"
 	},
+	moduleDirectories: ["node_modules", "src"],
 	coverageDirectory: "./coverage",
 	verbose: true
 }

@@ -12,8 +12,10 @@
     "dev-bundles": "webpack --mode development --watch",
     "build": "npm run build-ts && npm run build-bundles",
     "build-ts": "tsc",
-    "build-bundles": "webpack --mode production",
-    "test": "jest",
+    "build-bundles": "webpack --mode development",
+    "test": "npm run build-bundles && npm run copy-dist && jest --runInBand",
+    "copy-dist": "cp -r ./dist/ ./src/test/mock/__files/",
+    "test-instant": "cp -r ./dist/ ./src/test/mock/__files/ && jest --runInBand",
     "test-server": "npx wiremock --port 8081 --verbose --root-dir ./src/test/mock"
   },
   "dependencies": {
