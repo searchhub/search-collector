@@ -4,13 +4,13 @@
     <meta charset="UTF-8">
     <title>E2E Testing</title>
     <script defer src="/dist/index.window.bundle.js"></script>
+    <script defer src="/dist/index.window.bundle22.js"></script>
     <script>
 		document.addEventListener("DOMContentLoaded", () => {
 			const {
 				Collector,
 				Context,
 				SearchResultCollector,
-				SQSEventWriter,
 				JSONEnvelopeWriter,
 				RestEventWriter
 			} = window.SearchCollector;
@@ -40,7 +40,6 @@
 			let writer = new RestEventWriter("http://localhost:8081" + "/" + options.channel);
 			writer = new JSONEnvelopeWriter(writer, writerOptions);
 			collector.setWriters([writer]);
-
 
 			collector.start();
 		});
