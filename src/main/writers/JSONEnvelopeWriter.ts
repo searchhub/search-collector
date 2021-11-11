@@ -8,11 +8,12 @@
 import {Writer, WriterOptions} from "./Writer";
 import {Context} from "../utils/Context";
 import {TrailResolver} from "../query/TrailResolver";
+import {StringResolver} from "../resolvers/Resolver";
 
 export class JSONEnvelopeWriter implements Writer {
 	delegate: Writer;
-	sessionResolver: any;
-	queryResolver: any;
+	sessionResolver: StringResolver;
+	queryResolver: StringResolver;
 	trailResolver: TrailResolver;
 	debug: boolean;
 	channel: string;
@@ -38,7 +39,7 @@ export class JSONEnvelopeWriter implements Writer {
 		data.timestamp = new Date().getTime();
 
 		if (this.sessionResolver) {
-			data.session = this.sessionResolver.get();
+			data.session = this.sessionResolver();
 		}
 
 		if (!data.query && this.queryResolver) {
