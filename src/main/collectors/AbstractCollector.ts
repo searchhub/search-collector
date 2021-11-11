@@ -34,4 +34,23 @@ export class AbstractCollector {
 	attach(writer: Writer, log: Logger) {
 		// override in subclass
 	}
+
+	/**
+	 * Used to execute resolver functions.
+	 * Logs a debug message if the value is undefined or if an error is thrown by the resolver
+	 * @param resolver A resolver function
+	 * @param log the logger
+	 * @param resolverArgs arguments to be passed to the resolver function
+	 * @protected
+	 */
+	protected resolve(resolver: (...any) => any, log: Logger, ...resolverArgs) {
+		try {
+			const val = resolver(...resolverArgs);
+			if (val == void 0)
+				log.debug("Resolver returned no value.", resolver);
+			return val;
+		} catch (e) {
+			log.error("Unexpected error during resolver execution: ", e);
+		}
+	}
 }
