@@ -6,9 +6,6 @@ import {join} from "path";
 let process: ChildProcess;
 export const shutdownMockServer = async () => {
 	if (process) {
-		process.kill("SIGINT");
-		process = void 0;
-
 		try {
 			await fetch(`http://localhost:8081/__admin/shutdown`, {
 				method: "POST"
@@ -16,6 +13,9 @@ export const shutdownMockServer = async () => {
 		} catch (e) {
 			console.error("Could not stop wiremock server: ", e);
 		}
+
+		process.kill("SIGINT");
+		process = void 0;
 	}
 }
 
