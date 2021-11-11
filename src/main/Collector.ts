@@ -67,6 +67,8 @@ export class Collector {
 			? new DefaultWriter({
 				debug: this.options.debug,
 				context: this.options.context,
+				channel: this.options.channel,
+				endpoint: this.options.endpoint,
 				...this.options.writerOptions
 			})
 			: new SplitStreamWriter(this.writers);
