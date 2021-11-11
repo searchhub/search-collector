@@ -24,7 +24,7 @@ export class SQSEventWriter implements Writer {
 			// deduplication id to a message hash
 			src += "&MessageGroupId=1&MessageDeduplicationId=" + Math.random();
 		}
-		src += "&MessageBody=" + data;
+		src += "&MessageBody=" + JSON.stringify(data);
 
 		img.src = src;
 	}
