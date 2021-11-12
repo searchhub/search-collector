@@ -161,7 +161,10 @@ class StubAsserter {
 	private async fetchJournalEntry() {
 		const entry = (await getJournal()).requests.find(entry => entry.stubMapping.id === this.stub.id);
 		if (!entry)
-			throw Error(`Could not find stub for id ${this.stub.id}`);
+			throw Error(`Could not find stub for id ${this.stub.id} with filename ${this.stub.__filename}, 
+			probably (1) your api-stub did not match your request or \n 
+			(2) there were no request at all or \n
+			(3) another stub matched your request.`);
 
 		return entry;
 	}
@@ -195,6 +198,7 @@ export const deleteStubMapping = async (id: string) => {
 
 export const createStubAsserter = async (filename: string): Promise<StubAsserter> => {
 	const stub = await createStubMapping(filename);
+	stub.__filename = filename;
 	return new StubAsserter(stub);
 }
 

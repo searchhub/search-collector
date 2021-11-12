@@ -29,22 +29,17 @@ export class BrowserCollector extends AbstractCollector {
 
 		const data: any = {
 			"type": this.getType(),
-			//@ts-ignore
-			"touch": (('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || (navigator.msMaxTouchPoints > 0))
+			touch: ('ontouchstart' in window) || (navigator.maxTouchPoints > 0)
 		}
 
-		if (this.recordLanguage) {
-			//@ts-ignore
-			data.lang = win.navigator.userLanguage || win.navigator.language;
-		}
+		if (this.recordLanguage)
+			data.lang = win.navigator.language;
 
-		if (this.recordUrl) {
+		if (this.recordUrl)
 			data.url = win.location.href;
-		}
 
-		if (this.recordReferrer) {
+		if (this.recordReferrer)
 			data.ref = doc.referrer;
-		}
 
 		writer.write(data);
 	}

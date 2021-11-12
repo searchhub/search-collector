@@ -1,0 +1,18 @@
+{
+  "request": {
+    "method": "GET",
+    "urlPath": "/browser-collector-channel",
+    "queryParameters": {
+      "data": {
+        "contains": "lang"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": "OK",
+    "headers": {
+      "Content-Type": "text/plain"
+    }
+  }
+}
