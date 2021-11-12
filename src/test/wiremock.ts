@@ -68,50 +68,94 @@ export const isWiremockReady = async () => {
 
 class StubAsserter {
 
-	disposed: boolean;
+	private disposed: boolean;
+	private testFunctions: Array<Function> = [];
 
 	constructor(private readonly stub) {
 	}
 
-	async verifyCallCount(callCount: number) {
+	async verify() {
 		this.checkDisposed();
-		await verifyStubMappingCallCount(this.stub.id, callCount);
+		try {
+			for (let i = 0; i < this.testFunctions.length; i++) {
+				await this.testFunctions[i]();
+			}
+		} catch (e) {
+			throw e;
+		} finally {
+			await this.dispose();
+		}
+	}
+
+	verifyCallCount(callCount: number) {
+		this.testFunctions.push(async () => {
+			await this._verifyCallCount(callCount);
+		});
 		return this;
 	}
 
-	async verifyBody(assertFn: (body: any) => void) {
-		this.checkDisposed();
+	private async _verifyCallCount(callCount: number) {
+		await verifyStubMappingCallCount(this.stub.id, callCount);
+	}
+
+	verifyBody(assertFn: (body: any) => void) {
+		this.testFunctions.push(async () => {
+			await this._verifyBody(assertFn);
+		});
+		return this;
+	}
+
+	private async _verifyBody(assertFn: (body: any) => void) {
 		const entry = await this.fetchJournalEntry();
 		await assertFn(entry.request.body);
+	}
+
+	verifyHeaders(assertFn: (headers: { [key: string]: string }) => void) {
+		this.testFunctions.push(async () => {
+			await this._verifyHeaders(assertFn);
+		});
 		return this;
 	}
 
-	async verifyHeaders(assertFn: (headers: { [key: string]: string }) => void) {
-		this.checkDisposed();
+	private async _verifyHeaders(assertFn: (headers: { [key: string]: string }) => void) {
 		const entry = await this.fetchJournalEntry();
 		await assertFn(entry.request.headers);
+	}
+
+	verifyCookies(assertFn: (cookies: { [key: string]: string }) => void) {
+		this.testFunctions.push(async () => {
+			await this._verifyCookies(assertFn);
+		});
 		return this;
 	}
 
-	async verifyCookies(assertFn: (cookies: { [key: string]: string }) => void) {
-		this.checkDisposed();
+	private async _verifyCookies(assertFn: (cookies: { [key: string]: string }) => void) {
 		const entry = await this.fetchJournalEntry();
 		await assertFn(entry.request.cookies);
+	}
+
+	verifyRequest(assertFn: (request: any) => void) {
+		this.testFunctions.push(async () => {
+			await this._verifyRequest(assertFn);
+		});
 		return this;
 	}
 
-	async verifyRequest(assertFn: (request: any) => void) {
-		this.checkDisposed();
+	private async _verifyRequest(assertFn: (request: any) => void) {
 		const entry = await this.fetchJournalEntry();
 		await assertFn(entry.request);
+	}
+
+	verifyQueryParams(assertFn: (queryParams: { [key: string]: { key: string, values: Array<string> } }) => void) {
+		this.testFunctions.push(async () => {
+			await this._verifyQueryParams(assertFn);
+		});
 		return this;
 	}
 
-	async verifyQueryParams(assertFn: (queryParams: { [key: string]: { key: string, values: Array<string> } }) => void) {
-		this.checkDisposed();
+	private async _verifyQueryParams(assertFn: (queryParams: { [key: string]: { key: string, values: Array<string> } }) => void) {
 		const entry = await this.fetchJournalEntry();
 		await assertFn(entry.request.queryParams);
-		return this;
 	}
 
 	private async fetchJournalEntry() {
