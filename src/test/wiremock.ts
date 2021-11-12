@@ -11,7 +11,7 @@ export const shutdownMockServer = async () => {
 	}
 
 	try {
-		const res = await fetch(`http://localhost:8081/__admin/shutdown`, {
+		await fetch(`http://localhost:8081/__admin/shutdown`, {
 			method: "POST"
 		});
 	} catch (e) {
@@ -168,13 +168,29 @@ class StubAsserter {
 
 	private async dispose() {
 		this.disposed = true;
-		//TODO implement me
+		await deleteStubMapping(this.stub.id);
 	}
 
 	private checkDisposed() {
 		if (this.disposed === true)
 			throw Error("This asserter is already disposed");
 	}
+}
+
+export const deleteStubMapping = async (id: string) => {
+	const res: Response = await fetch(`http://localhost:8081/__admin/mappings/${id}`, {
+		method: "DELETE"
+	});
+
+	if (res.status === 404) {
+		console.debug(`stub mapping with id ${id} did not exist`);
+		return false;
+	} else if (res.status !== 200) {
+		console.error(`could not delete stub mapping with id ${id}`);
+		return false;
+	}
+
+	return true;
 }
 
 export const createStubAsserter = async (filename: string): Promise<StubAsserter> => {
@@ -203,28 +219,6 @@ export const verifyStubMappingCallCount = async (id: string, callCount: number) 
 	const journal = await getJournal();
 	const called = journal.requests.reduce((acc, request) => request.stubMapping.id === id ? ++acc : acc, 0);
 	expect(called).toBe(callCount);
-}
-
-export const verifyApiCallCount = async (callCount: number, filename: string) => {
-	const mapping: any = require(join(__dirname, "mock", "mappings", filename));
-
-	if (!mapping)
-		throw Error(`mapping ${filename} not found`);
-
-	if (!mapping.request)
-		throw Error(`mapping ${filename} doesnt contain a request section`);
-
-	const res = await fetch(`http://localhost:8081/__admin/requests/count`, {
-		method: "POST",
-		headers: {
-			"Content-Type": "application/json"
-		},
-		body: JSON.stringify(mapping.request)
-	});
-	const body = await res.json();
-
-	if (body.count !== callCount)
-		throw Error(`Expected API ${JSON.stringify(mapping.request)} to be called ${callCount} but instead was ${body.count}`);
 }
 
 export const getJournal = async () => {
