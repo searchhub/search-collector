@@ -16,7 +16,7 @@ export * from "./collectors/FiredSearchCollector";
 export * from "./collectors/RedirectCollector";
 export * from "./writers/DefaultWriter";
 export * from "./writers/SplitStreamWriter";
-export * from "./query/TrailResolver";
+export * from "./query/Trail";
 export * from "./query/Query";
 export * from "./utils/Context";
 export * from "./utils/Sentinel";

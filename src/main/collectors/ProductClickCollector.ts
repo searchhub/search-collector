@@ -1,12 +1,12 @@
 import {ClickCollector} from "./ClickCollector";
 import {ListenerType} from "../utils/ListenerType";
 import {NumberResolver, StringResolver} from "../resolvers/Resolver";
-import {TrailResolver} from "../query/TrailResolver";
+import {Trail} from "../query/Trail";
 
 export type ProductClickCollectorResolver = {
 	idResolver: StringResolver,
 	positionResolver?: NumberResolver,
-	trailResolver?: TrailResolver,
+	trailResolver?: Trail,
 	priceResolver?: NumberResolver,
 	imageResolver?: StringResolver
 	metadataResolver?: StringResolver
@@ -18,7 +18,7 @@ export type ProductClickCollectorResolver = {
 export class ProductClickCollector extends ClickCollector {
 	private readonly idResolver: StringResolver;
 	private readonly positionResolver: NumberResolver;
-	private readonly trailResolver: TrailResolver;
+	private readonly trailResolver: Trail;
 	private readonly priceResolver: NumberResolver;
 	private readonly imageResolver: StringResolver;
 	private readonly metadataResolver: StringResolver;

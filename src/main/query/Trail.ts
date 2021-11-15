@@ -6,7 +6,7 @@ import {getLocalStorage} from "../utils/Util";
 
 const TTL = 1000 * 60 * 60 * 24 * 2;
 
-export class TrailResolver {
+export class Trail {
 	queryResolver: QueryResolver;
 	sessionResolver;
 	key: string;

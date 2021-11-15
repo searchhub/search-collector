@@ -1,6 +1,6 @@
 import {Sentinel} from "../utils/Sentinel";
 import {AbstractCollector} from "./AbstractCollector";
-import {TrailResolver, TrailType} from "../query/TrailResolver";
+import {Trail, TrailType} from "../query/Trail";
 import {NumberResolver, StringResolver} from "../resolvers/Resolver";
 
 /**
@@ -16,7 +16,7 @@ export class AssociatedProductCollector extends AbstractCollector {
 	private readonly idResolver: StringResolver;
 	private readonly positionResolver: NumberResolver;
 	private readonly priceResolver: NumberResolver;
-	private readonly trailResolver: TrailResolver;
+	private readonly trailResolver: Trail;
 
 	/**
 	 * Construct a click collector

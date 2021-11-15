@@ -1,6 +1,6 @@
 import {Context} from "../utils/Context";
 import {QueryResolver, StringResolver} from "../resolvers/Resolver";
-import {TrailResolver} from "../query/TrailResolver";
+import {Trail} from "../query/Trail";
 
 export * from "./Base64EncodeWriter";
 export * from "./BufferingWriter";
@@ -27,5 +27,5 @@ export type WriterOptions = {
 export type WriterResolverOptions = {
 	sessionResolver: StringResolver,
 	queryResolver: QueryResolver,
-	trailResolver?: TrailResolver
+	trailResolver?: Trail
 }

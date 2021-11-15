@@ -7,14 +7,14 @@
  */
 import {Writer, WriterOptions} from "./Writer";
 import {Context} from "../utils/Context";
-import {TrailResolver} from "../query/TrailResolver";
+import {Trail} from "../query/Trail";
 import {QueryResolver, StringResolver} from "../resolvers/Resolver";
 
 export class JSONEnvelopeWriter implements Writer {
 	delegate: Writer;
 	sessionResolver: StringResolver;
 	queryResolver: QueryResolver;
-	trailResolver: TrailResolver;
+	trailResolver: Trail;
 	debug: boolean;
 	channel: string;
 	recordUrl: boolean;
