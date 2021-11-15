@@ -8,12 +8,12 @@
 import {Writer, WriterOptions} from "./Writer";
 import {Context} from "../utils/Context";
 import {TrailResolver} from "../query/TrailResolver";
-import {StringResolver} from "../resolvers/Resolver";
+import {QueryResolver, StringResolver} from "../resolvers/Resolver";
 
 export class JSONEnvelopeWriter implements Writer {
 	delegate: Writer;
 	sessionResolver: StringResolver;
-	queryResolver: StringResolver;
+	queryResolver: QueryResolver;
 	trailResolver: TrailResolver;
 	debug: boolean;
 	channel: string;
@@ -43,7 +43,7 @@ export class JSONEnvelopeWriter implements Writer {
 		}
 
 		if (!data.query && this.queryResolver) {
-			let q = this.queryResolver();
+			let q = this.queryResolver().toString();
 			if (!q) {
 				// See if we have a payload id and a trail for it. This means we
 				// are collecting data for an event that does not have a query context

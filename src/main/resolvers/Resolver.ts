@@ -1,6 +1,7 @@
 import {Writer} from "../writers/Writer";
 import {Context} from "../utils/Context";
 import {generateId, getCookie, setCookie} from "../utils/Util";
+import {Query} from "../query/Query";
 
 const MINUTES_ONE_DAY = 60 * 24;
 const MINUTES_HALF_HOUR = 30;
@@ -10,6 +11,7 @@ export type WriterResolver = (writer: Writer, type: string, context: Context) =>
 export type BooleanResolver = (element?: HTMLElement) => boolean;
 export type StringResolver = (element?: HTMLElement) => string;
 export type NumberResolver = (element?: HTMLElement) => number;
+export type QueryResolver = () => Query; //TODO document breaking change
 
 /**
  * Read the cookie with the provided name
@@ -18,7 +20,7 @@ export type NumberResolver = (element?: HTMLElement) => number;
 export const cookieResolver = (name: string = ""): string => getCookie(name);
 
 /**
- * * Resolve the id of the current search session. A search session is defined as
+ * Resolve the id of the current search session. A search session is defined as
  * limited time slice of search activity across multiple tabs. By default a session
  * would be considered expired after 30 min of inactivity.
  *

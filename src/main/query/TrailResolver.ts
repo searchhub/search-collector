@@ -1,16 +1,16 @@
 // Let the product search trails live for 2 days. Note that
 // the product trail is independent from any session, thus we should be
 // able to identify the source query for a product even across sessions
-import {StringResolver} from "../resolvers/Resolver";
+import {QueryResolver, StringResolver} from "../resolvers/Resolver";
 
 const TTL = 1000 * 60 * 60 * 24 * 2;
 
 export class TrailResolver {
-	queryResolver: StringResolver;
+	queryResolver: QueryResolver;
 	sessionResolver;
 	key: string;
 
-	constructor(queryResolver: StringResolver, sessionResolver: StringResolver, id?: string) {
+	constructor(queryResolver: QueryResolver, sessionResolver: StringResolver, id?: string) {
 		this.queryResolver = queryResolver;
 		this.sessionResolver = sessionResolver;
 		this.key = "search-collector-trail" + (id ? "-" + id : "");
@@ -50,7 +50,7 @@ export class TrailResolver {
 	register(id, trailType = TrailType.Main, query) {
 		var trail = {
 			"timestamp": new Date().getTime(),
-			"query": query || this.queryResolver(),
+			"query": query || this.queryResolver().toString(),
 			"type": trailType
 		};
 

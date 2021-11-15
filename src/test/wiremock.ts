@@ -46,7 +46,7 @@ export const verifyNoUnmatchedRequests = async () => {
 
 function isAllowedUnmatchedRequest(entry) {
 	const url = entry.request.url;
-	const allowedUrls = ["index.window.bundle.js", "__healthcheck", "page.html"]
+	const allowedUrls = ["index.window.bundle.js", "__healthcheck", "page.html"];
 	return !!allowedUrls.find(allowedUrl => url.indexOf(allowedUrl) > -1);
 }
 
