@@ -2,19 +2,17 @@ import {AbstractCollector} from "./AbstractCollector";
 import {Sentinel} from "../utils/Sentinel";
 import {ListenerType} from "../utils/ListenerType";
 
-// Don't consider search phrases shorter than this
-const MIN_LENGTH = 2;
-const DELAY = 500;
-
 /**
  * Collect search information from a field that has a "as-you-type" trigger and
  * renders search results immediately. May trigger multiple times depending on
  * type speed patterns - we expect that the interval between key strokes would be
- * less than 400ms
+ * less than 500ms
  */
 export class InstantSearchQueryCollector extends AbstractCollector {
 
 	selectorExpression: string;
+	delayMs: number;
+	minLength: number;
 	listenerType: ListenerType;
 
 	/**
@@ -22,10 +20,18 @@ export class InstantSearchQueryCollector extends AbstractCollector {
 	 *
 	 * @constructor
 	 * @param {string} selectorExpression - Document query selector identifying the elements to attach to
+	 * @param delayMs
+	 * @param minLength
+	 * @param listenerType
 	 */
-	constructor(selectorExpression: string, listenerType = ListenerType.Sentinel) {
+	constructor(selectorExpression: string,
+							delayMs: number = 500,
+							minLength: number = 2,
+							listenerType = ListenerType.Sentinel) {
 		super("instant-search");
 		this.selectorExpression = selectorExpression;
+		this.delayMs = delayMs;
+		this.minLength = minLength;
 		this.listenerType = listenerType;
 	}
 
@@ -45,15 +51,15 @@ export class InstantSearchQueryCollector extends AbstractCollector {
 
 			// Delay the reaction of the event, clean the timeout if the event fires
 			// again and start counting from 0
-			delay(function () {
+			delay(() => {
 				const keywords = searchBox.value;
-				if (keywords && keywords.length >= MIN_LENGTH) {
+				if (keywords && keywords.length >= this.minLength) {
 					writer.write({
 						"type": type,
 						"keywords": keywords
 					});
 				}
-			}, DELAY);
+			}, this.delayMs);
 		}
 
 		// The Sentiel library uses animationstart event listeners which may interfere with
@@ -63,9 +69,9 @@ export class InstantSearchQueryCollector extends AbstractCollector {
 		// "sentinel (default)" - works on elements inserted in the DOM anytime, but interferes with CSS animations on these elements
 		if (this.listenerType === ListenerType.Dom) {
 			const nodeList = this.getDocument().querySelectorAll(this.selectorExpression);
-			nodeList.forEach(el => el.addEventListener("keypress", ev => handler(el, ev, writer)));
+			nodeList.forEach(el => el.addEventListener("keyup", ev => handler(el, ev, writer)));
 		} else {
-			new Sentinel(this.getDocument()).on(this.selectorExpression, el => el.addEventListener("keypress", ev => handler(el, ev, writer)));
+			new Sentinel(this.getDocument()).on(this.selectorExpression, el => el.addEventListener("keyup", ev => handler(el, ev, writer)));
 		}
 	}
 }
