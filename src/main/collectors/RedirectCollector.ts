@@ -3,7 +3,7 @@ import {Context} from "../utils/Context";
 import {BooleanResolver, CallbackResolver} from "../resolvers/Resolver";
 
 /**
- * Keep track of human triggered searches followed by a redirec to a page different than the search result page
+ * Keep track of human triggered searches followed by a redirect to a page different than the search result page
  */
 export class RedirectCollector extends AbstractCollector {
 
@@ -13,7 +13,7 @@ export class RedirectCollector extends AbstractCollector {
 	private readonly expectedPageResolver: BooleanResolver;
 
 	/**
-	 * Construct search result collector
+	 * Construct redirect collector
 	 *
 	 * @constructor
 	 * @param {function} triggerResolver - Function that fires when a search happens, should return the keyword
@@ -21,7 +21,7 @@ export class RedirectCollector extends AbstractCollector {
 	 * @param context
 	 */
 	constructor(triggerResolver: CallbackResolver, expectedPageResolver: BooleanResolver, context?: Context) {
-		super("search", context);
+		super("redirect", context);
 		this.triggerResolver = triggerResolver;
 		this.expectedPageResolver = expectedPageResolver;
 	}
@@ -49,8 +49,8 @@ export class RedirectCollector extends AbstractCollector {
 			if (!this.resolve(this.expectedPageResolver, log)) {
 				// Thus record the redirect
 				writer.write({
-					"type": "redirect",
-					"keywords": lastSearch
+					type: "redirect",
+					keywords: lastSearch
 				});
 			}
 		}
