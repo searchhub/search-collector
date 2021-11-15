@@ -23,7 +23,7 @@ export class ImpressionCollector extends AbstractCollector {
 	 * @param idResolver - Resolve the id of the element
 	 * @param positionResolver - Resolve the position of the element in dom
 	 */
-	constructor(selectorExpression: string, idResolver: StringResolver, positionResolver: NumberResolver) {
+	constructor(selectorExpression: string, idResolver: StringResolver, positionResolver: NumberResolver) { //TODO breaking change constructor
 		super("impression");
 		this.selectorExpression = selectorExpression;
 		this.idResolver = idResolver;
