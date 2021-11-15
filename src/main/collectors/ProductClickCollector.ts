@@ -1,17 +1,18 @@
 import {ClickCollector} from "./ClickCollector";
 import {ListenerType} from "../utils/ListenerType";
+import {NumberResolver, StringResolver} from "../resolvers/Resolver";
+import {TrailResolver} from "../query/TrailResolver";
 
 /**
  * ClickCollector emitting "product" events, attach to product links
  */
 export class ProductClickCollector extends ClickCollector {
-
-	idResolver;
-	positionResolver;
-	trailResolver;
-	priceResolver;
-	imageResolver;
-	metadataResolver;
+	idResolver: StringResolver;
+	positionResolver: NumberResolver;
+	trailResolver: TrailResolver;
+	priceResolver: NumberResolver;
+	imageResolver: StringResolver;
+	metadataResolver: StringResolver;
 
 	constructor(selector, resolvers, listenerType = ListenerType.Sentinel) {
 		super(selector, "product", listenerType);

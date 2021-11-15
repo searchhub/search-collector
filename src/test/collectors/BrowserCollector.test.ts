@@ -3,7 +3,7 @@ import {createStubAsserter, shutdownMockServer, startMockServer, verifyNoUnmatch
 
 declare const page: Page;
 
-describe('SearchResultCollector Suite', () => {
+describe('BrowserCollector Suite', () => {
 
 	beforeAll(async () => {
 		await startMockServer();

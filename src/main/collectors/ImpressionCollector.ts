@@ -1,37 +1,33 @@
 import {AbstractCollector} from "./AbstractCollector";
 import {Sentinel} from "../utils/Sentinel";
-import {scrollMonitor} from "scrollmonitor";
 import {NumberResolver, StringResolver} from "../resolvers/Resolver";
 
-//TODO change it maybe?
-type ImpressionAttributeCollector = {
-	(element?: HTMLElement): {
-		id: StringResolver,
-		position: NumberResolver
-	}
-};
+const scrollMonitor = require("scrollmonitor");
 
 /**
- * Collect impressions - a disply of a product in the browser viewport. If the product is shown multiple
+ * Collect impressions - a display of a product in the browser viewport. If the product is shown multiple
  * times, the collector will record multiple events i.e. we don't apply filter logic here.
  *
  * Handles both DOM elements present in the DOM and elements inserted after the page load / collector construction.
  */
 export class ImpressionCollector extends AbstractCollector {
 	selectorExpression: string;
-	attributeCollector: ImpressionAttributeCollector;
+	idResolver: StringResolver;
+	positionResolver: NumberResolver;
 
 	/**
 	 * Construct impression collector
 	 *
 	 * @constructor
 	 * @param {string} selectorExpression - Document query selector identifying the elements to attach to
-	 * @param {function} attributeCollector - A function to be triggered on click of the element, intended to collect specific element data
+	 * @param idResolver - Resolve the id of the element
+	 * @param positionResolver - Resolve the position of the element in dom
 	 */
-	constructor(selectorExpression: string, attributeCollector: ImpressionAttributeCollector) {
+	constructor(selectorExpression: string, idResolver: StringResolver, positionResolver: NumberResolver) {
 		super("impression");
 		this.selectorExpression = selectorExpression;
-		this.attributeCollector = attributeCollector;
+		this.idResolver = idResolver;
+		this.positionResolver = positionResolver;
 	}
 
 	/**
@@ -39,15 +35,17 @@ export class ImpressionCollector extends AbstractCollector {
 	 * when the event occurs, with a delay of 1s - we could gather many events within this timeframe
 	 *
 	 * @param {object} writer - The writer to send the data to
+	 * @param {Logger} log - The logger
 	 */
-	attach(writer) {
+	attach(writer, log) {
 		const handler = el => {
 			const watcher = scrollMonitor.create(el);
 
 			watcher.enterViewport(() => {
 				const data = {
 					type: this.type,
-					...this.attributeCollector(el)
+					id: this.resolve(this.idResolver, log, el),
+					position: this.resolve(this.positionResolver, log, el)
 				};
 				// Figure out if we need to check the visibility of an element i.e.
 				// guard against elements that enter the viewport but have display=hidden

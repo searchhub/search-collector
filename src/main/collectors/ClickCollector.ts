@@ -20,9 +20,10 @@ export class ClickCollector extends AbstractCollector {
 	 * @constructor
 	 * @param {string} selectorExpression - Document query selector identifying the elements to attach to
 	 * @param {string} type - The type of element click to report
+	 * @param {string} listenerType - Whether the listener should be a dom or sentinel listener
 	 */
 	constructor(selectorExpression, type = "click", listenerType = ListenerType.Sentinel) {
-		super(type)
+		super(type);
 		this.selectorExpression = selectorExpression;
 		this.listenerType = listenerType;
 	}

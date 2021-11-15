@@ -47,7 +47,7 @@ export class TrailResolver {
 	 * Register this product id as starting a purchase journey at this session/query
 	 * Possible trail types are "main" and "associated"
 	 */
-	register(id, trailType = TrailType.Main, query) {
+	register(id, trailType = TrailType.Main, query?) {
 		var trail = {
 			"timestamp": new Date().getTime(),
 			"query": query || this.queryResolver().toString(),
