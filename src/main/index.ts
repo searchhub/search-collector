@@ -7,7 +7,6 @@ export * from "./collectors/ImpressionCollector";
 export * from "./collectors/FilterClickCollector";
 export * from "./collectors/ProductClickCollector";
 export * from "./collectors/BasketClickCollector";
-export * from "./collectors/ProductListCollector";
 export * from "./collectors/AssociatedProductCollector";
 export * from "./collectors/GenericEventCollector";
 export * from "./collectors/CheckoutClickCollector";
