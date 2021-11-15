@@ -3,8 +3,8 @@ import {Writer} from "../writers/Writer";
 import {Logger} from "../logger/Logger";
 
 export class AbstractCollector {
-	type: string;
-	context: Context;
+	protected type: string;
+	protected context: Context;
 
 	constructor(type: string, context: Context = new Context(window, document)) {
 		this.type = type;

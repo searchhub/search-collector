@@ -6,8 +6,8 @@ import {ListenerType} from "../utils/ListenerType";
  * ClickCollector emitting "product" events, attach to product links
  */
 export class BasketClickCollector extends ClickCollector {
-	idResolver: StringResolver;
-	priceResolver: NumberResolver;
+	private readonly idResolver: StringResolver;
+	private readonly priceResolver: NumberResolver;
 
 	constructor(selector, resolvers, listenerType = ListenerType.Sentinel) {
 		super(selector, "basket", listenerType);
@@ -19,20 +19,18 @@ export class BasketClickCollector extends ClickCollector {
 	 * Collect the product click information from the element
 	 * @override
 	 */
-	collect(element) {
-		let id = this.idResolver(element);
-
-		let data = undefined;
+	collect(element, log) {
+		const id = this.resolve(this.idResolver, log, element);
 		if (id) {
-			data = {
-				"id": id
-			}
+			const data: any = {
+				id
+			};
 
 			if (this.priceResolver) {
-				data.price = this.priceResolver(element);
+				data.price = this.resolve(this.priceResolver, log, element);
 			}
-		}
 
-		return data;
+			return data;
+		}
 	}
 }

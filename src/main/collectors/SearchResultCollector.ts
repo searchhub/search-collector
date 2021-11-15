@@ -7,10 +7,9 @@ import {NumberResolver, StringResolver} from "../resolvers/Resolver";
  * See the other search collectors for dynamic ones.
  */
 export class SearchResultCollector extends AbstractCollector {
-
-	phraseResolver: StringResolver;
-	countResolver: NumberResolver;
-	actionResolver: StringResolver;
+	private readonly phraseResolver: StringResolver;
+	private readonly countResolver: NumberResolver;
+	private readonly actionResolver: StringResolver;
 
 	/**
 	 * Construct search result collector

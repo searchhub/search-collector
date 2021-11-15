@@ -29,10 +29,10 @@ export class RedirectCollector extends AbstractCollector {
 	 *
 	 * @param {object} writer - The writer to send the data to
 	 */
-	attach(writer) {
+	attach(writer, log) {
 		const win = this.context.getWindow();
 
-		this.triggerResolver(keyword => {
+		this.resolve(this.triggerResolver, log, keyword => {
 			win.sessionStorage.setItem("lastSearch", keyword);
 		});
 
@@ -43,7 +43,7 @@ export class RedirectCollector extends AbstractCollector {
 			win.sessionStorage.removeItem("lastSearch");
 
 			// If we have not landed on the expected search page, it must have been (looove) a redirect
-			if (!this.expectedPageResolver()) {
+			if (!this.resolve(this.expectedPageResolver, log)) {
 				// Thus record the redirect
 				writer.write({
 					"type": "redirect",

@@ -7,13 +7,14 @@ import {AbstractCollector} from "./AbstractCollector";
  * See https://developer.mozilla.org/en-US/docs/Web/Guide/Events/Creating_and_triggering_events for guidance
  */
 export class GenericEventCollector extends AbstractCollector {
-	eventName: string;
+	private readonly eventName: string;
 
 	/**
 	 * Construct event based collector
 	 *
 	 * @constructor
 	 * @param {string} eventName - the name of the event to react on
+	 * @param type
 	 */
 	constructor(eventName: string, type = "GenericEvent") {
 		super(type);

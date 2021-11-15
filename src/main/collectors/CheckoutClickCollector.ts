@@ -8,12 +8,12 @@ import {NumberResolver, StringResolver} from "../resolvers/Resolver";
  * information from and write to the collector writer
  */
 export class CheckoutClickCollector extends AbstractCollector {
-	clickSelector: string;
-	contentSelector: string;
-	idResolver: StringResolver;
-	priceResolver: NumberResolver;
-	amountResolver: NumberResolver;
-	listenerType: ListenerType;
+	private readonly clickSelector: string;
+	private readonly contentSelector: string;
+	private readonly idResolver: StringResolver;
+	private readonly priceResolver: NumberResolver;
+	private readonly amountResolver: NumberResolver;
+	private readonly listenerType: ListenerType;
 
 	constructor(clickSelector, contentSelector, resolvers, listenerType = ListenerType.Sentinel) {
 		super("checkout");
@@ -30,26 +30,26 @@ export class CheckoutClickCollector extends AbstractCollector {
 	 * when the event occurs
 	 *
 	 * @param {object} writer - The writer to send the data to
+	 * @param log
 	 */
-	attach(writer) {
+	attach(writer, log) {
 		const doc = this.getDocument();
 
 		// Activates on click of the element selected using the clickSelector
 		const handler = element => {
 			const items = doc.querySelectorAll<HTMLElement>(this.contentSelector);
 			items.forEach(item => {
-				const id = this.idResolver(item);
-
+				const id = this.resolve(this.idResolver, log, item);
 				if (id) {
 					const data: any = {
-						"id": id
-					}
+						id
+					};
 
 					if (this.priceResolver) {
-						data.price = this.priceResolver(item);
+						data.price = this.resolve(this.priceResolver, log, item);
 					}
 					if (this.amountResolver) {
-						data.amount = this.amountResolver(item);
+						data.amount = this.resolve(this.amountResolver, log, item);
 					}
 
 					// We write each item separately - they may be coming from different queries

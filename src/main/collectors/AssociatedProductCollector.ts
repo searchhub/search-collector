@@ -11,21 +11,20 @@ import {NumberResolver, StringResolver} from "../resolvers/Resolver";
  * from the element.
  */
 export class AssociatedProductCollector extends AbstractCollector {
-
-	mainProductId: string;
-	selectorExpression: string;
-	idResolver: StringResolver;
-	positionResolver: NumberResolver;
-	priceResolver: NumberResolver;
-	trailResolver: TrailResolver;
+	private readonly mainProductId: string;
+	private readonly selectorExpression: string;
+	private readonly idResolver: StringResolver;
+	private readonly positionResolver: NumberResolver;
+	private readonly priceResolver: NumberResolver;
+	private readonly trailResolver: TrailResolver;
 
 	/**
 	 * Construct a click collector
 	 *
 	 * @constructor
 	 * @param {string} selectorExpression - Document query selector identifying the elements to attach to
-	 * @param {function} attributeCollector - A function to be triggered on click of the element, intended to collect specific element data
-	 * @param {string} type - The type of element click to report
+	 * @param mainProductId
+	 * @param resolvers
 	 */
 	constructor(selectorExpression, mainProductId, resolvers) {
 		super("associated-product")
@@ -42,14 +41,15 @@ export class AssociatedProductCollector extends AbstractCollector {
 	 * when the event occurs
 	 *
 	 * @param {object} writer - The writer to send the data to
+	 * @param log
 	 */
-	attach(writer) {
+	attach(writer, log) {
 		const collect = element => {
-			const id = this.idResolver(element);
+			const id = this.resolve(this.idResolver, log, element);
 
 			if (id) {
-				const position = this.positionResolver ? this.positionResolver(element) : void 0;
-				const price = this.priceResolver ? this.priceResolver(element) : void 0;
+				const position = this.positionResolver ? this.resolve(this.positionResolver, log, element) : void 0;
+				const price = this.priceResolver ? this.resolve(this.priceResolver, log, element) : void 0;
 
 				if (this.trailResolver) {
 					// Find out the query source of the main product. Note that despite being a

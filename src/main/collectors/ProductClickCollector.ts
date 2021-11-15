@@ -37,27 +37,27 @@ export class ProductClickCollector extends ClickCollector {
 	 * Collect the product click information from the element
 	 * @override
 	 */
-	collect(element) {
-		const id = this.idResolver(element);
+	collect(element, log) {
+		const id = this.resolve(this.idResolver, log, element);
 		if (id) {
 			const data: any = {
-				id: this.idResolver(element)
+				id
 			};
 
 			if (this.positionResolver) {
-				data.position = this.positionResolver(element);
+				data.position = this.resolve(this.positionResolver, log, element);
 			}
 
 			if (this.priceResolver) {
-				data.price = this.priceResolver(element);
+				data.price = this.resolve(this.priceResolver, log, element);
 			}
 
 			if (this.imageResolver) {
-				data.image = this.imageResolver(element);
+				data.image = this.resolve(this.imageResolver, log, element);
 			}
 
 			if (this.metadataResolver) {
-				data.metadata = this.metadataResolver(element);
+				data.metadata = this.resolve(this.metadataResolver, log, element);
 			}
 
 			if (this.trailResolver) {

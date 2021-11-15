@@ -11,9 +11,9 @@ const scrollMonitor = require("scrollmonitor");
  * Handles both DOM elements present in the DOM and elements inserted after the page load / collector construction.
  */
 export class ImpressionCollector extends AbstractCollector {
-	selectorExpression: string;
-	idResolver: StringResolver;
-	positionResolver: NumberResolver;
+	private readonly selectorExpression: string;
+	private readonly idResolver: StringResolver;
+	private readonly positionResolver: NumberResolver;
 
 	/**
 	 * Construct impression collector

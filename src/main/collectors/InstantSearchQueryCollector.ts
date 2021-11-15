@@ -9,11 +9,10 @@ import {ListenerType} from "../utils/ListenerType";
  * less than 500ms
  */
 export class InstantSearchQueryCollector extends AbstractCollector {
-
-	selectorExpression: string;
-	delayMs: number;
-	minLength: number;
-	listenerType: ListenerType;
+	private readonly selectorExpression: string;
+	private readonly delayMs: number;
+	private readonly minLength: number;
+	private readonly listenerType: ListenerType;
 
 	/**
 	 * Construct instant search collector

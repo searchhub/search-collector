@@ -6,9 +6,9 @@ import {AbstractCollector} from "./AbstractCollector";
  */
 export class BrowserCollector extends AbstractCollector {
 
-	recordUrl: boolean;
-	recordReferrer: boolean;
-	recordLanguage: boolean;
+	private readonly recordUrl: boolean;
+	private readonly recordReferrer: boolean;
+	private readonly recordLanguage: boolean;
 
 	constructor(options) {
 		super("browser");
@@ -28,7 +28,7 @@ export class BrowserCollector extends AbstractCollector {
 		const doc = this.getDocument();
 
 		const data: any = {
-			"type": this.getType(),
+			type: this.getType(),
 			touch: ('ontouchstart' in window) || (navigator.maxTouchPoints > 0)
 		}
 

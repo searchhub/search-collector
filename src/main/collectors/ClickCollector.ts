@@ -10,9 +10,8 @@ import {ListenerType} from "../utils/ListenerType";
  * from the element.
  */
 export class ClickCollector extends AbstractCollector {
-
-	selectorExpression: string;
-	listenerType: ListenerType;
+	protected selectorExpression: string;
+	protected listenerType: ListenerType;
 
 	/**
 	 * Construct a click collector
@@ -32,7 +31,7 @@ export class ClickCollector extends AbstractCollector {
 	 * Abstract collection method, must be overriden in the subclasses
 	 * @abstract
 	 */
-	collect(element) {
+	collect(element, log) {
 		return undefined;
 	}
 
@@ -41,10 +40,11 @@ export class ClickCollector extends AbstractCollector {
 	 * when the event occurs
 	 *
 	 * @param {object} writer - The writer to send the data to
+	 * @param log
 	 */
-	attach(writer) {
+	attach(writer, log) {
 		const handler = (element, writer) => {
-			const payload = this.collect(element);
+			const payload = this.collect(element, log);
 			if (payload) {
 				writer.write({
 					"type": this.type,

@@ -25,8 +25,9 @@ export class FiredSearchCollector extends AbstractCollector {
 	 * the data immediately
 	 *
 	 * @param {object} writer - The writer to send the data to
+	 * @param log
 	 */
-	attach(writer) {
-		this.resolver(writer, this.getType(), this.getContext());
+	attach(writer, log) {
+		this.resolve(this.resolver, log, writer, this.getType(), this.getContext());
 	}
 }

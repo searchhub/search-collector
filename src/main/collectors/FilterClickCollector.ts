@@ -1,22 +1,23 @@
 import {ClickCollector} from "./ClickCollector";
+import {StringResolver} from "../resolvers/Resolver";
 
 /**
  * ClickCollector emitting "filter" events, attach to facet links
  */
 export class FilterClickCollector extends ClickCollector {
 
-	collector;
+	resolver: StringResolver;
 
 	constructor(selector, collector) {
 		super(selector, "filter");
-		this.collector = collector;
+		this.resolver = collector;
 	}
 
 	/**
 	 * Collect the product click information from the element
 	 * @override
 	 */
-	collect(element: HTMLElement) {
-		return {"query": this.collector(element)};
+	collect(element: HTMLElement, log) {
+		return {"query": this.resolve(this.resolver, log, element)};
 	}
 }
