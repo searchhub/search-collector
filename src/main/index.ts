@@ -9,7 +9,6 @@ export * from "./collectors/ProductClickCollector";
 export * from "./collectors/BasketClickCollector";
 export * from "./collectors/ProductListCollector";
 export * from "./collectors/AssociatedProductCollector";
-export * from "./collectors/SearchEventResultCollector";
 export * from "./collectors/GenericEventCollector";
 export * from "./collectors/CheckoutClickCollector";
 export * from "./collectors/AbstractCollector";
