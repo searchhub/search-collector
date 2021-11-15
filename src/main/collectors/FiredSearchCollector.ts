@@ -1,14 +1,11 @@
-import {AbstractCollector} from "./AbstractCollector";
 import {WriterResolver} from "../resolvers/Resolver";
+import {WriterResolverCollector} from "./WriterResolverCollector";
 
 /**
  * Triggered when the client has triggered/fired a search
  *
  */
-export class FiredSearchCollector extends AbstractCollector {
-
-	resolver: WriterResolver;
-
+export class FiredSearchCollector extends WriterResolverCollector {
 	/**
 	 * Construct fired search collector
 	 *
@@ -16,18 +13,6 @@ export class FiredSearchCollector extends AbstractCollector {
 	 * @param {function} resolver - Function that triggers the writing. We can't always determine when search triggers, leave to the implementation to determine when/how
 	 */
 	constructor(resolver: WriterResolver) {
-		super("fired-search");
-		this.resolver = resolver;
-	}
-
-	/**
-	 * Attach a writer, note that this collector is not asynchronous and will write
-	 * the data immediately
-	 *
-	 * @param {object} writer - The writer to send the data to
-	 * @param log
-	 */
-	attach(writer, log) {
-		this.resolve(this.resolver, log, writer, this.getType(), this.getContext());
+		super("fired-search", resolver);
 	}
 }

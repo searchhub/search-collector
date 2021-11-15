@@ -6,7 +6,7 @@ import {StringResolver} from "../resolvers/Resolver";
  */
 export class FilterClickCollector extends ClickCollector {
 
-	resolver: StringResolver;
+	private readonly resolver: StringResolver;
 
 	constructor(selector, collector) {
 		super(selector, "filter");
@@ -18,6 +18,6 @@ export class FilterClickCollector extends ClickCollector {
 	 * @override
 	 */
 	collect(element: HTMLElement, log) {
-		return {"query": this.resolve(this.resolver, log, element)};
+		return {query: this.resolve(this.resolver, log, element)};
 	}
 }
