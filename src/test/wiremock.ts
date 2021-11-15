@@ -35,6 +35,21 @@ export const waitForShutdown = async (delay: number = 100, retries: number = 50)
 	return wait(100);
 }
 
+export const verifyNoUnmatchedRequests = async () => {
+	const journal = await getJournal();
+	journal.requests.filter(req => !req.wasMatched)
+		.forEach(entry => {
+			if (!isAllowedUnmatchedRequest(entry))
+				throw Error(`Unmatched stub mappings. Please delete the mapping or check your test. Request ${entry.id} with url ${entry.request.url}`);
+		});
+}
+
+function isAllowedUnmatchedRequest(entry) {
+	const url = entry.request.url;
+	const allowedUrls = ["index.window.bundle.js", "__healthcheck", "page.html"]
+	return !!allowedUrls.find(allowedUrl => url.indexOf(allowedUrl) > -1);
+}
+
 export const waitForReadiness = async (delay: number = 100, retries: number = 50) => {
 	const origRetries = retries;
 	while (retries > 0) {

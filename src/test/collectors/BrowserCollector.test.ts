@@ -1,5 +1,5 @@
 import {Page} from "puppeteer";
-import {createStubAsserter, shutdownMockServer, startMockServer} from "../wiremock";
+import {createStubAsserter, shutdownMockServer, startMockServer, verifyNoUnmatchedRequests} from "../wiremock";
 
 declare const page: Page;
 
@@ -13,8 +13,8 @@ describe('SearchResultCollector Suite', () => {
 		await shutdownMockServer();
 	})
 
-	beforeEach(async () => {
-
+	afterEach(async () => {
+		await verifyNoUnmatchedRequests();
 	})
 
 	test('track search result data', async () => {
