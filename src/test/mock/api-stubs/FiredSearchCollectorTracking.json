@@ -1,0 +1,18 @@
+{
+  "request": {
+    "method": "GET",
+    "urlPath": "/fired-search-collector-channel",
+    "queryParameters": {
+      "data": {
+        "contains": "fired-search"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": "OK",
+    "headers": {
+      "Content-Type": "text/plain"
+    }
+  }
+}

@@ -22,7 +22,7 @@ export class FiredSearchCollector extends AbstractCollector {
 
 	/**
 	 * Attach a writer, note that this collector is not asynchronous and will write
-	 * the data immediatelly
+	 * the data immediately
 	 *
 	 * @param {object} writer - The writer to send the data to
 	 */
