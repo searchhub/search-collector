@@ -27,7 +27,7 @@ export const startMockServer = async () => {
 
 	process = exec("npm run test-server");
 	const readyTime = await waitForReadiness();
-	console.debug(`wiremock ready after ${readyTime}ms`);
+	// console.debug(`wiremock ready after ${readyTime}ms`);
 }
 
 export const waitForShutdown = async (delay: number = 100, retries: number = 50) => {
