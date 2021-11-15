@@ -7,8 +7,8 @@ import {BooleanResolver, CallbackResolver} from "../resolvers/Resolver";
  */
 export class RedirectCollector extends AbstractCollector {
 
-	triggerResolver: CallbackResolver;
-	expectedPageResolver: BooleanResolver;
+	private readonly triggerResolver: CallbackResolver;
+	private readonly expectedPageResolver: BooleanResolver;
 
 	/**
 	 * Construct search result collector
@@ -16,9 +16,10 @@ export class RedirectCollector extends AbstractCollector {
 	 * @constructor
 	 * @param {function} triggerResolver - Function that fires when a search happens, should return the keyword
 	 * @param {function} expectedPageResolver - Function that should return whether the page we load is the expected one
+	 * @param context
 	 */
-	constructor(triggerResolver: CallbackResolver, expectedPageResolver: BooleanResolver, contextResolver?: Context) {
-		super("search", contextResolver);
+	constructor(triggerResolver: CallbackResolver, expectedPageResolver: BooleanResolver, context?: Context) {
+		super("search", context);
 		this.triggerResolver = triggerResolver;
 		this.expectedPageResolver = expectedPageResolver;
 	}

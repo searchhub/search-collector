@@ -2,6 +2,7 @@
 // the product trail is independent from any session, thus we should be
 // able to identify the source query for a product even across sessions
 import {QueryResolver, StringResolver} from "../resolvers/Resolver";
+import {getLocalStorage} from "../utils/Util";
 
 const TTL = 1000 * 60 * 60 * 24 * 2;
 
@@ -16,7 +17,7 @@ export class TrailResolver {
 		this.key = "search-collector-trail" + (id ? "-" + id : "");
 
 		try {
-			let localTrails = this._load(localStorage);
+			let localTrails = this._load(getLocalStorage());
 			let now = new Date().getTime();
 
 			// Drop all expired trails, TTL in sync with session duration of 30 min
@@ -25,7 +26,7 @@ export class TrailResolver {
 					delete localTrails[id];
 				}
 			}
-			this._save(localStorage, localTrails);
+			this._save(getLocalStorage(), localTrails);
 
 
 			// Load existing session trails and merge it with the local storage trails.
@@ -34,8 +35,8 @@ export class TrailResolver {
 			// of all product clicks within the session. Reminder, sessionStorage is maintained
 			// per tab/window and is deleted upon closing, localStorage is per website with no
 			// default expiry.
-			let sessionTrails = this._load(sessionStorage);
-			let trails = Object.assign(localTrails, sessionTrails);
+			const sessionTrails = this._load(sessionStorage);
+			const trails = Object.assign(localTrails, sessionTrails);
 			this._save(sessionStorage, trails);
 
 		} catch (e) {
@@ -48,26 +49,26 @@ export class TrailResolver {
 	 * Possible trail types are "main" and "associated"
 	 */
 	register(id, trailType = TrailType.Main, query?) {
-		var trail = {
+		const trail = {
 			"timestamp": new Date().getTime(),
 			"query": query || this.queryResolver().toString(),
 			"type": trailType
 		};
 
 		for (let storage of [localStorage, sessionStorage]) {
-			var trails = this._load(storage);
+			const trails = this._load(storage);
 			trails[id] = trail;
 			this._save(storage, trails);
 		}
 	}
 
 	fetch(id) {
-		var trails = this._load(sessionStorage);
+		const trails = this._load(sessionStorage);
 		return trails[id];
 	}
 
 	_load(storage) {
-		var data = storage.getItem(this.key);
+		const data = storage.getItem(this.key);
 		return data ? JSON.parse(data) : {};
 	}
 

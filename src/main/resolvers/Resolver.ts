@@ -6,7 +6,7 @@ import {Query} from "../query/Query";
 const MINUTES_ONE_DAY = 60 * 24;
 const MINUTES_HALF_HOUR = 30;
 
-export type CallbackResolver = (callback: (param: any) => void) => void;
+export type CallbackResolver = (callback: (...params: any) => void) => void;
 export type WriterResolver = (writer: Writer, type: string, context: Context) => void
 export type BooleanResolver = (element?: HTMLElement) => boolean;
 export type StringResolver = (element?: HTMLElement) => string;
