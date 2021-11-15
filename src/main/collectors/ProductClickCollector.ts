@@ -3,6 +3,15 @@ import {ListenerType} from "../utils/ListenerType";
 import {NumberResolver, StringResolver} from "../resolvers/Resolver";
 import {TrailResolver} from "../query/TrailResolver";
 
+export type ProductClickCollectorResolver = {
+	idResolver: StringResolver,
+	positionResolver?: NumberResolver,
+	trailResolver?: TrailResolver,
+	priceResolver?: NumberResolver,
+	imageResolver?: StringResolver
+	metadataResolver?: StringResolver
+}
+
 /**
  * ClickCollector emitting "product" events, attach to product links
  */
@@ -14,7 +23,7 @@ export class ProductClickCollector extends ClickCollector {
 	private readonly imageResolver: StringResolver;
 	private readonly metadataResolver: StringResolver;
 
-	constructor(selector, resolvers, listenerType = ListenerType.Sentinel) {
+	constructor(selector, resolvers: ProductClickCollectorResolver, listenerType = ListenerType.Sentinel) {
 		super(selector, "product", listenerType);
 		this.idResolver = resolvers.idResolver;
 		this.positionResolver = resolvers.positionResolver;
@@ -32,7 +41,7 @@ export class ProductClickCollector extends ClickCollector {
 		const id = this.idResolver(element);
 		if (id) {
 			const data: any = {
-				"id": this.idResolver(element)
+				id: this.idResolver(element)
 			};
 
 			if (this.positionResolver) {
