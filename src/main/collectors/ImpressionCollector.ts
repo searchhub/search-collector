@@ -39,9 +39,7 @@ export class ImpressionCollector extends AbstractCollector {
 	 */
 	attach(writer, log) {
 		const handler = el => {
-			const watcher = scrollMonitor.create(el);
-
-			watcher.enterViewport(() => {
+			scrollMonitor.create(el).enterViewport(() => {
 				const data = {
 					type: this.type,
 					id: this.resolve(this.idResolver, log, el),

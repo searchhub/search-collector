@@ -42,22 +42,17 @@ export class CheckoutClickCollector extends AbstractCollector {
 				const id = this.resolve(this.idResolver, log, item);
 				if (id) {
 					const data: any = {
-						id
+						id,
+						price: this.resolve(this.priceResolver, log, item),
+						amount: this.resolve(this.amountResolver, log, item)
 					};
-
-					if (this.priceResolver) {
-						data.price = this.resolve(this.priceResolver, log, item);
-					}
-					if (this.amountResolver) {
-						data.amount = this.resolve(this.amountResolver, log, item);
-					}
 
 					// We write each item separately - they may be coming from different queries
 					// thus when we try to resolve the trail for each of them we need to have them
 					// as separate records
 					writer.write({
-						"type": this.getType(),
-						"data": data
+						type: this.getType(),
+						data: data //TODO data prop
 					});
 				}
 			})

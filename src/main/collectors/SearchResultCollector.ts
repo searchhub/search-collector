@@ -7,9 +7,6 @@ import {NumberResolver, StringResolver} from "../resolvers/Resolver";
  * See the other search collectors for dynamic ones.
  */
 export class SearchResultCollector extends AbstractCollector {
-	private readonly phraseResolver: StringResolver;
-	private readonly countResolver: NumberResolver;
-	private readonly actionResolver: StringResolver;
 
 	/**
 	 * Construct search result collector
@@ -20,13 +17,10 @@ export class SearchResultCollector extends AbstractCollector {
 	 * @param {function} actionResolver - A search result may be refined or a client may browse 2,3,4 page.
 	 * This function should provide a text represantion of the action
 	 */
-	constructor(phraseResolver: StringResolver,
-							countResolver: NumberResolver,
-							actionResolver?: StringResolver) {
+	constructor(private readonly phraseResolver: StringResolver,
+							private readonly countResolver: NumberResolver,
+							private readonly actionResolver?: StringResolver) {
 		super("search");
-		this.phraseResolver = phraseResolver;
-		this.countResolver = countResolver;
-		this.actionResolver = actionResolver;
 	}
 
 	/**
@@ -37,15 +31,11 @@ export class SearchResultCollector extends AbstractCollector {
 	 * @param {object} log - The logger
 	 */
 	attach(writer, log) {
-		const keywords = this.resolve(this.phraseResolver, log);
-		const count = this.resolve(this.countResolver, log);
-		const action = this.actionResolver ? this.resolve(this.actionResolver, log) : "search";
-
 		writer.write({
 			type: "search",
-			keywords,
-			count,
-			action
+			keywords: this.resolve(this.phraseResolver, log),
+			count: this.resolve(this.countResolver, log),
+			action: this.resolve(this.actionResolver, log) || "search"
 		});
 	}
 }

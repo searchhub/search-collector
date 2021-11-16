@@ -43,12 +43,14 @@ export class AbstractCollector {
 	 * @param resolverArgs arguments to be passed to the resolver function
 	 * @protected
 	 */
-	protected resolve(resolver: (...any) => any, log: Logger, ...resolverArgs) {
+	protected resolve(resolver: (...any) => any, log: Logger, ...resolverArgs): any | undefined {
 		try {
-			const val = resolver(...resolverArgs);
-			if (val == void 0)
-				log.debug("Resolver returned no value.", resolver);
-			return val;
+			if (resolver) {
+				const val = resolver(...resolverArgs);
+				if (val == void 0)
+					log.debug("Resolver returned no value.", resolver);
+				return val;
+			}
 		} catch (e) {
 			log.error("Unexpected error during resolver execution: ", e);
 		}

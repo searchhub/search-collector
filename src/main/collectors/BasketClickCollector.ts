@@ -22,15 +22,10 @@ export class BasketClickCollector extends ClickCollector {
 	collect(element, log) {
 		const id = this.resolve(this.idResolver, log, element);
 		if (id) {
-			const data: any = {
-				id
+			return {
+				id,
+				price: this.resolve(this.priceResolver, log, element)
 			};
-
-			if (this.priceResolver) {
-				data.price = this.resolve(this.priceResolver, log, element);
-			}
-
-			return data;
 		}
 	}
 }

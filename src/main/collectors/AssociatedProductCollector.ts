@@ -16,7 +16,7 @@ export class AssociatedProductCollector extends AbstractCollector {
 	private readonly idResolver: StringResolver;
 	private readonly positionResolver: NumberResolver;
 	private readonly priceResolver: NumberResolver;
-	private readonly trailResolver: Trail;
+	private readonly trail?: Trail;
 
 	/**
 	 * Construct a click collector
@@ -33,7 +33,7 @@ export class AssociatedProductCollector extends AbstractCollector {
 		this.idResolver = resolvers.idResolver;
 		this.positionResolver = resolvers.positionResolver;
 		this.priceResolver = resolvers.priceResolver;
-		this.trailResolver = resolvers.trailResolver;
+		this.trail = resolvers.trail;
 	}
 
 	/**
@@ -48,16 +48,16 @@ export class AssociatedProductCollector extends AbstractCollector {
 			const id = this.resolve(this.idResolver, log, element);
 
 			if (id) {
-				const position = this.positionResolver ? this.resolve(this.positionResolver, log, element) : void 0;
-				const price = this.priceResolver ? this.resolve(this.priceResolver, log, element) : void 0;
+				const position = this.resolve(this.positionResolver, log, element);
+				const price = this.resolve(this.priceResolver, log, element);
 
-				if (this.trailResolver) {
+				if (this.trail) {
 					// Find out the query source of the main product. Note that despite being a
 					// "main" product, it could be a 2nd or 3rd, 4th level of associated product browsing
-					const trail = this.trailResolver.fetch(this.mainProductId);
+					const trail = this.trail.fetch(this.mainProductId);
 					if (trail) {
 						// Upon a follow-up event for this product (ex. basket), we would pick this trail
-						this.trailResolver.register(id, TrailType.Associated, trail.query);
+						this.trail.register(id, TrailType.Associated, trail.query);
 					}
 				}
 

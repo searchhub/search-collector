@@ -6,10 +6,10 @@ import {Trail} from "../query/Trail";
 export type ProductClickCollectorResolver = {
 	idResolver: StringResolver,
 	positionResolver?: NumberResolver,
-	trailResolver?: Trail,
 	priceResolver?: NumberResolver,
-	imageResolver?: StringResolver
-	metadataResolver?: StringResolver
+	imageResolver?: StringResolver,
+	metadataResolver?: StringResolver,
+	trail?: Trail
 }
 
 /**
@@ -18,16 +18,16 @@ export type ProductClickCollectorResolver = {
 export class ProductClickCollector extends ClickCollector {
 	private readonly idResolver: StringResolver;
 	private readonly positionResolver: NumberResolver;
-	private readonly trailResolver: Trail;
 	private readonly priceResolver: NumberResolver;
 	private readonly imageResolver: StringResolver;
 	private readonly metadataResolver: StringResolver;
+	private readonly trail: Trail;
 
 	constructor(selector, resolvers: ProductClickCollectorResolver, listenerType = ListenerType.Sentinel) {
 		super(selector, "product", listenerType);
 		this.idResolver = resolvers.idResolver;
 		this.positionResolver = resolvers.positionResolver;
-		this.trailResolver = resolvers.trailResolver;
+		this.trail = resolvers.trail;
 		this.priceResolver = resolvers.priceResolver;
 		this.imageResolver = resolvers.imageResolver;
 		this.metadataResolver = resolvers.metadataResolver;
@@ -40,33 +40,19 @@ export class ProductClickCollector extends ClickCollector {
 	collect(element, log) {
 		const id = this.resolve(this.idResolver, log, element);
 		if (id) {
-			const data: any = {
-				id
-			};
-
-			if (this.positionResolver) {
-				data.position = this.resolve(this.positionResolver, log, element);
-			}
-
-			if (this.priceResolver) {
-				data.price = this.resolve(this.priceResolver, log, element);
-			}
-
-			if (this.imageResolver) {
-				data.image = this.resolve(this.imageResolver, log, element);
-			}
-
-			if (this.metadataResolver) {
-				data.metadata = this.resolve(this.metadataResolver, log, element);
-			}
-
-			if (this.trailResolver) {
+			if (this.trail) {
 				// Register that this product journey into potential purchase started
 				// with this query
-				this.trailResolver.register(data.id);
+				this.trail.register(id);
 			}
 
-			return data;
+			return {
+				id,
+				position: this.resolve(this.positionResolver, log, element),
+				price: this.resolve(this.priceResolver, log, element),
+				image: this.resolve(this.imageResolver, log, element),
+				metadata: this.resolve(this.metadataResolver, log, element)
+			};
 		}
 	}
 }
