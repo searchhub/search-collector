@@ -1,7 +1,7 @@
 export class Query {
 	criteria: Array<any>;
 
-	constructor(queryString: string) {
+	constructor(queryString?: string) {
 		this.criteria = [];
 		var self = this;
 

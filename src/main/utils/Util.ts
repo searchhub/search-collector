@@ -26,6 +26,7 @@ export const parseQueryString = (q = window.location.search.substring(1)) => {
  * Use this method to retrieve a mock impl which will at least prevent errors.
  */
 export const getLocalStorage = (): Storage => {
+	var localStorage = localStorage || void 0;
 	return localStorage || cookieLocalStorage();
 }
 
@@ -33,7 +34,7 @@ function cookieLocalStorage() {
 	const LOCAL_STORAGE_COOKIE_NAME = "__localStorageMock";
 
 	function getStorageFromCookie() {
-		return JSON.parse(getCookie(LOCAL_STORAGE_COOKIE_NAME || "{}"));
+		return JSON.parse(getCookie(LOCAL_STORAGE_COOKIE_NAME) || "{}");
 	}
 
 	function saveStorageToCookie(data) {

@@ -4,7 +4,7 @@ import {Writer, WriterOptions} from "./writers/Writer";
 import {AbstractCollector} from "./collectors/AbstractCollector";
 import {LoggerTransport} from "./logger/LoggerTransport";
 import {ConsoleTransport} from "./logger/transport/ConsoleTransport";
-import {DefaultLogger} from "./logger/DefaultLogger";
+import {TransportLogger} from "./logger/TransportLogger";
 import {Context} from "./utils/Context";
 
 type CollectorOptions = {
@@ -37,7 +37,7 @@ export class Collector {
 
 	start() {
 		const writer = this.getWriter();
-		const logger = new DefaultLogger(this.transports);
+		const logger = new TransportLogger(this.transports);
 
 		this.collectors.forEach(collector => {
 			try {
