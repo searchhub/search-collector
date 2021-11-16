@@ -42,7 +42,7 @@
 			));
 
 			let writer = new RestEventWriter("http://localhost:8081" + "/" + options.channel);
-			writer = new JSONEnvelopeWriter(writer, writerOptions);
+			writer = new JSONEnvelopeWriter(writer, writerOptions.resolver.sessionResolver, options.channel);
 			collector.setWriters([writer]);
 
 			collector.start();

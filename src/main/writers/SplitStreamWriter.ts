@@ -12,7 +12,7 @@ export class SplitStreamWriter implements Writer {
 			try {
 				writer.write(data);
 			} catch (e) {
-				console.error("Cloud not write data: ", e);
+				console.error("Could not write data: ", e);
 			}
 		}
 	}
