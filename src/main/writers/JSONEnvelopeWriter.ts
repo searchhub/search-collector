@@ -12,14 +12,12 @@ import {StringResolver} from "../resolvers/Resolver";
 export class JSONEnvelopeWriter implements Writer {
 	delegate: Writer;
 	sessionResolver: StringResolver;
-	debug: boolean;
 	channel: string;
 	context: Context;
 
 	constructor(delegate: Writer, options: WriterOptions) {
 		this.delegate = delegate;
 		this.sessionResolver = options.resolver.sessionResolver;
-		this.debug = !!options.debug;
 		this.channel = options.channel;
 		this.context = options.context;
 	}
@@ -35,10 +33,6 @@ export class JSONEnvelopeWriter implements Writer {
 
 		if (this.channel) {
 			data.channel = this.channel;
-		}
-
-		if (this.debug) {
-			console.debug(JSON.stringify(data));
 		}
 
 		this.delegate.write(data);

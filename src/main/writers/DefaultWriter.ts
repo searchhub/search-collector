@@ -6,6 +6,7 @@ import {JSONEnvelopeWriter} from "./JSONEnvelopeWriter";
 import {Writer, WriterOptions} from "./Writer";
 import {TrailWriter} from "./TrailWriter";
 import {BrowserTrackingWriter} from "./BrowserTrackingWriter";
+import {DebugWriter} from "./DebugWriter";
 
 export class DefaultWriter implements Writer {
 
@@ -19,6 +20,7 @@ export class DefaultWriter implements Writer {
 		let writer: Writer = isSQS(endpoint, sqs) ? new SQSEventWriter(endpoint) : new RestEventWriter(endpoint);
 		writer = new BufferingWriter(writer, "buffer:" + options.endpoint);
 		writer = new Base64EncodeWriter(writer);
+		writer = new DebugWriter(writer, options.debug);
 		writer = new TrailWriter(writer, options.resolver.trailResolver, options.resolver.queryResolver);
 		writer = new JSONEnvelopeWriter(writer, options);
 		writer = new BrowserTrackingWriter(writer, {
