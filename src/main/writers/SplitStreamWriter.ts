@@ -10,7 +10,11 @@ export class SplitStreamWriter implements Writer {
 
 	write(data: any) {
 		for (let writer of this.writers) {
-			writer.write(data);
+			try {
+				writer.write(data);
+			} catch (e) {
+				console.error("Cloud not write data: ", e);
+			}
 		}
 	}
 }
