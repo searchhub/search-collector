@@ -5,7 +5,8 @@
 <p align="center">A fast and simple Javascript SDK specifically targeted at collecting search and search related browser events.</p>
 
 <p align="center">
-    <a href="#" target="_blank"><img src="https://github.com/searchhub/search-collector/actions/workflows/master.yml/badge.svg" alt="master workflow" /></a>
+    <a href="#" target="_blank"><img src="https://github.com/searchhub/search-collector/actions/workflows/build.yml/badge.svg" alt="build workflow" /></a>
+    <a href="#" target="_blank"><img src="https://github.com/searchhub/search-collector/actions/workflows/tests.yml/badge.svg" alt="test workflow" /></a>
     <a href="https://github.com/searchhub/search-collector/blob/feature/ts-webpack/LICENSE" target="_blank"><img src="https://img.shields.io/npm/l/search-collector" alt="license" /></a>
     <a href="https://www.npmjs.com/package/search-collector" target="_blank"><img src="https://img.shields.io/npm/dw/search-collector" alt="downloads" /></a>
     <a href="https://www.npmjs.com/package/search-collector" target="_blank"><img src="https://img.shields.io/librariesio/release/npm/search-collector" alt="dependencies" /></a>
