@@ -1,27 +1,25 @@
-![logo](https://avatars.githubusercontent.com/u/29304684?v=4)
+<p align="center">
+  <a href="https://www.searchhub.io/" target="blank"><img src="https://avatars.githubusercontent.com/u/29304684?v=4" width="120" alt="Searchhub Logo" /></a>
+</p>
 
-# SearchCollector - Fast and simple collection of search-specific browser events
+<p align="center">A fast and simple Javascript SDK specifically targeted at collecting search and search related browser events.</p>
 
-A fast and simple Javascript SDK specifically targeted at collecting search and search related browser events.
-
-![master workflow](https://github.com/searchhub/search-collector/actions/workflows/master.yml/badge.svg)
-![license](https://img.shields.io/npm/l/search-collector)
-![downloads](https://img.shields.io/npm/dw/search-collector)
-![dependencies](https://img.shields.io/librariesio/release/npm/search-collector)
-![stars](https://img.shields.io/github/stars/searchhub/search-collector?style=social)
-![twitter](https://img.shields.io/twitter/follow/cxpsearchhub?style=social)
-
-[![NPM](https://nodei.co/npm/search-collector.png)](https://npmjs.org/package/search-collector)
-
-SearchCollector is small - usual setup results in ~20k uncompressed size - and fast, no load or effect on the user
-experience.
+<p align="center">
+    <a href="#" target="_blank"><img src="https://github.com/searchhub/search-collector/actions/workflows/master.yml/badge.svg" alt="master workflow" /></a>
+    <a href="https://github.com/searchhub/search-collector/blob/feature/ts-webpack/LICENSE" target="_blank"><img src="https://img.shields.io/npm/l/search-collector" alt="license" /></a>
+    <a href="https://www.npmjs.com/package/search-collector" target="_blank"><img src="https://img.shields.io/npm/dw/search-collector" alt="downloads" /></a>
+    <a href="https://www.npmjs.com/package/search-collector" target="_blank"><img src="https://img.shields.io/librariesio/release/npm/search-collector" alt="dependencies" /></a>
+    <a href="https://www.npmjs.com/package/search-collector" target="_blank"><img src="https://img.shields.io/npm/v/search-collector" alt="version" /></a>
+    <a href="https://twitter.com/cxpsearchhub" target="_blank"><img src="https://img.shields.io/github/stars/searchhub/search-collector?style=social" alt="stars" /></a>
+    <a href="https://twitter.com/cxpsearchhub" target="_blank"><img src="https://img.shields.io/twitter/follow/cxpsearchhub?style=social" alt="twitter" /></a>
+</p>
 
 # Getting started
 
 ## Install
 
 ```bash
-$ npm install --save search-collector
+$ npm i -S search-collector
 ```
 
 ## Assemble
