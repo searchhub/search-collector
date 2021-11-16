@@ -19,10 +19,10 @@ type CollectorOptions = {
  * Default assembly point of collectors and writers.
  */
 export class Collector {
-	options: CollectorOptions;
-	collectors: Array<AbstractCollector> = [];
-	writers: Array<Writer> = [];
-	transports: Array<LoggerTransport> = [new ConsoleTransport()];
+	private options: CollectorOptions;
+	private collectors: Array<AbstractCollector> = [];
+	private writers: Array<Writer> = [];
+	private transports: Array<LoggerTransport> = [new ConsoleTransport()];
 
 	constructor(options: CollectorOptions) {
 		this.options = options;
@@ -57,9 +57,7 @@ export class Collector {
 	}
 
 	setWriters(replacementWriters: Array<Writer>) {
-		for (let w of replacementWriters) {
-			this.writers.push(w);
-		}
+		this.writers = [...replacementWriters];
 	}
 
 	private getWriter() {
