@@ -1,11 +1,8 @@
+![logo](https://avatars.githubusercontent.com/u/29304684?v=4)
+
 # SearchCollector - Fast and simple collection of search-specific browser events
 
-SearchCollector is a fast and simple Javascript SDK specificatlly targeted at collecting search and search related
-events from a browser. It allows you to assemble a solution suitable for your own needs, without imposing much
-requirements upfront.
-
-SearchCollector is small - usual setup results in ~20k uncompressed size - and fast, no load or effect on the user
-experience.
+A fast and simple Javascript SDK specifically targeted at collecting search and search related browser events.
 
 ![master workflow](https://github.com/searchhub/search-collector/actions/workflows/master.yml/badge.svg)
 ![license](https://img.shields.io/npm/l/search-collector)
@@ -15,6 +12,9 @@ experience.
 ![twitter](https://img.shields.io/twitter/follow/cxpsearchhub?style=social)
 
 [![NPM](https://nodei.co/npm/search-collector.png)](https://npmjs.org/package/search-collector)
+
+SearchCollector is small - usual setup results in ~20k uncompressed size - and fast, no load or effect on the user
+experience.
 
 # Getting started
 
