@@ -22,6 +22,7 @@ export type WriterOptions = {
 	context?: Context
 	recordReferrer?: boolean,
 	recordUrl?: boolean,
+	recordLanguage?: boolean,
 	resolver: WriterResolverOptions,
 }
 export type WriterResolverOptions = {

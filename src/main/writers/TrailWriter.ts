@@ -4,9 +4,9 @@ import {QueryResolver} from "../resolvers/Resolver";
 
 export class TrailWriter implements Writer {
 
-	constructor(private readonly trail: Trail,
-							private readonly queryResolver: QueryResolver,
-							private readonly delegate?: Writer) {
+	constructor(private readonly delegate: Writer,
+							private readonly trail: Trail,
+							private readonly queryResolver: QueryResolver) {
 	}
 
 	write(data: any) {

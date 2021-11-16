@@ -14,8 +14,6 @@ export class JSONEnvelopeWriter implements Writer {
 	sessionResolver: StringResolver;
 	debug: boolean;
 	channel: string;
-	recordUrl: boolean;
-	recordReferrer: boolean;
 	context: Context;
 
 	constructor(delegate: Writer, options: WriterOptions) {
@@ -23,8 +21,6 @@ export class JSONEnvelopeWriter implements Writer {
 		this.sessionResolver = options.resolver.sessionResolver;
 		this.debug = !!options.debug;
 		this.channel = options.channel;
-		this.recordUrl = !!options.recordUrl;
-		this.recordReferrer = !!options.recordReferrer;
 		this.context = options.context;
 	}
 
@@ -39,16 +35,6 @@ export class JSONEnvelopeWriter implements Writer {
 
 		if (this.channel) {
 			data.channel = this.channel;
-		}
-
-		if (this.recordUrl && !data.url) {
-			let win = this.context ? this.context.getWindow() : window;
-			data.url = win.location.href;
-		}
-
-		if (this.recordReferrer && !data.ref) {
-			let doc = this.context ? this.context.getDocument() : document;
-			data.ref = doc.referrer;
 		}
 
 		if (this.debug) {
