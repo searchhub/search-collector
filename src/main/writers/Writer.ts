@@ -28,5 +28,5 @@ export type WriterOptions = {
 export type WriterResolverOptions = {
 	sessionResolver: StringResolver,
 	queryResolver: QueryResolver,
-	trailResolver?: Trail
+	trail?: Trail
 }

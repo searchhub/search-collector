@@ -21,7 +21,7 @@ export class DefaultWriter implements Writer {
 		writer = new BufferingWriter(writer, "buffer:" + options.endpoint);
 		writer = new Base64EncodeWriter(writer);
 		writer = new DebugWriter(writer, options.debug);
-		writer = new TrailWriter(writer, options.resolver.trailResolver, options.resolver.queryResolver);
+		writer = new TrailWriter(writer, options.resolver.trail, options.resolver.queryResolver);
 		writer = new JSONEnvelopeWriter(writer, options);
 		writer = new BrowserTrackingWriter(writer, {
 			recordReferrer: options.recordReferrer,
