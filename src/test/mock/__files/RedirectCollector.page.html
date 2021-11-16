@@ -10,7 +10,8 @@
 				Collector,
 				Context,
 				RedirectCollector,
-				RestEventWriter
+				RestEventWriter,
+				Query
 			} = window.SearchCollector;
 			const options = {
 				debug: true,
@@ -20,7 +21,11 @@
 			};
 			const writerOptions = {
 				resolver: {
-					queryResolver: () => document.querySelector("#searchInput")?.value,
+					queryResolver: () => {
+						const q = new Query();
+						q.setSearch(document.querySelector("#searchInput")?.value);
+						return q;
+					},
 					sessionResolver: () => "redirect-collector-session"
 				}
 			};

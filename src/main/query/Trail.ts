@@ -8,7 +8,7 @@ const TTL = 1000 * 60 * 60 * 24 * 2;
 
 export class Trail {
 	queryResolver: QueryResolver;
-	sessionResolver;
+	sessionResolver: StringResolver;
 	key: string;
 
 	constructor(queryResolver: QueryResolver, sessionResolver: StringResolver, id?: string) {
@@ -27,7 +27,6 @@ export class Trail {
 				}
 			}
 			this._save(getLocalStorage(), localTrails);
-
 
 			// Load existing session trails and merge it with the local storage trails.
 			// This should guarantee that regardless of whether the pages further down the trail
