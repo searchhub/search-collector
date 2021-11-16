@@ -7,14 +7,11 @@
  */
 import {Writer, WriterOptions} from "./Writer";
 import {Context} from "../utils/Context";
-import {Trail} from "../query/Trail";
-import {QueryResolver, StringResolver} from "../resolvers/Resolver";
+import {StringResolver} from "../resolvers/Resolver";
 
 export class JSONEnvelopeWriter implements Writer {
 	delegate: Writer;
 	sessionResolver: StringResolver;
-	queryResolver: QueryResolver;
-	trailResolver: Trail;
 	debug: boolean;
 	channel: string;
 	recordUrl: boolean;
@@ -24,8 +21,6 @@ export class JSONEnvelopeWriter implements Writer {
 	constructor(delegate: Writer, options: WriterOptions) {
 		this.delegate = delegate;
 		this.sessionResolver = options.resolver.sessionResolver;
-		this.queryResolver = options.resolver.queryResolver;
-		this.trailResolver = options.resolver.trailResolver;
 		this.debug = !!options.debug;
 		this.channel = options.channel;
 		this.recordUrl = !!options.recordUrl;
@@ -42,30 +37,9 @@ export class JSONEnvelopeWriter implements Writer {
 			data.session = this.sessionResolver();
 		}
 
-		if (!data.query && this.queryResolver) {
-			let q = this.queryResolver().toString();
-			if (!q) {
-				// See if we have a payload id and a trail for it. This means we
-				// are collecting data for an event that does not have a query context
-				// on the page anymore but we want to assosiate the event with the query
-				// context of the original search result
-				if (data.data && data.data.id && this.trailResolver) {
-					let trail = this.trailResolver.fetch(data.data.id);
-					if (trail && trail.query) {
-						data.query = trail.query;
-						data.queryTime = trail.timestamp;
-						data.trailType = trail.type;
-					}
-				}
-			} else {
-				data.query = q;
-			}
-		}
-
 		if (this.channel) {
 			data.channel = this.channel;
 		}
-
 
 		if (this.recordUrl && !data.url) {
 			let win = this.context ? this.context.getWindow() : window;

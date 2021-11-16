@@ -4,6 +4,7 @@ import {BufferingWriter} from "./BufferingWriter";
 import {Base64EncodeWriter} from "./Base64EncodeWriter";
 import {JSONEnvelopeWriter} from "./JSONEnvelopeWriter";
 import {Writer, WriterOptions} from "./Writer";
+import {TrailWriter} from "./TrailWriter";
 
 export class DefaultWriter implements Writer {
 
@@ -16,6 +17,7 @@ export class DefaultWriter implements Writer {
 		// This writer pipeline will send Base64 encoded array of json events
 		let writer: Writer = isSQS(endpoint, sqs) ? new SQSEventWriter(endpoint) : new RestEventWriter(endpoint);
 		writer = new Base64EncodeWriter(writer);
+		writer = new TrailWriter(options.resolver.trailResolver, options.resolver.queryResolver, writer);
 		writer = new JSONEnvelopeWriter(writer, options);
 		writer = new BufferingWriter(writer, options.endpoint);
 
