@@ -10,7 +10,7 @@ import {DebugWriter} from "./DebugWriter";
 
 export class DefaultWriter implements Writer {
 
-	writer: Writer;
+	private readonly writer: Writer;
 
 	constructor(options: WriterOptions) {
 		const {endpoint, sqs} = options;

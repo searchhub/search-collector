@@ -1,12 +1,11 @@
 import {Writer} from "./Writer";
 
+/**
+ * Calls all writers passed to the constructor error safe
+ */
 export class SplitStreamWriter implements Writer {
 
-	writers: Array<Writer>;
-
-	constructor(writers: Array<Writer>) {
-		this.writers = writers;
-	}
+	constructor(private readonly writers: Array<Writer>) {}
 
 	write(data: any) {
 		for (let writer of this.writers) {

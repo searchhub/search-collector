@@ -5,13 +5,8 @@ import {Writer} from "./Writer";
 
 export class SQSEventWriter implements Writer {
 
-	queue: any;
-	fifo: any;
-
-	constructor(queue, fifo = false) {
-		this.queue = queue;
-		this.fifo = fifo;
-	}
+	constructor(private readonly queue,
+							private readonly fifo = false) {}
 
 	write(data) {
 		const img = new Image();

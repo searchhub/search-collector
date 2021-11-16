@@ -1,15 +1,11 @@
+import {Writer} from "./Writer";
+
 /**
  * Straight-forward REST write via GET request
  */
-import {Writer} from "./Writer";
-
 export class RestEventWriter implements Writer {
 
-	endpoint: any;
-
-	constructor(endpoint) {
-		this.endpoint = endpoint;
-	}
+	constructor(private readonly endpoint: string) {}
 
 	write(data) {
 		const img = new Image();

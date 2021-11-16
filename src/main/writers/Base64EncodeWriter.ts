@@ -7,16 +7,13 @@ import {Writer} from "./Writer";
 
 export class Base64EncodeWriter implements Writer {
 
-	delegate: Writer;
-
-	constructor(delegate: Writer) {
-		this.delegate = delegate;
-	}
+	constructor(private readonly delegate: Writer) {}
 
 	write(data) {
 		const d = JSON.stringify(data);
 		this.delegate.write(base64encode(encodeURIComponent(d)));
 	}
+
 }
 
 /**

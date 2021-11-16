@@ -1,3 +1,7 @@
+import {Writer, WriterOptions} from "./Writer";
+import {Context} from "../utils/Context";
+import {StringResolver} from "../resolvers/Resolver";
+
 /**
  * Wrap the events in a JSON envelope, enrich each record with timestamp and if
  * available - session, query and channel information.
@@ -5,15 +9,11 @@
  * If the options passed ot the writer contain debug=true, this writer will also
  * log to the console
  */
-import {Writer, WriterOptions} from "./Writer";
-import {Context} from "../utils/Context";
-import {StringResolver} from "../resolvers/Resolver";
-
 export class JSONEnvelopeWriter implements Writer {
-	delegate: Writer;
-	sessionResolver: StringResolver;
-	channel: string;
-	context: Context;
+	private readonly delegate: Writer;
+	private readonly sessionResolver: StringResolver;
+	private readonly channel: string;
+	private readonly context: Context;
 
 	constructor(delegate: Writer, options: WriterOptions) {
 		this.delegate = delegate;
