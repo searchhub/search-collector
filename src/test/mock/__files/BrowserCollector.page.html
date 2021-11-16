@@ -5,44 +5,21 @@
     <title>E2E Testing</title>
     <script defer src="/dist/index.window.bundle.js"></script>
     <script>
+
 		document.addEventListener("DOMContentLoaded", () => {
 			const {
 				Collector,
-				Context,
 				BrowserCollector,
-				JSONEnvelopeWriter,
 				RestEventWriter,
-				Query
 			} = window.SearchCollector;
-			const options = {
-				debug: true,
-				context: new Context(window, document),
-				channel: "browser-collector-channel",
-				endpoint: "http://localhost:8081"
-			};
-			const writerOptions = {
-				resolver: {
-					queryResolver: () => {
-						const q = new Query();
-						q.setSearch(document.querySelector("#searchInput")?.value);
-						return q;
-					},
-					sessionResolver: () => "search-result-collector-session"
-				}
-			};
 
 			const collector = new Collector({
-				...options,
-				writerOptions
+				writer: new RestEventWriter("http://localhost:8081/browser-collector-channel")
 			});
 
 			collector.add(new BrowserCollector({recordReferrer: true, recordUrl: false, recordLanguage: false}));
 			collector.add(new BrowserCollector({recordReferrer: false, recordUrl: true, recordLanguage: false}));
 			collector.add(new BrowserCollector({recordReferrer: false, recordUrl: false, recordLanguage: true}));
-
-			let writer = new RestEventWriter("http://localhost:8081" + "/" + options.channel);
-			// writer = new JSONEnvelopeWriter(writer, writerOptions);
-			collector.setWriters([writer]);
 
 			collector.start();
 		});

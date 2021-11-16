@@ -1,18 +1,15 @@
-import {DefaultWriter} from "./writers/DefaultWriter";
 import {SplitStreamWriter} from "./writers/SplitStreamWriter";
-import {Writer, WriterOptions} from "./writers/Writer";
+import {Writer} from "./writers/Writer";
 import {AbstractCollector} from "./collectors/AbstractCollector";
 import {LoggerTransport} from "./logger/LoggerTransport";
 import {ConsoleTransport} from "./logger/transport/ConsoleTransport";
 import {TransportLogger} from "./logger/TransportLogger";
 import {Context} from "./utils/Context";
+import {ConsoleWriter} from "./writers/ConsoleWriter";
 
 type CollectorOptions = {
-	endpoint: string,
-	channel: string,
-	debug?: boolean,
-	context?: Context,
-	writerOptions: WriterOptions
+	writer?: Writer,
+	context?: Context
 }
 
 /**
@@ -24,26 +21,26 @@ export class Collector {
 	private writers: Array<Writer> = [];
 	private transports: Array<LoggerTransport> = [new ConsoleTransport()];
 
-	constructor(options: CollectorOptions) {
-		this.options = options;
+	constructor(options?: CollectorOptions) {
+		this.options = options || {};
 	}
 
 	add(collector: AbstractCollector) {
-		if (this.options.context && typeof collector.setContext === "function") {
+		if (this.options.context)
 			collector.setContext(this.options.context);
-		}
+
 		this.collectors.push(collector);
 	}
 
 	start() {
 		const writer = this.getWriter();
-		const logger = new TransportLogger(this.transports);
+		const log = new TransportLogger(this.transports);
 
 		this.collectors.forEach(collector => {
 			try {
-				collector.attach(writer, logger);
+				collector.attach(writer, log);
 			} catch (e) {
-				logger.error("Unexpected Exception during collector attach: ", e);
+				log.error("Unexpected Exception during collector attach: ", e);
 			}
 		});
 	}
@@ -56,19 +53,13 @@ export class Collector {
 		this.transports = transports || [];
 	}
 
-	setWriters(replacementWriters: Array<Writer>) {
-		this.writers = [...replacementWriters];
+	setWriters(replacementWriters: Array<Writer> | Writer) {
+		this.writers = Array.isArray(replacementWriters) ? [...replacementWriters] : [replacementWriters];
 	}
 
 	private getWriter() {
 		return this.writers.length == 0
-			? new DefaultWriter({
-				debug: this.options.debug,
-				context: this.options.context,
-				channel: this.options.channel,
-				endpoint: this.options.endpoint,
-				...this.options.writerOptions
-			})
+			? this.options.writer || new ConsoleWriter()
 			: new SplitStreamWriter(this.writers);
 	}
 }

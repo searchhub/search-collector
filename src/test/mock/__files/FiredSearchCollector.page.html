@@ -5,34 +5,16 @@
     <title>E2E Testing</title>
     <script defer src="/dist/index.window.bundle.js"></script>
     <script>
+
 		document.addEventListener("DOMContentLoaded", () => {
 			const {
 				Collector,
-				Context,
 				FiredSearchCollector,
-				RestEventWriter,
-				Query
+				RestEventWriter
 			} = window.SearchCollector;
-			const options = {
-				debug: true,
-				context: new Context(window, document),
-				channel: "fired-search-collector-channel",
-				endpoint: "http://localhost:8081"
-			};
-			const writerOptions = {
-				resolver: {
-					queryResolver: () => {
-						const q = new Query();
-						q.setSearch(document.querySelector("#searchInput")?.value);
-						return q;
-					},
-					sessionResolver: () => "fired-search-collector-session"
-				}
-			};
 
 			const collector = new Collector({
-				...options,
-				writerOptions
+				writer: new RestEventWriter("http://localhost:8081/fired-search-collector-channel")
 			});
 
 			const firedSearchCallback = (callback) => {
@@ -50,9 +32,6 @@
 					});
 				})
 			}));
-
-			let writer = new RestEventWriter("http://localhost:8081" + "/" + options.channel);
-			collector.setWriters([writer]);
 
 			collector.start();
 		});
