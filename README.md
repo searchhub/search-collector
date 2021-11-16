@@ -8,6 +8,13 @@ SearchCollector is small - usual setup results in ~20k uncompressed size - and f
 experience.
 
 ![master workflow](https://github.com/searchhub/search-collector/actions/workflows/master.yml/badge.svg)
+![license](https://img.shields.io/npm/l/search-collector)
+![downloads](https://img.shields.io/npm/dw/search-collector)
+![dependencies](https://img.shields.io/librariesio/release/npm/search-collector)
+![stars](https://img.shields.io/github/stars/searchhub/search-collector?style=social)
+![twitter](https://img.shields.io/twitter/follow/cxpsearchhub?style=social)
+
+[![NPM](https://nodei.co/npm/search-collector.png)](https://npmjs.org/package/search-collector)
 
 # Getting started
 
