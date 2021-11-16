@@ -9,7 +9,7 @@ const confFactory = (mode, type, name) => {
 		entry: "./src/main/index.ts",
 		target: "web",
 		mode,
-		devtool: mode === "production" ? "inline-source-map" : void 0,
+		devtool: mode === "production" ? false : "inline-source-map",
 		module: {
 			rules: [
 				{
