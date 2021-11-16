@@ -47,8 +47,8 @@ export class ClickCollector extends AbstractCollector {
 			const payload = this.collect(element, log);
 			if (payload) {
 				writer.write({
-					"type": this.type,
-					"data": payload
+					type: this.type,
+					data: payload //TODO data prop
 				});
 			}
 		}

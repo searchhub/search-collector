@@ -6,6 +6,12 @@ import {getLocalStorage} from "../utils/Util";
 
 const TTL = 1000 * 60 * 60 * 24 * 2;
 
+export type TrailData = {
+	timestamp: number,
+	query: string,
+	type: TrailType
+}
+
 export class Trail {
 	queryResolver: QueryResolver;
 	sessionResolver: StringResolver;
@@ -51,9 +57,9 @@ export class Trail {
 	 */
 	register(id, trailType = TrailType.Main, query?) {
 		const trail = {
-			"timestamp": new Date().getTime(),
-			"query": query || this.queryResolver().toString(),
-			"type": trailType
+			timestamp: new Date().getTime(),
+			query: query || this.queryResolver().toString(),
+			type: trailType
 		};
 
 		for (let storage of [localStorage, sessionStorage]) {
@@ -63,7 +69,7 @@ export class Trail {
 		}
 	}
 
-	fetch(id) {
+	fetch(id): TrailData {
 		const trails = this._load(sessionStorage);
 		return trails[id];
 	}

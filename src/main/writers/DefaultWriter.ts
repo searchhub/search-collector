@@ -7,6 +7,7 @@ import {Writer, WriterOptions} from "./Writer";
 import {TrailWriter} from "./TrailWriter";
 import {BrowserTrackingWriter} from "./BrowserTrackingWriter";
 import {DebugWriter} from "./DebugWriter";
+import {QueryWriter} from "./QueryWriter";
 
 export class DefaultWriter implements Writer {
 
@@ -21,6 +22,7 @@ export class DefaultWriter implements Writer {
 		writer = new BufferingWriter(writer, "buffer:" + options.endpoint);
 		writer = new Base64EncodeWriter(writer);
 		writer = new DebugWriter(writer, options.debug);
+		writer = new QueryWriter(writer, options.resolver.queryResolver);
 		writer = new TrailWriter(writer, options.resolver.trail, options.resolver.queryResolver);
 		writer = new JSONEnvelopeWriter(writer, options);
 		writer = new BrowserTrackingWriter(writer, {
