@@ -48,23 +48,20 @@ export class AssociatedProductCollector extends AbstractCollector {
 			const id = this.resolve(this.idResolver, log, element);
 
 			if (id) {
-				const position = this.resolve(this.positionResolver, log, element);
-				const price = this.resolve(this.priceResolver, log, element);
-
 				if (this.trail) {
 					// Find out the query source of the main product. Note that despite being a
 					// "main" product, it could be a 2nd or 3rd, 4th level of associated product browsing
-					const trail = this.trail.fetch(this.mainProductId);
-					if (trail) {
+					const previousTrail = this.trail.fetch(this.mainProductId);
+					if (previousTrail) {
 						// Upon a follow-up event for this product (ex. basket), we would pick this trail
-						this.trail.register(id, TrailType.Associated, trail.query);
+						this.trail.register(id, TrailType.Associated, previousTrail.query);
 					}
 				}
 
 				return {
 					id,
-					position,
-					price
+					position: this.resolve(this.positionResolver, log, element),
+					price: this.resolve(this.priceResolver, log, element)
 				};
 			}
 		}

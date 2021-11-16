@@ -19,7 +19,7 @@ export class TrailWriter implements Writer {
 				// context of the original search result
 				//TODO TA: does it have to be data.data?
 				if (data.data && data.data.id && this.trail) {
-					let trail = this.trail.fetch(data.data.id);
+					const trail = this.trail.fetch(data.data.id);
 					if (trail && trail.query) {
 						data.query = trail.query;
 						data.queryTime = trail.timestamp;

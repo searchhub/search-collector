@@ -27,10 +27,10 @@ export class ProductClickCollector extends ClickCollector {
 		super(selector, "product", listenerType);
 		this.idResolver = resolvers.idResolver;
 		this.positionResolver = resolvers.positionResolver;
-		this.trail = resolvers.trail;
 		this.priceResolver = resolvers.priceResolver;
 		this.imageResolver = resolvers.imageResolver;
 		this.metadataResolver = resolvers.metadataResolver;
+		this.trail = resolvers.trail;
 	}
 
 	/**

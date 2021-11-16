@@ -11,14 +11,16 @@ export class Trail {
 	sessionResolver: StringResolver;
 	key: string;
 
-	constructor(queryResolver: QueryResolver, sessionResolver: StringResolver, id?: string) {
+	constructor(queryResolver: QueryResolver,
+							sessionResolver: StringResolver,
+							id?: string) {
 		this.queryResolver = queryResolver;
 		this.sessionResolver = sessionResolver;
 		this.key = "search-collector-trail" + (id ? "-" + id : "");
 
 		try {
-			let localTrails = this._load(getLocalStorage());
-			let now = new Date().getTime();
+			const localTrails = this._load(getLocalStorage());
+			const now = new Date().getTime();
 
 			// Drop all expired trails, TTL in sync with session duration of 30 min
 			for (let id of Object.keys(localTrails)) {
