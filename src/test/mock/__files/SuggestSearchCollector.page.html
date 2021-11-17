@@ -8,32 +8,13 @@
 		document.addEventListener("DOMContentLoaded", () => {
 			const {
 				Collector,
-				Context,
 				SuggestSearchCollector,
 				RestEventWriter,
 				Sentinel,
-				Query
 			} = window.SearchCollector;
-			const options = {
-				debug: true,
-				context: new Context(window, document),
-				channel: "suggest-search-collector-channel",
-				endpoint: "http://localhost:8081"
-			};
-			const writerOptions = {
-				resolver: {
-					queryResolver: () => {
-						const q = new Query();
-						q.setSearch(document.querySelector("#searchInput")?.value);
-						return q;
-					},
-					sessionResolver: () => "suggest-search-collector-session"
-				}
-			};
 
 			const collector = new Collector({
-				...options,
-				writerOptions
+				writer: new RestEventWriter("http://localhost:8081/suggest-search-collector-channel")
 			});
 
 			collector.add(new SuggestSearchCollector((writer, type, context) => {
@@ -48,9 +29,6 @@
 					})
 				});
 			}));
-
-			const writer = new RestEventWriter("http://localhost:8081" + "/" + options.channel);
-			collector.setWriters([writer]);
 
 			collector.start();
 		});

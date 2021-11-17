@@ -32,8 +32,6 @@ describe('SearchResultCollector Suite', () => {
 				expect(trackingData.type).toBe("search");
 				expect(trackingData.keywords).toBe("THE QUERY");
 				expect(trackingData.count).toBe(10);
-				expect(trackingData.timestamp).toBeDefined();
-				expect(trackingData.session).toBe("search-result-collector-session");
 				expect(params.data.values.length).toBe(1);
 			})
 			.verify();

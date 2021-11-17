@@ -8,31 +8,12 @@
 		document.addEventListener("DOMContentLoaded", () => {
 			const {
 				Collector,
-				Context,
 				RedirectCollector,
 				RestEventWriter,
-				Query
 			} = window.SearchCollector;
-			const options = {
-				debug: true,
-				context: new Context(window, document),
-				channel: "redirect-collector-channel",
-				endpoint: "http://localhost:8081"
-			};
-			const writerOptions = {
-				resolver: {
-					queryResolver: () => {
-						const q = new Query();
-						q.setSearch(document.querySelector("#searchInput")?.value);
-						return q;
-					},
-					sessionResolver: () => "redirect-collector-session"
-				}
-			};
 
 			const collector = new Collector({
-				...options,
-				writerOptions
+				writer: new RestEventWriter("http://localhost:8081/redirect-collector-channel")
 			});
 
 			const firedSearchCallback = (callback) => {
@@ -45,9 +26,6 @@
 				const params = new URLSearchParams(window.location.search);
 				return params.get("isSearchPage") !== "false";
 			}));
-
-			const writer = new RestEventWriter("http://localhost:8081" + "/" + options.channel);
-			collector.setWriters([writer]);
 
 			document.querySelector("#searchButton").addEventListener("click", () => {
 				const params = new URLSearchParams(document.location.search);

@@ -8,34 +8,14 @@
 		document.addEventListener("DOMContentLoaded", () => {
 			const {
 				Collector,
-				Context,
 				ProductClickCollector,
-				JSONEnvelopeWriter,
 				RestEventWriter,
 				Resolver,
-				Query
 			} = window.SearchCollector;
 			const {positionResolver} = Resolver;
-			const options = {
-				debug: true,
-				context: new Context(window, document),
-				channel: "product-click-collector-channel",
-				endpoint: "http://localhost:8081"
-			};
-			const writerOptions = {
-				resolver: {
-					queryResolver: () => {
-						const q = new Query();
-						q.setSearch(document.querySelector("#searchInput")?.value);
-						return q;
-					},
-					sessionResolver: () => "product-click-collector-session"
-				}
-			};
 
 			const collector = new Collector({
-				...options,
-				writerOptions
+				writer: new RestEventWriter("http://localhost:8081/product-click-collector-channel")
 			});
 
 			if (new URLSearchParams(window.location.search).get("collector") === "none") {
@@ -51,10 +31,6 @@
 					metadataResolver: element => element.nodeName
 				}));
 			}
-
-			let writer = new RestEventWriter("http://localhost:8081" + "/" + options.channel);
-			writer = new JSONEnvelopeWriter(writer, writerOptions.resolver.sessionResolver, options.channel);
-			collector.setWriters([writer]);
 
 			collector.start();
 		});

@@ -8,46 +8,20 @@
 		document.addEventListener("DOMContentLoaded", () => {
 			const {
 				Collector,
-				Context,
 				ImpressionCollector,
-				JSONEnvelopeWriter,
 				RestEventWriter,
-				Resolver,
-				Query
+				Resolver
 			} = window.SearchCollector;
 			const {positionResolver} = Resolver;
-			const options = {
-				debug: true,
-				context: new Context(window, document),
-				channel: "impression-collector-channel",
-				endpoint: "http://localhost:8081"
-			};
-			const writerOptions = {
-				resolver: {
-					queryResolver: () => {
-						const q = new Query();
-						q.setSearch(document.querySelector("#searchInput")?.value);
-						return q;
-					},
-					sessionResolver: () => "impression-collector-session"
-				}
-			};
 
 			const collector = new Collector({
-				...options,
-				writerOptions
+				writer: new RestEventWriter("http://localhost:8081/impression-collector-channel")
 			});
-
-			const idResolver = element => element.getAttribute("data-id")
 
 			collector.add(
 				new ImpressionCollector(".product",
-					idResolver,
+					element => element.getAttribute("data-id"),
 					element => positionResolver(".product", element)));
-
-			let writer = new RestEventWriter("http://localhost:8081" + "/" + options.channel);
-			writer = new JSONEnvelopeWriter(writer, writerOptions.resolver.sessionResolver, options.channel);
-			collector.setWriters([writer]);
 
 			collector.start();
 		});
