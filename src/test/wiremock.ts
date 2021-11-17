@@ -10,7 +10,28 @@ export const shutdownMockServer = async () => {
 		process = void 0;
 	}
 
+	await shutdown();
 	await waitForShutdown();
+}
+
+const shutdown = async () => {
+	try {
+		await fetch(`http://localhost:8081/__admin/shutdown`, {
+			method: "POST"
+		});
+		return false;
+	} catch (e) {
+		return e.code === "ECONNREFUSED";
+	}
+}
+
+const waitForShutdown = async (delay: number = 50, retries: number = 100) => {
+	if (await shutdown())
+		return true;
+	else {
+		await wait(delay);
+		return await waitForShutdown(delay, --retries)
+	}
 }
 
 export const startMockServer = async () => {
@@ -20,19 +41,6 @@ export const startMockServer = async () => {
 	process = exec("npm run test-server");
 	const readyTime = await waitForReadiness();
 	// console.debug(`wiremock ready after ${readyTime}ms`);
-}
-
-export const waitForShutdown = async (delay: number = 100, retries: number = 50) => {
-	try {
-		await fetch(`http://localhost:8081/__admin/shutdown`, {
-			method: "POST"
-		});
-		return await waitForShutdown(delay, --retries)
-	} catch (e) {
-		if (e.code === "ECONNREFUSED")
-			return true;
-		return waitForShutdown(waitForShutdown(delay, --retries));
-	}
 }
 
 export const verifyNoUnmatchedRequests = async () => {
