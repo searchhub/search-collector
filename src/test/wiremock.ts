@@ -10,14 +10,6 @@ export const shutdownMockServer = async () => {
 		process = void 0;
 	}
 
-	try {
-		await fetch(`http://localhost:8081/__admin/shutdown`, {
-			method: "POST"
-		});
-	} catch (e) {
-		// nop
-	}
-
 	await waitForShutdown();
 }
 
@@ -31,8 +23,16 @@ export const startMockServer = async () => {
 }
 
 export const waitForShutdown = async (delay: number = 100, retries: number = 50) => {
-	// TODO implement me
-	return wait(100);
+	try {
+		await fetch(`http://localhost:8081/__admin/shutdown`, {
+			method: "POST"
+		});
+		return await waitForShutdown(delay, --retries)
+	} catch (e) {
+		if (e.code === "ECONNREFUSED")
+			return true;
+		return waitForShutdown(waitForShutdown(delay, --retries));
+	}
 }
 
 export const verifyNoUnmatchedRequests = async () => {
