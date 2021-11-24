@@ -1,8 +1,7 @@
 import {AbstractCollector} from "./AbstractCollector";
 import {Sentinel} from "../utils/Sentinel";
 import {NumberResolver, StringResolver} from "../resolvers/Resolver";
-
-const scrollMonitor = require("scrollmonitor");
+import scrollMonitor from "scrollmonitor";
 
 /**
  * Collect impressions - a display of a product in the browser viewport. If the product is shown multiple
