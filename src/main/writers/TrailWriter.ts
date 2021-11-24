@@ -10,14 +10,12 @@ export class TrailWriter implements Writer {
 
 	write(data: any) {
 		const q = this.queryResolver().toString();
-		if (!q && !data.query) {
+		if (!q && !data.query && TrailWriter.isAppendTrail(data)) {
 			// See if we have a payload id and a trail for it. This means we
 			// are collecting data for an event that does not have a query context
 			// on the page anymore but we want to associate the event with the query
 			// context of the original search result
-			if (TrailWriter.isAppendTrail(data))
-				this.appendTrail(data);
-
+			this.appendTrail(data);
 		}
 
 		this.delegate.write(data);

@@ -3,6 +3,7 @@
 // able to identify the source query for a product even across sessions
 import {QueryResolver, StringResolver} from "../resolvers/Resolver";
 import {getLocalStorage} from "../utils/Util";
+import {TrailType} from "./TrailType";
 
 const TTL = 1000 * 60 * 60 * 24 * 2;
 
@@ -55,10 +56,10 @@ export class Trail {
 	 * Register this product id as starting a purchase journey at this session/query
 	 * Possible trail types are "main" and "associated"
 	 */
-	register(id, trailType = TrailType.Main, query?) {
+	register(id: string, trailType = TrailType.Main, queryString?) {
 		const trail = {
 			timestamp: new Date().getTime(),
-			query: query || this.queryResolver().toString(),
+			query: queryString || this.queryResolver().toString(),
 			type: trailType
 		};
 
@@ -74,17 +75,13 @@ export class Trail {
 		return trails[id];
 	}
 
-	_load(storage) {
+	private _load(storage) {
 		const data = storage.getItem(this.key);
 		return data ? JSON.parse(data) : {};
 	}
 
-	_save(storage, data) {
+	private _save(storage, data) {
 		storage.setItem(this.key, JSON.stringify(data));
 	}
 }
 
-export enum TrailType {
-	Main = "main",
-	Associated = "associated"
-}

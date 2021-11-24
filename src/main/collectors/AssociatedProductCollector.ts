@@ -1,7 +1,8 @@
 import {Sentinel} from "../utils/Sentinel";
 import {AbstractCollector} from "./AbstractCollector";
-import {Trail, TrailType} from "../query/Trail";
+import {Trail} from "../query/Trail";
 import {NumberResolver, StringResolver} from "../resolvers/Resolver";
+import {TrailType} from "../query/TrailType";
 
 /**
  * Collect clicks on elements matching a query selector. Handles both DOM elements
