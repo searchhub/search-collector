@@ -9,10 +9,13 @@ export class BasketClickCollector extends ClickCollector {
 	private readonly idResolver: StringResolver;
 	private readonly priceResolver: NumberResolver;
 
-	constructor(selector, resolvers, listenerType = ListenerType.Sentinel) {
+	constructor(selector: string,
+							idResolver: StringResolver,
+							priceResolver: NumberResolver,
+							listenerType = ListenerType.Sentinel) {
 		super(selector, "basket", listenerType);
-		this.idResolver = resolvers.idResolver;
-		this.priceResolver = resolvers.priceResolver;
+		this.idResolver = idResolver;
+		this.priceResolver = priceResolver;
 	}
 
 	/**

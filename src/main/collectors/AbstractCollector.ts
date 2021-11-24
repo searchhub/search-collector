@@ -37,7 +37,7 @@ export class AbstractCollector {
 
 	/**
 	 * Used to execute resolver functions.
-	 * Logs a debug message if the value is undefined or if an error is thrown by the resolver
+	 * Logs a debug message if the value is undefined or logs an error if an exception is thrown by the resolver
 	 * @param resolver A resolver function
 	 * @param log the logger
 	 * @param resolverArgs arguments to be passed to the resolver function
