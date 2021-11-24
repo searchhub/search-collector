@@ -18,12 +18,18 @@ export class Trail {
 	sessionResolver: StringResolver;
 	key: string;
 
+	/**
+	 *
+	 * @param queryResolver
+	 * @param sessionResolver
+	 * @param uid the unique id of this trail. Used as part of the key to save all Trail steps/parts
+	 */
 	constructor(queryResolver: QueryResolver,
 							sessionResolver: StringResolver,
-							id?: string) {
+							uid?: string) {
 		this.queryResolver = queryResolver;
 		this.sessionResolver = sessionResolver;
-		this.key = "search-collector-trail" + (id ? "-" + id : "");
+		this.key = "search-collector-trail" + (uid ? "-" + uid : "");
 
 		try {
 			const localTrails = this._load(getLocalStorage());

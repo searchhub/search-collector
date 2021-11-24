@@ -40,8 +40,6 @@ export const cookieSessionResolver = (name = "SearchCollectorSession"): string =
  * @param element the element for which we want to know the position relative to the elements selected by selectorExpression
  */
 export const positionResolver = (selectorExpression: string, element: HTMLElement): number | undefined => {
-	const position = Array.from(document.querySelectorAll(selectorExpression))
-		.reduce((acc, node, index) => node === element ? index : acc, undefined);
-	//ts compiler interprets undefined accumulator in reduce as Element
-	return position as number | undefined;
+	return Array.from(document.querySelectorAll(selectorExpression))
+		.reduce<number | undefined>((acc, node, index) => node === element ? index : acc, undefined);
 };
