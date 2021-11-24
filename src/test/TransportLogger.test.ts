@@ -1,4 +1,4 @@
-import {TransportLogger} from "../main/logger/TransportLogger";
+import {TransportLogger} from "../main/";
 import MockContext = jest.MockContext;
 
 describe('Test the TransportLogger', () => {

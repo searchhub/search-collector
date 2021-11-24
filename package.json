@@ -1,10 +1,10 @@
 {
   "name": "search-collector",
-  "version": "0.1.37",
+  "version": "1.0.0-alpha-1",
   "description": "Search Collector - Search metrics collection SDK",
   "license": "MIT",
-  "main": "src/main/index.js",
-  "types": "src/main/index.d.ts",
+  "main": "dist/index.js",
+  "types": "src/index.d.ts",
   "author": "CXP Commerce Experts GmbH",
   "homepage": "https://github.com/searchhub/search-collector",
   "scripts": {

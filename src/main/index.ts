@@ -22,6 +22,7 @@ export * from "./utils/Context";
 export * from "./utils/Sentinel";
 export * from "./writers/Writer";
 export {TrailType} from "./query/TrailType";
+export {TransportLogger} from "./logger/TransportLogger";
 
 import * as _Util from "./utils/Util";
 import * as _Resolver from "./resolvers/Resolver";
