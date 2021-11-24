@@ -23,7 +23,7 @@ describe('ImpressionCollectorTracking Suite', () => {
 		await page.goto("http://localhost:8081/ImpressionCollector.page.html", {waitUntil: 'load'});
 		await page.click("#scrollTarget");//click scrolls the element into view
 
-		await wait(100);//wait for the requests to settle
+		await wait(250);//wait for the requests to settle
 
 		await stubAsserter.verifyCallCount(10)
 			.verifyQueryParams(params => {
