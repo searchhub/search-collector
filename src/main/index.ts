@@ -23,6 +23,9 @@ export * from "./utils/Sentinel";
 export * from "./writers/Writer";
 export {TrailType} from "./query/TrailType";
 export {TransportLogger} from "./logger/TransportLogger";
+export {SQSErrorTransport} from "./logger/transport/SQSErrorTransport";
+export {ConsoleTransport} from "./logger/transport/ConsoleTransport";
+export {SQSTransport} from "./logger/transport/SQSTransport";
 
 import * as _Util from "./utils/Util";
 import * as _Resolver from "./resolvers/Resolver";
