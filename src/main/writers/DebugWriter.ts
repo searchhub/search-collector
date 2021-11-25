@@ -11,7 +11,7 @@ export class DebugWriter implements Writer {
 
 	write(data: any) {
 		if (this.debug)
-			console.debug(JSON.stringify(data));
+			console.log(data);
 
 		this.delegate.write(data);
 	}
