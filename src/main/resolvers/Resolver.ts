@@ -1,6 +1,6 @@
 import {Writer} from "../writers/Writer";
 import {Context} from "../utils/Context";
-import {generateId, getCookie, setCookie} from "../utils/Util";
+import {generateId, getCookie, getLocalStorage, setCookie} from "../utils/Util";
 import {Query} from "../query/Query";
 
 const MINUTES_ONE_DAY = 60 * 24;
@@ -43,3 +43,18 @@ export const positionResolver = (selectorExpression: string, element: HTMLElemen
 	return Array.from(document.querySelectorAll(selectorExpression))
 		.reduce<number | undefined>((acc, node, index) => node === element ? index : acc, undefined);
 };
+
+/**
+ * This is a persistent debug resolver which stores the debug query parameter across requests.
+ */
+export const debugResolver = () => {
+	const DEBUG_KEY = "__collectorDebug";
+	const debugParam = new URLSearchParams(window.location.search).get("debug");
+	const isDebugParamExists = !!debugParam;
+	if (isDebugParamExists) {
+		const debug = debugParam === "true";
+		getLocalStorage().setItem(DEBUG_KEY, String(debug));
+	}
+
+	return getLocalStorage().getItem(DEBUG_KEY) === "true";
+}
