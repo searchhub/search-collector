@@ -1,6 +1,6 @@
 {
   "name": "search-collector",
-  "version": "1.0.0-alpha-1",
+  "version": "1.0.0-alpha-2",
   "description": "Search Collector - Search metrics collection SDK",
   "license": "MIT",
   "main": "dist/index.js",
