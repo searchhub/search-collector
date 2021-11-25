@@ -11,6 +11,7 @@ export const shutdownMockServer = async () => {
 	}
 
 	await shutdown();
+	await wait(100);
 	await waitForShutdown();
 }
 
