@@ -5,7 +5,7 @@ import {LoggerTransport} from "../LoggerTransport";
  */
 export class SQSErrorTransport implements LoggerTransport {
 
-	constructor(private readonly queue,
+	constructor(private readonly queue: string,
 							private readonly fifo = false) {}
 
 	protected send(data) {
