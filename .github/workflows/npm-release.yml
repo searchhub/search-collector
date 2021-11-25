@@ -1,0 +1,35 @@
+on:
+  release:
+    types: [ created ]
+
+name: npm release pipeline
+
+jobs:
+  publish-npm:
+    name: Publish NPM Job
+    runs-on: ubuntu-latest
+    steps:
+      - name: echo ref
+        run: |
+          echo "Ref ${{ github.ref }}"
+          echo "Ref ${{ github }}"
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.ref }}
+      - name: npm setup
+        uses: actions/setup-node@v2
+        with:
+          node-version: '12.x'
+          registry-url: 'https://registry.npmjs.org'
+      - name: npm install
+        run: |
+          npm ci --slient --ignore-scripts
+      - name: npm build
+        run: |
+          npm run build --silent
+      - name: npm publish
+        run: |
+          npm publish --ignore-scripts
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

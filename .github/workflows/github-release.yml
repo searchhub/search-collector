@@ -25,7 +25,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.USER_TOKEN }}
         with:
           tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }}
-          body: Automcatically created release
+          release_name: release ${{ github.ref }}
+          body: automcatically created release
           draft: false
           prerelease: false
