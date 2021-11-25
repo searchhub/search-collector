@@ -2,6 +2,8 @@ import {AbstractCollector} from "./AbstractCollector";
 import {Sentinel} from "../utils/Sentinel";
 import {NumberResolver, StringResolver} from "../resolvers/Resolver";
 import scrollMonitor from "scrollmonitor";
+import {LocalStorageQueue} from "../utils/LocalStorageQueue";
+import {debounce} from "../utils/Util";
 
 /**
  * Collect impressions - a display of a product in the browser viewport. If the product is shown multiple
@@ -13,6 +15,8 @@ export class ImpressionCollector extends AbstractCollector {
 	private readonly selectorExpression: string;
 	private readonly idResolver: StringResolver;
 	private readonly positionResolver: NumberResolver;
+	private readonly queue: LocalStorageQueue;
+
 
 	/**
 	 * Construct impression collector
@@ -22,11 +26,12 @@ export class ImpressionCollector extends AbstractCollector {
 	 * @param idResolver - Resolve the id of the element
 	 * @param positionResolver - Resolve the position of the element in dom
 	 */
-	constructor(selectorExpression: string, idResolver: StringResolver, positionResolver: NumberResolver) { //TODO breaking change constructor
+	constructor(selectorExpression: string, idResolver: StringResolver, positionResolver: NumberResolver) {
 		super("impression");
 		this.selectorExpression = selectorExpression;
 		this.idResolver = idResolver;
 		this.positionResolver = positionResolver;
+		this.queue = new LocalStorageQueue("impressions");
 	}
 
 	/**
@@ -37,19 +42,22 @@ export class ImpressionCollector extends AbstractCollector {
 	 * @param {Logger} log - The logger
 	 */
 	attach(writer, log) {
+		const flush = debounce(() => {
+			const queue = this.queue.drain();
+			writer.write({
+				type: this.type,
+				data: queue
+			});
+		}, 250);
+
 		const handler = el => {
 			scrollMonitor.create(el).enterViewport(() => {
-				const data = {
-					type: this.type,
+				this.queue.push({
 					id: this.resolve(this.idResolver, log, el),
 					position: this.resolve(this.positionResolver, log, el)
-				};
-				// Figure out if we need to check the visibility of an element i.e.
-				// guard against elements that enter the viewport but have display=hidden
-				// if (el.offsetParent === null) {
-				//  return;
-				// }
-				writer.write(data);
+				});
+
+				flush();
 			})
 		};
 

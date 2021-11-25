@@ -23,17 +23,20 @@ describe('ImpressionCollectorTracking Suite', () => {
 		await page.goto("http://localhost:8081/ImpressionCollector.page.html", {waitUntil: 'load'});
 		await page.click("#scrollTarget");//click scrolls the element into view
 
-		await wait(250);//wait for the requests to settle
+		await wait(750); //ImpressionCollector is debounced, give it some more time
 
-		await stubAsserter.verifyCallCount(10)
+		await stubAsserter.verifyCallCount(1)
 			.verifyQueryParams(params => {
-				const trackingData = JSON.parse(params.data.values[0]);
-				expect(trackingData.type).toBe("impression");
-				expect(trackingData.position).toBeDefined();
-				expect(typeof trackingData.position).toBe("number");
-				expect(trackingData.id).toBeDefined();
-				expect(typeof trackingData.id).toBe("string");
-				expect(params.data.values.length).toBe(1);
+				const event = JSON.parse(params.data.values[0]);
+				expect(event.type).toBe("impression");
+				expect(event.data.length).toBe(10)
+
+				event.data.forEach(impression => {
+					expect(impression.position).toBeDefined();
+					expect(typeof impression.position).toBe("number");
+					expect(impression.id).toBeDefined();
+					expect(typeof impression.id).toBe("string");
+				});
 			})
 			.verify();
 	});

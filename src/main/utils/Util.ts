@@ -26,8 +26,15 @@ export const parseQueryString = (q = window.location.search.substring(1)) => {
  * Use this method to retrieve a mock impl which will at least prevent errors.
  */
 export const getLocalStorage = (): Storage => {
-	var localStorage = localStorage || void 0;
-	return localStorage || cookieLocalStorage();
+	if ("localStorage" in window) {
+		try {
+			localStorage.getItem("abc"); // access localStorage to trigger incognito mode exceptions
+			return localStorage;
+		} catch (e) {
+			console.error(e);
+		}
+	}
+	return cookieLocalStorage();
 }
 
 function cookieLocalStorage() {
@@ -37,8 +44,8 @@ function cookieLocalStorage() {
 		return JSON.parse(getCookie(LOCAL_STORAGE_COOKIE_NAME) || "{}");
 	}
 
-	function saveStorageToCookie(data) {
-		setCookie(LOCAL_STORAGE_COOKIE_NAME, JSON.stringify(data), 30);
+	function saveStorageToCookie(data: string) {
+		setCookie(LOCAL_STORAGE_COOKIE_NAME, data, 30);
 	}
 
 	return {
@@ -123,3 +130,68 @@ export const generateId = () => {
 	return text;
 }
 
+
+/**
+ * Returns a function, that, as long as it continues to be invoked, will not
+ * be triggered. The function will be called after it stops being called for
+ * N milliseconds. If `immediate` is passed, trigger the function on the
+ * leading edge, instead of the trailing. The function also has a property 'clear'
+ * that is a function which will clear the timer to prevent previously scheduled executions.
+ *
+ * @source underscore.js
+ * @see http://unscriptable.com/2009/03/20/debouncing-javascript-methods/
+ * @param func {Function} function to wrap
+ * @param wait {Number} timeout in ms (`100`)
+ * @param immediate {Boolean} whether to execute at the beginning (`false`)
+ * @api public
+ */
+export const debounce = (func: Function, wait = 100, immediate = false) => {
+	var timeout, args, context, timestamp, result;
+
+	function later() {
+		var last = Date.now() - timestamp;
+
+		if (last < wait && last >= 0) {
+			timeout = setTimeout(later, wait - last);
+		} else {
+			timeout = null;
+			if (!immediate) {
+				result = func.apply(context, args);
+				context = args = null;
+			}
+		}
+	}
+
+	const debounced = function () {
+		context = this;
+		args = arguments;
+		timestamp = Date.now();
+		var callNow = immediate && !timeout;
+		if (!timeout) timeout = setTimeout(later, wait);
+		if (callNow) {
+			result = func.apply(context, args);
+			context = args = null;
+		}
+
+		return result;
+	}
+
+	debounced.clear = function () {
+		if (timeout) {
+			clearTimeout(timeout);
+			timeout = null;
+		}
+	};
+
+	debounced.flush = function () {
+		if (timeout) {
+			result = func.apply(context, args);
+			context = args = null;
+
+			clearTimeout(timeout);
+			timeout = null;
+		}
+	};
+
+	return debounced;
+};
