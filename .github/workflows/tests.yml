@@ -17,6 +17,6 @@ jobs:
         with:
           node-version: '12.x'
           cache: 'npm'
-      - run: npm ci --silent --ignore-scripts
+      - run: npm ci --silent
       - run: npm run build --silent
       - run: npm test

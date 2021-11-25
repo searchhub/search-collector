@@ -24,7 +24,7 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
       - name: npm install
         run: |
-          npm ci --slient --ignore-scripts
+          npm ci --slient
       - name: npm build
         run: |
           npm run build --silent
