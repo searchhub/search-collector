@@ -1,7 +1,7 @@
 import {AbstractCollector} from "./AbstractCollector";
 import {Sentinel} from "../utils/Sentinel";
 import {NumberResolver, StringResolver} from "../resolvers/Resolver";
-import scrollMonitor from "scrollmonitor";
+import ScrollMonitor from "scrollmonitor";
 import {LocalStorageQueue} from "../utils/LocalStorageQueue";
 import {debounce} from "../utils/Util";
 
@@ -51,14 +51,14 @@ export class ImpressionCollector extends AbstractCollector {
 		}, 250);
 
 		const handler = el => {
-			scrollMonitor.create(el).enterViewport(() => {
+			ScrollMonitor.create(el).enterViewport(() => {
 				this.queue.push({
 					id: this.resolve(this.idResolver, log, el),
 					position: this.resolve(this.positionResolver, log, el)
 				});
 
 				flush();
-			})
+			});
 		};
 
 		new Sentinel(this.getDocument()).on(this.selectorExpression, handler);
