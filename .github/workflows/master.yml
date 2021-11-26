@@ -2,7 +2,7 @@ name: master branch pipeline
 
 on:
   push:
-    branches: [ 'feature/ts-webpack' ]
+    branches: [ 'master' ]
 
 jobs:
   git-tag:
