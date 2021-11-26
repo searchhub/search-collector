@@ -3,7 +3,7 @@ import {WriterResolver} from "../resolvers/Resolver";
 
 
 /**
- * Resolves passing the writer, the type of the event + context to the provided resolver function.
+ * Resolves immediately and passing the writer, the type of the event + context to the provided resolver function.
  */
 export class WriterResolverCollector extends AbstractCollector {
 	private readonly resolver: WriterResolver;
