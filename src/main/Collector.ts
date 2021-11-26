@@ -27,7 +27,7 @@ export class Collector {
 	}
 
 	add(collector: AbstractCollector) {
-		if (this.options.context)
+		if (this.options.context && !collector.getContext())
 			collector.setContext(this.options.context);
 
 		this.collectors.push(collector);
