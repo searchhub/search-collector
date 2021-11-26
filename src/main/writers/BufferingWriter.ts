@@ -28,10 +28,9 @@ export class BufferingWriter implements Writer {
 
 	flush(cancelTimer) {
 		if (this.queue.size() > 0) {
-			// TODO organize drain and write via callbacks to ensure no data is lost
 			// if the browser shutsdown before the write is complete
-			const data = this.queue.drain();
-			this.delegate.write(data);
+			this.queue.transactionalDrain(queue => new Promise(res => res(this.delegate.write(queue))))
+				.catch(err => console.error("could not drain queue: ", err));
 		}
 
 		if (!cancelTimer) {

@@ -31,6 +31,16 @@ export class LocalStorageQueue {
 		return buffer;
 	}
 
+	transactionalDrain(asyncCallback: (queue: Array<any>) => Promise<any>): Promise<any> {
+		const buffer = this.queue;
+		return asyncCallback(this.queue)
+			.then(res => {
+				this.queue = [];
+				this._save();
+				return buffer;
+			});
+	}
+
 	size() {
 		return this.queue.length;
 	}
