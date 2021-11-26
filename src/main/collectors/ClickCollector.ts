@@ -1,6 +1,7 @@
 import {AbstractCollector} from "./AbstractCollector";
 import {Sentinel} from "../utils/Sentinel";
 import {ListenerType} from "../utils/ListenerType";
+import {Logger} from "../logger/Logger";
 
 /**
  * Collect clicks on elements matching a query selector. Handles both DOM elements
@@ -31,7 +32,7 @@ export class ClickCollector extends AbstractCollector {
 	 * Abstract collection method, must be overriden in the subclasses
 	 * @abstract
 	 */
-	collect(element, log) {
+	collect(element: HTMLElement, log: Logger) {
 		return undefined;
 	}
 
