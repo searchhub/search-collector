@@ -15,13 +15,18 @@ export class CheckoutClickCollector extends AbstractCollector {
 	private readonly amountResolver: NumberResolver;
 	private readonly listenerType: ListenerType;
 
-	constructor(clickSelector, contentSelector, resolvers, listenerType = ListenerType.Sentinel) {
+	constructor(clickSelector: string,
+							contentSelector: string,
+							idResolver: StringResolver,
+							priceResolver: NumberResolver,
+							amountResolver: NumberResolver,
+							listenerType = ListenerType.Sentinel) {
 		super("checkout");
 		this.clickSelector = clickSelector
 		this.contentSelector = contentSelector;
-		this.idResolver = resolvers.idResolver;
-		this.priceResolver = resolvers.priceResolver;
-		this.amountResolver = resolvers.amountResolver;
+		this.idResolver = idResolver;
+		this.priceResolver = priceResolver;
+		this.amountResolver = amountResolver;
 		this.listenerType = listenerType;
 	}
 
