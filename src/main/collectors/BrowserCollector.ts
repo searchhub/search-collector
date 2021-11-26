@@ -1,5 +1,12 @@
 import {AbstractCollector} from "./AbstractCollector";
 
+
+export type BrowserCollectorOptions = {
+	recordUrl: boolean,
+	recordReferrer: boolean,
+	recordLanguage: boolean
+}
+
 /**
  * Collect basic browser information. Note that depending on how you use this you may
  * need to consult the GDPR guidelines
@@ -10,11 +17,11 @@ export class BrowserCollector extends AbstractCollector {
 	private readonly recordReferrer: boolean;
 	private readonly recordLanguage: boolean;
 
-	constructor(options) {
+	constructor(options = {recordUrl: true, recordReferrer: true, recordLanguage: false}) {
 		super("browser");
-		this.recordUrl = options && options.hasOwnProperty("recordUrl") ? options.recordUrl : true;
-		this.recordReferrer = options && options.hasOwnProperty("recordReferrer") ? options.recordReferrer : true;
-		this.recordLanguage = options && options.hasOwnProperty("recordLanguage") ? options.recordLanguage : false;
+		this.recordUrl = options.recordUrl || false;
+		this.recordReferrer = options.recordReferrer || false;
+		this.recordLanguage = options.recordLanguage || false;
 	}
 
 	/**
