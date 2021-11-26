@@ -222,17 +222,19 @@ export class Query {
 	}
 
 	setSearch(term) {
-		this.removeSelection("$s");
+		if (term) {
+			this.removeSelection("$s");
 
-		this.criteria.unshift({
-			"field": "$s",
-			"operation": "=",
-			"value": term
-		});
+			this.criteria.unshift({
+				"field": "$s",
+				"operation": "=",
+				"value": term
+			});
+		}
 	}
 
 	getSearch() {
-		var s = this.getSelection("$s");
+		const s = this.getSelection("$s");
 		return s ? s.value : undefined;
 	}
 

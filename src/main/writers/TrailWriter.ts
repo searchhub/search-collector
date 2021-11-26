@@ -9,8 +9,8 @@ export class TrailWriter implements Writer {
 							private readonly queryResolver: QueryResolver) {}
 
 	write(data: any) {
-		const q = this.queryResolver().toString();
-		if (!q && !data.query && TrailWriter.isAppendTrail(data)) {
+		const q = this.queryResolver();
+		if ((!q || !q.isValid()) && !data.query && TrailWriter.isAppendTrail(data)) {
 			// See if we have a payload id and a trail for it. This means we
 			// are collecting data for an event that does not have a query context
 			// on the page anymore but we want to associate the event with the query
