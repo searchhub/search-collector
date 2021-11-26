@@ -20,6 +20,7 @@ export class Collector {
 	private collectors: Array<AbstractCollector> = [];
 	private writers: Array<Writer> = [];
 	private transports: Array<LoggerTransport> = [new ConsoleTransport()];
+	private hasStarted: boolean = false;
 
 	constructor(options?: CollectorOptions) {
 		this.options = options || {};
@@ -30,19 +31,14 @@ export class Collector {
 			collector.setContext(this.options.context);
 
 		this.collectors.push(collector);
+
+		if (this.hasStarted === true)
+			this.invokedCollector(collector);
 	}
 
 	start() {
-		const writer = this.getWriter();
-		const log = new TransportLogger(this.transports);
-
-		this.collectors.forEach(collector => {
-			try {
-				collector.attach(writer, log);
-			} catch (e) {
-				log.error("Unexpected Exception during collector attach: ", e);
-			}
-		});
+		this.collectors.forEach(collector => this.invokedCollector(collector));
+		this.hasStarted = true;
 	}
 
 	addLogTransport(transport: LoggerTransport) {
@@ -55,6 +51,17 @@ export class Collector {
 
 	setWriters(replacementWriters: Array<Writer> | Writer) {
 		this.writers = Array.isArray(replacementWriters) ? [...replacementWriters] : [replacementWriters];
+	}
+
+	private invokedCollector(collector: AbstractCollector) {
+		const writer = this.getWriter();
+		const log = new TransportLogger(this.transports);
+
+		try {
+			collector.attach(writer, log);
+		} catch (e) {
+			log.error("Unexpected Exception during collector attach: ", e);
+		}
 	}
 
 	private getWriter() {
