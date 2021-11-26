@@ -28,8 +28,8 @@ describe('BasketClickCollector Suite', () => {
 			.verifyQueryParams(params => {
 				const trackingData = JSON.parse(params.data.values[0]);
 				expect(trackingData.type).toBe("basket");
-				expect(trackingData.data.id).toBe("5");
-				expect(trackingData.data.price).toBe(5.99);
+				expect(trackingData.id).toBe("5");
+				expect(trackingData.price).toBe(5.99);
 			})
 			.verify();
 	});

@@ -73,7 +73,7 @@ export class AssociatedProductCollector extends AbstractCollector {
 				if (payload) {
 					writer.write({
 						"type": this.getType(),
-						"data": payload
+						...payload
 					});
 				}
 			});

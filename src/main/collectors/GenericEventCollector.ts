@@ -31,7 +31,7 @@ export class GenericEventCollector extends AbstractCollector {
 		this.getWindow().addEventListener(this.eventName, (e: CustomEvent) => {
 			writer.write({
 				"type": e.detail.type,
-				"data": e.detail.data
+				...e.detail.data
 			});
 		})
 	}

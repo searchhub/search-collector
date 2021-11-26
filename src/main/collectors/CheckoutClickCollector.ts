@@ -57,7 +57,7 @@ export class CheckoutClickCollector extends AbstractCollector {
 					// as separate records
 					writer.write({
 						type: this.getType(),
-						data: data //TODO data prop
+						...data
 					});
 				}
 			})

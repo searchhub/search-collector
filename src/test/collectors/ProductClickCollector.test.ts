@@ -28,11 +28,11 @@ describe('ProductClickCollector Suite', () => {
 			.verifyQueryParams(params => {
 				const trackingData = JSON.parse(params.data.values[0]);
 				expect(trackingData.type).toBe("product");
-				expect(trackingData.data.id).toBe("5");
-				expect(trackingData.data.position).toBe(4);
-				expect(trackingData.data.price).toBe(5.99);
-				expect(trackingData.data.image).toBe("image.jpg");
-				expect(trackingData.data.metadata).toBe("DIV");
+				expect(trackingData.id).toBe("5");
+				expect(trackingData.position).toBe(4);
+				expect(trackingData.price).toBe(5.99);
+				expect(trackingData.image).toBe("image.jpg");
+				expect(trackingData.metadata).toBe("DIV");
 			})
 			.verify();
 	});
@@ -48,11 +48,11 @@ describe('ProductClickCollector Suite', () => {
 			.verifyQueryParams(params => {
 				const trackingData = JSON.parse(params.data.values[0]);
 				expect(trackingData.type).toBe("product");
-				expect(trackingData.data.id).toBe("5");
-				expect(trackingData.data.position).toBeFalsy();
-				expect(trackingData.data.price).toBeFalsy();
-				expect(trackingData.data.image).toBeFalsy();
-				expect(trackingData.data.metadata).toBeFalsy();
+				expect(trackingData.id).toBe("5");
+				expect(trackingData.position).toBeFalsy();
+				expect(trackingData.price).toBeFalsy();
+				expect(trackingData.image).toBeFalsy();
+				expect(trackingData.metadata).toBeFalsy();
 			})
 			.verify();
 	});
