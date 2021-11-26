@@ -50,11 +50,11 @@ export class ImpressionCollector extends AbstractCollector {
 			});
 		}, 250);
 
-		const handler = el => {
-			ScrollMonitor.create(el).enterViewport(() => {
+		const handler = element => {
+			ScrollMonitor.create(element).enterViewport(() => {
 				this.queue.push({
-					id: this.resolve(this.idResolver, log, el),
-					position: this.resolve(this.positionResolver, log, el)
+					id: this.resolve(this.idResolver, log, element),
+					position: this.resolve(this.positionResolver, log, element)
 				});
 
 				flush();

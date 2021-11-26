@@ -19,7 +19,7 @@ export class ClickCollector extends AbstractCollector {
 	 *
 	 * @constructor
 	 * @param {string} selectorExpression - Document query selector identifying the elements to attach to
-	 * @param {string} type - The type of element click to report
+	 * @param {string} type - The type OF element click to report
 	 * @param {string} listenerType - Whether the listener should be a dom or sentinel listener
 	 */
 	constructor(selectorExpression: string, type = "click", listenerType = ListenerType.Sentinel) {
@@ -29,10 +29,10 @@ export class ClickCollector extends AbstractCollector {
 	}
 
 	/**
-	 * Abstract collection method, must be overriden in the subclasses
+	 * Abstract collection method, must be overridden in the subclasses
 	 * @abstract
 	 */
-	collect(element: HTMLElement, log: Logger) {
+	collect(element: HTMLElement, event: Event, log: Logger) {
 		return undefined;
 	}
 
@@ -44,8 +44,8 @@ export class ClickCollector extends AbstractCollector {
 	 * @param log
 	 */
 	attach(writer, log) {
-		const handler = (element, writer) => {
-			const payload = this.collect(element, log);
+		const handler = (element: HTMLElement, event: Event) => {
+			const payload = this.collect(element, event, log);
 			if (payload) {
 				writer.write({
 					type: this.type,
@@ -61,10 +61,10 @@ export class ClickCollector extends AbstractCollector {
 		// "sentinel (default)" - works on elements inserted in the DOM anytime, but interferes with CSS animations on these elements
 		if (this.listenerType === ListenerType.Dom) {
 			const nodeList = this.getDocument().querySelectorAll(this.selectorExpression);
-			nodeList.forEach(el => el.addEventListener("click", ev => handler(el, writer)));
+			nodeList.forEach((el: HTMLElement) => el.addEventListener("click", ev => handler(el, ev)));
 		} else {
 			const sentinel = new Sentinel(this.getDocument());
-			sentinel.on(this.selectorExpression, el => el.addEventListener("click", ev => handler(el, writer)));
+			sentinel.on(this.selectorExpression, el => el.addEventListener("click", ev => handler(el, ev)));
 		}
 	}
 }

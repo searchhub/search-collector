@@ -17,7 +17,7 @@ export class FilterClickCollector extends ClickCollector {
 	 * Collect the product click information from the element
 	 * @override
 	 */
-	collect(element: HTMLElement, log) {
-		return {query: this.resolve(this.resolver, log, element)};
+	collect(element: HTMLElement, event: Event, log) {
+		return {query: this.resolve(this.resolver, log, element, event)};
 	}
 }

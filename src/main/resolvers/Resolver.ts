@@ -8,10 +8,10 @@ const MINUTES_HALF_HOUR = 30;
 
 export type CallbackResolver = (callback: (...params: any) => void) => void;
 export type WriterResolver = (writer: Writer, type: string, context: Context) => void
-export type BooleanResolver = (element?: HTMLElement) => boolean;
-export type StringResolver = (element?: HTMLElement) => string;
-export type NumberResolver = (element?: HTMLElement) => number;
-export type QueryResolver = () => Query; //TODO document breaking change
+export type BooleanResolver = (element?: HTMLElement, event?: Event) => boolean;
+export type StringResolver = (element?: HTMLElement, event?: Event) => string;
+export type NumberResolver = (element?: HTMLElement, event?: Event) => number;
+export type QueryResolver = () => Query;
 
 /**
  * Read the cookie with the provided name

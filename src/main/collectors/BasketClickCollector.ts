@@ -22,12 +22,12 @@ export class BasketClickCollector extends ClickCollector {
 	 * Collect the product click information from the element
 	 * @override
 	 */
-	collect(element, log) {
-		const id = this.resolve(this.idResolver, log, element);
+	collect(element, event, log) {
+		const id = this.resolve(this.idResolver, log, element, event);
 		if (id) {
 			return {
 				id,
-				price: this.resolve(this.priceResolver, log, element)
+				price: this.resolve(this.priceResolver, log, element, event)
 			};
 		}
 	}

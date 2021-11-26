@@ -33,9 +33,9 @@ export class SearchResultCollector extends AbstractCollector {
 	attach(writer, log) {
 		writer.write({
 			type: "search",
-			keywords: this.resolve(this.phraseResolver, log),
-			count: this.resolve(this.countResolver, log),
-			action: this.resolve(this.actionResolver, log) || "search"
+			keywords: this.resolve(this.phraseResolver, log, {}),
+			count: this.resolve(this.countResolver, log, {}),
+			action: this.resolve(this.actionResolver, log, {}) || "search"
 		});
 	}
 }
