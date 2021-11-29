@@ -8,12 +8,12 @@
 
 		document.addEventListener("DOMContentLoaded", () => {
 			const {
-				Collector,
+				CollectorModule,
 				BrowserCollector,
 				RestEventWriter,
 			} = window.SearchCollector;
 
-			const collector = new Collector({
+			const collector = new CollectorModule({
 				writer: new RestEventWriter("http://localhost:8081/browser-collector-channel")
 			});
 

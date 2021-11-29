@@ -7,14 +7,13 @@
     <script>
 		document.addEventListener("DOMContentLoaded", () => {
 			const {
-				Collector,
+				CollectorModule,
 				ProductClickCollector,
 				RestEventWriter,
-				Resolver,
+				positionResolver,
 			} = window.SearchCollector;
-			const {positionResolver} = Resolver;
 
-			const collector = new Collector({
+			const collector = new CollectorModule({
 				writer: new RestEventWriter("http://localhost:8081/product-click-collector-channel")
 			});
 

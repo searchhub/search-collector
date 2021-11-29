@@ -7,12 +7,12 @@
     <script>
 		document.addEventListener("DOMContentLoaded", () => {
 			const {
-				Collector,
+				CollectorModule,
 				SearchResultCollector,
 				RestEventWriter,
 			} = window.SearchCollector;
 
-			const collector = new Collector({
+			const collector = new CollectorModule({
 				writer: new RestEventWriter("http://localhost:8081/search-result-collector-channel")
 			});
 

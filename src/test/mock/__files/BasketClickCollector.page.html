@@ -7,12 +7,12 @@
     <script>
 		document.addEventListener("DOMContentLoaded", () => {
 			const {
-				Collector,
+				CollectorModule,
 				BasketClickCollector,
 				RestEventWriter,
 			} = window.SearchCollector;
 
-			const collector = new Collector({
+			const collector = new CollectorModule({
 				writer: new RestEventWriter("http://localhost:8081/basket-click-collector-channel")
 			});
 

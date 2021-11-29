@@ -1,4 +1,4 @@
-export * from "./Collector";
+export * from "./CollectorModule";
 export * from "./collectors/ClickCollector";
 export * from "./collectors/SearchResultCollector";
 export * from "./collectors/InstantSearchQueryCollector";

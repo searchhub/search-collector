@@ -15,7 +15,7 @@ type CollectorOptions = {
 /**
  * Default assembly point of collectors and writers.
  */
-export class Collector {
+export class CollectorModule {
 	private options: CollectorOptions;
 	private collectors: Array<AbstractCollector> = [];
 	private writers: Array<Writer> = [];
@@ -37,6 +37,9 @@ export class Collector {
 			this.invokedCollector(collector);
 	}
 
+	/**
+	 * Start collecting data by attaching all collectors
+	 */
 	start() {
 		this.collectors.forEach(collector => this.invokedCollector(collector));
 		this.hasStarted = true;
