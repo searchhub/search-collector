@@ -3,6 +3,7 @@
   "version": "1.0.0-alpha-3",
   "description": "Search Collector - Search metrics collection SDK",
   "keywords": [],
+  "main": "./dist/index.js",
   "scripts": {
     "dev": "tsc --watch --outDir ./dist --declarationDir ./dist",
     "dev-bundles": "webpack --mode development --watch",
@@ -35,7 +36,6 @@
     "wiremock": "^2.29.0"
   },
   "license": "MIT",
-  "main": "dist/index.js",
   "types": "src/index.d.ts",
   "author": "CXP Commerce Experts GmbH",
   "homepage": "https://github.com/searchhub/search-collector",
