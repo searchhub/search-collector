@@ -28,6 +28,9 @@ jobs:
       - name: npm build
         run: |
           npm run build --silent
+      - name: npm prepare publish
+        run: |
+          npm run prepare-publish --silent
       - name: npm publish
         run: |
           npm publish --ignore-scripts
