@@ -36,7 +36,7 @@ The library is built around three main concepts:
 
 A resolver is a function which will return a specific value.
 
-```javascript
+```typescript
 const sessionNameResolver = (someArg) => {
 	return "my-session-" + someArg;
 };
@@ -89,18 +89,6 @@ class MyWriter implements Writer {
 }
 ```
 
-```javascript
-//javascript
-class MyWriter {
-	write(data) {
-		fetch("/my-endponit", {
-			method: "POST",
-			body: JSON.stringify(data)
-		});
-	}
-}
-```
-
 # Logging
 
 `search-collector` ships with a default set of `Logger` and `LoggerTransport`. In most cases you just want to use or add
@@ -140,20 +128,6 @@ class MyLoggerTransport extends LoggerTransport {
 }
 
 collector.addLogTransport(new MyLoggerTransport());
-```
-
-```javascript
-//javasdcript
-const myTransport = {
-	error: (msg: string, ...dataArgs) => {
-		fetch("/my-endpoint", {
-			method: "POST",
-			body: JSONT.stringify({args: dataArgs})
-		});
-	}
-}
-
-collector.addLogTransport(myTransport);
 ```
 
 ## Override Logger

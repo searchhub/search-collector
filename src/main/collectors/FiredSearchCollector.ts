@@ -3,7 +3,6 @@ import {WriterResolverCollector} from "./WriterResolverCollector";
 
 /**
  * Triggered when the client has triggered/fired a search
- *
  */
 export class FiredSearchCollector extends WriterResolverCollector {
 	/**
