@@ -17,7 +17,7 @@
 
 # Description
 
-search-collector is a tiny JavaScript library for tracking search related events on e-commerce websites. It's built
+`search-collector` is a tiny JavaScript library for tracking search related events on e-commerce websites. It's built
 with <a href="http://www.typescriptlang.org" target="_blank">TypeScript</a> and combines OOP (Object Oriented
 Programming) and a sprinkle of FP (Functional Programming). In it's core it is meant to gather tracking data from
 the <a href="https://www.w3schools.com/whatis/whatis_htmldom.asp" target="_blank">DOM</a> elements as soon as the page
@@ -25,21 +25,16 @@ has loaded.
 
 # Getting started
 
-## Blueprint
-
-Checkout <a href="https://github.com/searchhub/search-collector-blueprint" target="_blank">Blueprint</a>
-
-## Install
-
-```bash
-$ npm i -S search-collector
-```
+Checkout the <a href="https://github.com/searchhub/search-collector-blueprint" target="_blank">Blueprint</a>
+or `$ npm i -S search-collector`
 
 # Concepts
 
+The library is built around three main concepts:
+
 ## Resolver
 
-A resolver is function which will return a specific value.
+A resolver is a function which will return a specific value.
 
 ```javascript
 const sessionNameResolver = (someArg) => {
@@ -154,27 +149,6 @@ You could also implement your own Logger. Instead of just implementing the log l
 the `LoggerTransport` you have to implement all log levels when you override the entire `Logger`.
 
 **Please be aware of that no LoggerTransports are called if you override the Logger**
-
-# Assemble
-
-Use different components based on your use case
-
-```javascript
-var SearchCollector = require("search-collector");
-
-var collector = new SearchCollector.Collector({
-	"sessionResolver": new SearchCollector.CookieSessionResolver(),
-	"endpoint": "/collector" // relative to the current context or absolute depending where you want to send the data
-});
-
-// Collect filter clicks
-collector.add(new SearchCollector.ClickCollector(".filter", e => e.getAttribute("id")));
-
-// Register product displays
-collector.add(new SearchCollector.ImpressionCollector(".product", e => e.getAttribute("id")));
-LoggerTransport
-collector.start();
-```
 
 # Available components
 
