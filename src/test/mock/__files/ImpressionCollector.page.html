@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>E2E Testing</title>
+    <script defer src="/dist/index.window.bundle.js"></script>
+    <script>
+		document.addEventListener("DOMContentLoaded", () => {
+			const {
+				CollectorModule,
+				ImpressionCollector,
+				RestEventWriter,
+				positionResolver
+			} = window.SearchCollector;
+
+			const collector = new CollectorModule({
+				writer: new RestEventWriter("http://localhost:8081/impression-collector-channel")
+			});
+
+			collector.add(
+				new ImpressionCollector(".product",
+					element => element.getAttribute("data-id"),
+					element => positionResolver(".product", element)));
+
+			collector.start();
+		});
+    </script>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        #spacer {
+            height: 101vh;
+        }
+
+        .product {
+            width: 100%;
+            background: blue;
+            margin: 10px;
+            color: white;
+            text-align: center;
+        }
+
+        #scrollTarget {
+            width: 100%;
+            height: 20px;
+            background: red;
+            color: white;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+<!--search box-->
+<input id="searchInput" value="THE QUERY"/>
+
+<div id="spacer"></div>
+
+<!--10-->
+<div class="product" data-id="1">Product</div>
+<div class="product" data-id="2">Product</div>
+<div class="product" data-id="3">Product</div>
+<div class="product" data-id="4">Product</div>
+<div class="product" data-id="5">Product</div>
+<div class="product" data-id="6">Product</div>
+<div class="product" data-id="7">Product</div>
+<div class="product" data-id="8">Product</div>
+<div class="product" data-id="9">Product</div>
+<div class="product" data-id="10">Product</div>
+
+<div id="scrollTarget">scrollTarget</div>
+</body>
+</html>

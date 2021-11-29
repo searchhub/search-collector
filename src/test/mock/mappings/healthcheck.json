@@ -1,0 +1,13 @@
+{
+  "request": {
+    "method": "GET",
+    "urlPath": "/__healthcheck"
+  },
+  "response": {
+    "status": 200,
+    "body": "{\"status\":\"OK\"}",
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}

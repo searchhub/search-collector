@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
+    "outDir": "./dist",
+    "target": "ES2019",
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "declaration": true,
+    "allowJs": true
+  },
+  "include": [
+    "src/main"
+  ],
+  "exclude": [
+    "dist"
+  ]
+}

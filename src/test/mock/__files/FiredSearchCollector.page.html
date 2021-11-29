@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>E2E Testing</title>
+    <script defer src="/dist/index.window.bundle.js"></script>
+    <script>
+
+		document.addEventListener("DOMContentLoaded", () => {
+			const {
+				CollectorModule,
+				FiredSearchCollector,
+				RestEventWriter
+			} = window.SearchCollector;
+
+			const collector = new CollectorModule({
+				writer: new RestEventWriter("http://localhost:8081/fired-search-collector-channel")
+			});
+
+			const firedSearchCallback = (callback) => {
+				document.querySelector("#searchButton").addEventListener("click", () => {
+					callback(document.querySelector("#searchInput").value);
+				});
+			}
+
+			collector.add(new FiredSearchCollector((writer, type, context) => {
+				firedSearchCallback((value) => {
+					writer.write({
+						"type": type,
+						"keywords": value,
+						"query": "$s=" + value
+					});
+				})
+			}));
+
+			collector.start();
+		});
+    </script>
+</head>
+<body>
+
+<!--search box-->
+<input id="searchInput" value="THE QUERY"/>
+<button id="searchButton">search button</button>
+
+<!--10-->
+<div class="product"></div>
+<div class="product"></div>
+<div class="product"></div>
+<div class="product"></div>
+<div class="product"></div>
+<div class="product"></div>
+<div class="product"></div>
+<div class="product"></div>
+<div class="product"></div>
+<div class="product"></div>
+
+</body>
+</html>

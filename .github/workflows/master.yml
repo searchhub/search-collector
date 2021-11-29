@@ -1,0 +1,46 @@
+name: master branch pipeline
+
+on:
+  push:
+    branches: [ 'master' ]
+
+jobs:
+  git-tag:
+    needs:
+      - test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: toarm/action-autotag@1.1.5
+        with:
+          GITHUB_TOKEN: ${{ secrets.USER_TOKEN }}
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          persist-credentials: false
+
+      - name: Cache npm
+        id: cache-npm
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-npm-
+      - name: Use Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: '12.x'
+
+      - name: npm install
+        run: |
+          npm ci --silent
+      - name: npm build
+        run: |
+          npm run build --silent
+      - name: npm test
+        run: |
+          npm test

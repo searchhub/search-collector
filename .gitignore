@@ -1,3 +1,8 @@
 search-collector.js
 node_modules
 build
+dist
+.idea
+
+src/**/*.d.ts
+src/**/*.js

@@ -1,0 +1,25 @@
+# ignore the .ts files
+**.ts
+
+# include the .d.ts files
+!**/*.d.ts
+!*.d.ts
+
+.github
+package-dist.json
+package-lock.json
+jest.config.js
+jest-puppeteer.config.js
+webpack.config
+tsconfig.json
+tsconfig.webpack.json
+webpack.config.js
+
+# for local dry-run testing
+.idea
+src/test/**
+
+blueprint/**
+demo/**
+
+*.tgz

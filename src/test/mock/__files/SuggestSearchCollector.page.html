@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>E2E Testing</title>
+    <script defer src="/dist/index.window.bundle.js"></script>
+    <script>
+		document.addEventListener("DOMContentLoaded", () => {
+			const {
+				CollectorModule,
+				SuggestSearchCollector,
+				RestEventWriter,
+				Sentinel,
+			} = window.SearchCollector;
+
+			const collector = new CollectorModule({
+				writer: new RestEventWriter("http://localhost:8081/suggest-search-collector-channel")
+			});
+
+			collector.add(new SuggestSearchCollector((writer, type, context) => {
+				new Sentinel(document).on(".suggest", (element) => {
+					element.addEventListener("click", () => {
+						const value = element.getAttribute("data-id");
+						writer.write({
+							"type": type,
+							"keywords": value,
+							"query": "$s=" + value
+						});
+					})
+				});
+			}));
+
+			collector.start();
+		});
+    </script>
+</head>
+<body>
+
+<!--search box-->
+<input id="searchInput" value="THE QUERY"/>
+
+<!--10-->
+<div class="suggest" data-id="S1">S1</div>
+<div class="suggest" data-id="S2">S2</div>
+<div class="suggest" data-id="S3">S3</div>
+<div class="suggest" data-id="S4">S4</div>
+<div class="suggest" data-id="S5">S5</div>
+<div class="suggest" data-id="S6">S6</div>
+<div class="suggest" data-id="S7">S7</div>
+<div class="suggest" data-id="S8">S8</div>
+<div class="suggest" data-id="S9">S9</div>
+<div class="suggest" data-id="S10">S10</div>
+
+</body>
+</html>

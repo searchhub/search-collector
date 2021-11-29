@@ -1,0 +1,31 @@
+on:
+  create:
+    tags:
+      - '^\d+\.\d+\.\d+$'
+
+name: github release pipeline
+
+jobs:
+  build:
+    name: Release Repo Job
+    runs-on: ubuntu-latest
+    steps:
+      - name: echo ref
+        run: |
+          echo "Ref ${{ github.ref }}"
+          echo "Ref ${{ github }}"
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.ref }}
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.USER_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: release ${{ github.ref }}
+          body: automcatically created release
+          draft: false
+          prerelease: false

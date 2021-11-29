@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>E2E Testing</title>
+    <script defer src="/dist/index.window.bundle.js"></script>
+    <script>
+		document.addEventListener("DOMContentLoaded", () => {
+			const {
+				CollectorModule,
+				SearchResultCollector,
+				RestEventWriter,
+			} = window.SearchCollector;
+
+			const collector = new CollectorModule({
+				writer: new RestEventWriter("http://localhost:8081/search-result-collector-channel")
+			});
+
+			collector.add(new SearchResultCollector(
+				() => document.querySelector("#searchInput")?.value,
+				() => document.querySelectorAll(".product").length
+			));
+
+			collector.start();
+		});
+    </script>
+</head>
+<body>
+
+<!--search box-->
+<input id="searchInput" value="THE QUERY"/>
+
+<!--10-->
+<div class="product"></div>
+<div class="product"></div>
+<div class="product"></div>
+<div class="product"></div>
+<div class="product"></div>
+<div class="product"></div>
+<div class="product"></div>
+<div class="product"></div>
+<div class="product"></div>
+<div class="product"></div>
+
+</body>
+</html>
