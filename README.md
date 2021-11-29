@@ -26,7 +26,7 @@ has loaded.
 # Getting started
 
 Checkout the <a href="https://github.com/searchhub/search-collector-blueprint" target="_blank">Blueprint</a>
-or `$ npm i -S search-collector`
+or `npm i -S search-collector`
 
 # Concepts
 
@@ -76,10 +76,23 @@ export class BrowserCollector extends AbstractCollector {
 A writer is responsible to deliver the data gathered by collectors to your tracking destination.
 
 ```typescript
+//typescript
 import {Writer} from "./Writer";
 
 class MyWriter implements Writer {
 	write(data: any) {
+		fetch("/my-endponit", {
+			method: "POST",
+			body: JSON.stringify(data)
+		});
+	}
+}
+```
+
+```javascript
+//javascript
+class MyWriter {
+	write(data) {
 		fetch("/my-endponit", {
 			method: "POST",
 			body: JSON.stringify(data)
