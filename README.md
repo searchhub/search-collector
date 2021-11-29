@@ -23,6 +23,67 @@
 $ npm i -S search-collector
 ```
 
+## Logging
+
+`search-collector` ships with a default set of `Logger` and `LoggerTransport`. In most cases you just want to use or add
+a new `LoggerTransport`. By default `TransportLogger` is used which will direct all log messages to all
+provided `LoggerTransports`.
+
+A `LoggerTransport` directs all implemented log levels to an output e.g. browser console or an REST endpoint. If you
+add multiple transports all of them are invoked.
+
+### Example configuration
+
+Log to the console if `debug` is enabled or send error logs to an SQS queue if `debug` is disabled:
+
+```javascript
+if (debug) {
+	collector.addLogTransport(new ConsoleTransport());
+} else {
+	collector.addLogTransport(new SQSErrorTransport("https://your-sqs-queue.com/collector"));
+}
+```
+
+### Implement LoggerTransport
+
+If you need more than SQS or console transport you can implement your own by implementing the desired log level:
+
+```typescript
+//typescript
+class MyLoggerTransport extends LoggerTransport {
+	error(msg: string, ...dataArgs) {
+		fetch("/my-endpoint", {
+			method: "POST",
+			body: JSONT.stringify({args: dataArgs})
+		});
+	}
+}
+
+collector.addLogTransport(new MyLoggerTransport());
+```
+
+```javascript
+//javasdcript
+const myTransport = {
+	error: (msg: string, ...dataArgs) => {
+		fetch("/my-endpoint", {
+			method: "POST",
+			body: JSONT.stringify({args: dataArgs})
+		});
+	}
+}
+
+collector.addLogTransport(myTransport);
+```
+
+### Override Logger
+
+You could also implement your own Logger. **Please be aware of that no LoggerTransports are called if you override the
+Logger**
+
+Instead of just implementing the log level you want to handle like in the `LoggerTransport` you have to implement all
+log levels when you override the entire `Logger`.
+
 ## Assemble
 
 Use different components based on your use case
@@ -40,7 +101,7 @@ collector.add(new SearchCollector.ClickCollector(".filter", e => e.getAttribute(
 
 // Register product displays
 collector.add(new SearchCollector.ImpressionCollector(".product", e => e.getAttribute("id")));
-
+LoggerTransport
 collector.start();
 ```
 

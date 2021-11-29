@@ -1,7 +1,7 @@
 import {LoggerTransport} from "../LoggerTransport";
 
 /**
- * Adds error messages to the sqs queue
+ * Only adds error messages to an sqs queue
  */
 export class SQSErrorTransport implements LoggerTransport {
 
