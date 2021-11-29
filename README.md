@@ -23,16 +23,74 @@
 $ npm i -S search-collector
 ```
 
-## Logging
+# Concepts
+
+## Resolver
+
+A resolver is function which will return a specific value.
+
+```javascript
+const sessionNameResolver = (someArg) => {
+	return "my-session-" + someArg;
+};
+```
+
+## Collector
+
+A collector is a class which is responsible for gathering tracking data. All collectors have to extend
+the `AbstractCollector` class which ships with some basic functionality and fields.
+
+```typescript
+import {StringResolver} from "./Resolver";
+import {Logger} from "./Logger";
+import {Writer} from "./Writer";
+import {AbstractCollector} from "./AbstractCollector";
+
+export class BrowserCollector extends AbstractCollector {
+	private readonly sessionResolver: StringResolver;
+
+	constructor(sessionResolver) {
+		super("browser");
+		this.sessionResolver = sessionResolver;
+	}
+
+	attach(writer: Writer, log: Logger) {
+		writer.write({
+			type: this.getType(),
+			sid: this.resolve(this.sessionResolver, log, "someResolverArg"),
+			agent: this.getWindow().navigator.userAgent
+		});
+	}
+}
+```
+
+## Writer
+
+A writer is responsible to deliver the data gathered by collectors to your tracking destination.
+
+```typescript
+import {Writer} from "./Writer";
+
+class MyWriter implements Writer {
+	write(data: any) {
+		fetch("/my-endponit", {
+			method: "POST",
+			body: JSON.stringify(data)
+		});
+	}
+}
+```
+
+# Logging
 
 `search-collector` ships with a default set of `Logger` and `LoggerTransport`. In most cases you just want to use or add
 a new `LoggerTransport`. By default `TransportLogger` is used which will direct all log messages to all
 provided `LoggerTransports`.
 
-A `LoggerTransport` directs all implemented log levels to an output e.g. browser console or an REST endpoint. If you
-add multiple transports all of them are invoked.
+A `LoggerTransport` directs all implemented log levels to an output e.g. browser console or an REST endpoint. If you add
+multiple transports all of them are invoked.
 
-### Example configuration
+## Example configuration
 
 Log to the console if `debug` is enabled or send error logs to an SQS queue if `debug` is disabled:
 
@@ -44,7 +102,7 @@ if (debug) {
 }
 ```
 
-### Implement LoggerTransport
+## Implement LoggerTransport
 
 If you need more than SQS or console transport you can implement your own by implementing the desired log level:
 
@@ -76,15 +134,14 @@ const myTransport = {
 collector.addLogTransport(myTransport);
 ```
 
-### Override Logger
+## Override Logger
 
-You could also implement your own Logger. **Please be aware of that no LoggerTransports are called if you override the
-Logger**
+You could also implement your own Logger. Instead of just implementing the log level you want to handle like in
+the `LoggerTransport` you have to implement all log levels when you override the entire `Logger`.
 
-Instead of just implementing the log level you want to handle like in the `LoggerTransport` you have to implement all
-log levels when you override the entire `Logger`.
+**Please be aware of that no LoggerTransports are called if you override the Logger**
 
-## Assemble
+# Assemble
 
 Use different components based on your use case
 
@@ -104,11 +161,6 @@ collector.add(new SearchCollector.ImpressionCollector(".product", e => e.getAttr
 LoggerTransport
 collector.start();
 ```
-
-## Deliver
-
-Wrap the code in your preferred browser delivery solution, our recommendation is to deliver the whole assembly as a
-single minified javascript file.
 
 # Available components
 
