@@ -2,7 +2,7 @@
   <a href="https://www.searchhub.io/" target="blank"><img src="https://avatars.githubusercontent.com/u/29304684?v=4" width="120" alt="Searchhub Logo" /></a>
 </p>
 
-<p align="center">A fast and simple Javascript SDK specifically targeted at collecting search and search related browser events.</p>
+<p align="center">A fast and simple JavaScript library specifically targeted at collecting search and search related browser events.</p>
 
 <p align="center">
     <a href="#" target="_blank"><img src="https://github.com/searchhub/search-collector/actions/workflows/build.yml/badge.svg" alt="build workflow" /></a>
@@ -15,7 +15,19 @@
     <a href="https://twitter.com/cxpsearchhub" target="_blank"><img src="https://img.shields.io/twitter/follow/cxpsearchhub?style=social" alt="twitter" /></a>
 </p>
 
+# Description
+
+search-collector is a tiny JavaScript library for tracking search related events on e-commerce websites. It's built
+with <a href="http://www.typescriptlang.org" target="_blank">TypeScript</a> and combines OOP (Object Oriented
+Programming) and a sprinkle of FP (Functional Programming). In it's core it is meant to gather tracking data from
+the <a href="https://www.w3schools.com/whatis/whatis_htmldom.asp" target="_blank">DOM</a> elements as soon as the page
+has loaded.
+
 # Getting started
+
+## Blueprint
+
+Checkout <a href="https://github.com/searchhub/search-collector-blueprint" target="_blank">Blueprint</a>
 
 ## Install
 
@@ -96,9 +108,11 @@ Log to the console if `debug` is enabled or send error logs to an SQS queue if `
 
 ```javascript
 if (debug) {
+	// log all messages to the browser console
 	collector.addLogTransport(new ConsoleTransport());
 } else {
-	collector.addLogTransport(new SQSErrorTransport("https://your-sqs-queue.com/collector"));
+	// send all error log messages to an SQS queue
+	collector.addLogTransport(new SQSErrorTransport("https://your-sqs-queue.com/queue"));
 }
 ```
 
