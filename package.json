@@ -3,12 +3,12 @@
   "version": "1.0.0-alpha-4",
   "description": "Search Collector - Search metrics collection SDK",
   "keywords": [],
-  "main": "./dist/index.js",
   "scripts": {
     "dev": "tsc --watch --outDir ./dist --declarationDir ./dist",
     "dev-bundles": "webpack --mode development --watch",
     "build": "npm run build-ts && npm run build-bundles",
     "build-ts": "tsc",
+    "prepare-publish": "cp -r dist/* .",
     "build-bundles": "webpack --mode production",
     "test": "npm run build-bundles && npm run copy-dist && jest --runInBand",
     "copy-dist": "rm -rf ./src/test/mock/__files/dist/ && cp -r ./dist/ ./src/test/mock/__files/",

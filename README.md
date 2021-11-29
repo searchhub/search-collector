@@ -48,10 +48,7 @@ A collector is a class which is responsible for gathering tracking data. All col
 the `AbstractCollector` class which ships with some basic functionality and fields.
 
 ```typescript
-import {StringResolver} from "./Resolver";
-import {Logger} from "./Logger";
-import {Writer} from "./Writer";
-import {AbstractCollector} from "./AbstractCollector";
+import {AbstractCollector} from "search-collector";
 
 export class BrowserCollector extends AbstractCollector {
 	private readonly sessionResolver: StringResolver;
@@ -77,8 +74,6 @@ A writer is responsible to deliver the data gathered by collectors to your track
 
 ```typescript
 //typescript
-import {Writer} from "./Writer";
-
 class MyWriter implements Writer {
 	write(data: any) {
 		fetch("/my-endponit", {
