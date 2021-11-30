@@ -27,7 +27,7 @@ export class TrailWriter implements Writer {
 	 * @private
 	 */
 	private appendTrail(data: any) {
-		const trail = this.trail.fetch(data.data.id);
+		const trail = this.trail.fetch(data.id);
 		if (trail && trail.query) {
 			data.query = trail.query;
 			data.queryTime = trail.timestamp;
