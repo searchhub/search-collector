@@ -44,10 +44,10 @@ export class ImpressionCollector extends AbstractCollector {
 	attach(writer, log) {
 		const flush = debounce(() => {
 			this.queue.transactionalDrain(queue => new Promise(res => {
-				writer.write({
+				res(writer.write({
 					type: this.type,
 					data: queue
-				});
+				}));
 			}))
 				.catch(err => log.error("Could not drain queue: ", err));
 
