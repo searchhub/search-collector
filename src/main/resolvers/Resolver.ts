@@ -50,7 +50,7 @@ export const positionResolver = (selectorExpression: string, element: HTMLElemen
 export const debugResolver = () => {
 	const DEBUG_KEY = "__collectorDebug";
 	const debugParam = new URLSearchParams(window.location.search).get("debug");
-	const isDebugParamExists = !!debugParam;
+	const isDebugParamExists = debugParam != null;
 	if (isDebugParamExists) {
 		const debug = debugParam === "true";
 		getLocalStorage().setItem(DEBUG_KEY, String(debug));
