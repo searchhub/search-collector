@@ -278,7 +278,7 @@ A utility class which combines the following writers in order:
 
 #### JSONEnvelopeWriter
 
-Package the payload as JSON, add contextual information like timestamp, current search query, the session, the channel
+Wraps the event in a JSON envelope, enrich each record with timestamp, session and channel information.
 
 #### QueryWriter
 
