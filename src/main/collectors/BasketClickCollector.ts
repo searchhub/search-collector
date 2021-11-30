@@ -3,7 +3,7 @@ import {NumberResolver, StringResolver} from "../resolvers/Resolver";
 import {ListenerType} from "../utils/ListenerType";
 
 /**
- * ClickCollector emitting "product" events, attach to product links
+ * Collect id and price if an item was add into the basket
  */
 export class BasketClickCollector extends ClickCollector {
 	private readonly idResolver: StringResolver;
