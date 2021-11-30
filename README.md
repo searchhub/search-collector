@@ -284,6 +284,8 @@ Write events to a REST endpoint
 
 #### SplitStreamWriter
 
+Calls all writers passed to the constructor error safe
+
 #### SQSEventWriter
 
 Write events to an SQS queue
