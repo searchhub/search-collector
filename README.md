@@ -136,6 +136,8 @@ the `LoggerTransport` you have to implement all log levels when you override the
 
 ## Collectors
 
+<a href="https://github.com/searchhub/search-collector/tree/master/src/main/collectors">See also</a>
+
 #### AbstractCollector
 
 A utility base class for collectors
@@ -208,6 +210,8 @@ function.
 
 ## Resolver
 
+<a href="https://github.com/searchhub/search-collector/tree/master/src/main/resolvers">See also</a>
+
 #### cookieResolver
 
 Resolves to the string value of a cookie or empty string if no cookie with that name exists
@@ -238,6 +242,8 @@ query. All our Collectors are using this class already if appropriate and automa
 TrailWriter
 
 ## Writer
+
+<a href="https://github.com/searchhub/search-collector/tree/master/src/main/writers">See also</a>
 
 #### Base64EncodeWriter
 
