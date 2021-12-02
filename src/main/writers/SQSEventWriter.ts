@@ -18,8 +18,11 @@ export class SQSEventWriter implements Writer {
 			// TODO when enough information is present to uniquely identify a message, switch the deduplication id to a message hash
 			src += "&MessageGroupId=1&MessageDeduplicationId=" + Math.random();
 		}
-		src += "&MessageBody=" + JSON.stringify(data);
+		if (typeof data !== "string") {
+			data = JSON.stringify(data);
+		}
 
+		src += "&MessageBody=" + data;
 		img.src = src;
 	}
 }

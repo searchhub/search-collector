@@ -40,8 +40,8 @@ export class DefaultWriter implements Writer {
 		// Writer pipeline, add/remove pieces according to use case
 		// This writer pipeline will send Base64 encoded array of json events
 		let writer: Writer = isSQS(endpoint, sqs) ? new SQSEventWriter(endpoint) : new RestEventWriter(endpoint);
-		writer = new BufferingWriter(writer, "buffer:" + options.endpoint);
 		writer = new Base64EncodeWriter(writer);
+		writer = new BufferingWriter(writer, "buffer:" + options.endpoint);
 		writer = new DebugWriter(writer, options.debug);
 		writer = new QueryWriter(writer, options.resolver.queryResolver);
 		writer = new TrailWriter(writer, options.trail, options.resolver.queryResolver);
