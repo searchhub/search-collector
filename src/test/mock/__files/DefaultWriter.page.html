@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>E2E Testing</title>
+    <script defer src="/dist/index.window.bundle.js"></script>
+    <script>
+		window.Date = class D {
+			getTime() {
+				return 555;
+			}
+		};
+
+		document.addEventListener("DOMContentLoaded", () => {
+			const {DefaultWriter, Query} = window.SearchCollector;
+			const defaultWriter = new DefaultWriter({
+				debug: true,
+				sqs: true,
+				channel: "default-writer-channel",
+				endpoint: "http://localhost:8081/default-writer-channel",
+				resolver: {
+					queryResolver: () => new Query(),
+					sessionResolver: () => "my-session"
+				}
+			});
+			defaultWriter.write({entry: 1, data: "data"});
+			defaultWriter.write({entry: 2, data: "data"});
+			defaultWriter.write({entry: 3, data: "data"});
+		});
+    </script>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        .product {
+            width: 100%;
+            background: blue;
+            margin: 10px;
+            color: white;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+</body>
+</html>

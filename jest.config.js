@@ -1,6 +1,6 @@
 module.exports = {
 	preset: "jest-puppeteer",
-	testTimeout: 30000,
+	testTimeout: 15000,
 	globals: {
 		URL: "http://localhost:8081"
 	},
