@@ -27,12 +27,22 @@ export class TrailWriter implements Writer {
 	 * @private
 	 */
 	private appendTrail(data: any) {
-		const trail = this.trail.fetch(data.id);
+		const trail = this.trail.fetch(this.getId(data));
 		if (trail && trail.query) {
 			data.query = trail.query;
 			data.queryTime = trail.timestamp;
 			data.trailType = trail.type;
 		}
+	}
+
+	/**
+	 * for legacy support where sometimes data was wrapped in property called "data"
+	 * @param data
+	 * @private
+	 */
+	private getId(data: any) {
+		if (data)
+			return data.id || data.data?.id;
 	}
 
 	/**
