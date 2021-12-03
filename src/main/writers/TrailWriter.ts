@@ -10,7 +10,7 @@ export class TrailWriter implements Writer {
 
 	write(data: any) {
 		const q = this.queryResolver();
-		if ((!q || !q.isValid()) && !data.query && TrailWriter.isAppendTrail(data)) {
+		if ((!q || !q.isValid()) && !data.query && this.isAppendTrail(data)) {
 			// See if we have a payload id and a trail for it. This means we
 			// are collecting data for an event that does not have a query context
 			// on the page anymore but we want to associate the event with the query
@@ -26,7 +26,7 @@ export class TrailWriter implements Writer {
 	 * @param data
 	 * @private
 	 */
-	private appendTrail(data: any) {
+	protected appendTrail(data: any) {
 		const trail = this.trail.fetch(this.getId(data));
 		if (trail && trail.query) {
 			data.query = trail.query;
@@ -36,7 +36,7 @@ export class TrailWriter implements Writer {
 	}
 
 	/**
-	 * for legacy support where sometimes data was wrapped in property called "data"
+	 * for legacy support: sometimes data was wrapped in property called "data"
 	 * @param data
 	 * @private
 	 */
@@ -50,7 +50,7 @@ export class TrailWriter implements Writer {
 	 * @param data
 	 * @private
 	 */
-	private static isAppendTrail(data: any) {
+	protected isAppendTrail(data: any) {
 		return data && ["checkout", "basket", "filter"].indexOf(data.type) > -1
 		// TA: This was previously "data.data && data.data.id && this.trail"
 		// the only Collectors appending a property called "data" to its event are ClickCollector i.e.
