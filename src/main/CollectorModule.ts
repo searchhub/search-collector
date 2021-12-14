@@ -73,7 +73,16 @@ export class CollectorModule {
 	}
 
 	private getLogger() {
-		return this.logger || new TransportLogger(this.transports);
+		const hasLogger = !!this.logger;
+		if (hasLogger)
+			return this.logger;
+
+		if (!this.transports || this.transports.length === 0) {
+			console.warn("ATTENTION-SEARCH-COLLECTOR-WARNING");
+			console.warn("search-collector: no LoggerTransport configured while using the default TransportLogger. Please add a transport CollectorModule#addLogTransport or CollectorModule#setTransports");
+		}
+
+		return new TransportLogger(this.transports);
 	}
 
 	private getWriter() {
