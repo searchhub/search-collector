@@ -22,18 +22,39 @@ export const getLocalStorage = (): Storage => {
 			console.error(e);
 		}
 	}
-	return cookieLocalStorage();
+	return cookieStorage(525600, "__localStorageMock___");
 }
 
-function cookieLocalStorage() {
-	const LOCAL_STORAGE_COOKIE_NAME = "__localStorageMock";
+export const generateId = () => {
+	const possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+	let text = "";
+	for (let i = 0; i < 7; i++) {
+		text += possible.charAt(Math.floor(Math.random() * possible.length));
+	}
+	return text;
+}
+
+export const getSessionStorage = (): Storage => {
+	if ("sessionStorage" in window) {
+		try {
+			sessionStorage.getItem("abc"); // access sessionStorage to trigger incognito mode exceptions
+			return sessionStorage;
+		} catch (e) {
+			console.error(e);
+		}
+	}
+	return cookieStorage(void 0, "__sessionStorageMock___");
+}
+
+function cookieStorage(ttlMinutes: number | undefined, storageName: string) {
+	const LOCAL_STORAGE_COOKIE_NAME = storageName;
 
 	function getStorageFromCookie() {
 		return JSON.parse(getCookie(LOCAL_STORAGE_COOKIE_NAME) || "{}");
 	}
 
 	function saveStorageToCookie(data: string) {
-		setCookie(LOCAL_STORAGE_COOKIE_NAME, data, 30);
+		setCookie(LOCAL_STORAGE_COOKIE_NAME, data, ttlMinutes); // one year
 	}
 
 	return {
@@ -108,16 +129,6 @@ export const getCookie = (cname: string): string | "" => {
 	}
 	return "";
 }
-
-export const generateId = () => {
-	const possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-	let text = "";
-	for (let i = 0; i < 7; i++) {
-		text += possible.charAt(Math.floor(Math.random() * possible.length));
-	}
-	return text;
-}
-
 
 /**
  * Returns a function, that, as long as it continues to be invoked, will not

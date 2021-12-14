@@ -2,7 +2,7 @@
 // the product trail is independent from any session, thus we should be
 // able to identify the source query for a product even across sessions
 import {QueryResolver, StringResolver} from "../resolvers/Resolver";
-import {getLocalStorage} from "../utils/Util";
+import {getLocalStorage, getSessionStorage} from "../utils/Util";
 import {TrailType} from "./TrailType";
 
 const TTL = 1000 * 60 * 60 * 24 * 2;
@@ -49,9 +49,9 @@ export class Trail {
 			// of all product clicks within the session. Reminder, sessionStorage is maintained
 			// per tab/window and is deleted upon closing, localStorage is per website with no
 			// default expiry.
-			const sessionTrails = this._load(sessionStorage);
+			const sessionTrails = this._load(getSessionStorage());
 			const trails = Object.assign(localTrails, sessionTrails);
-			this._save(sessionStorage, trails);
+			this._save(getSessionStorage(), trails);
 
 		} catch (e) {
 			console.log("Error parsing stored event queue " + e);
@@ -69,7 +69,7 @@ export class Trail {
 			type: trailType
 		};
 
-		for (let storage of [localStorage, sessionStorage]) {
+		for (let storage of [getLocalStorage(), getSessionStorage()]) {
 			const trails = this._load(storage);
 			trails[id] = trail;
 			this._save(storage, trails);
@@ -77,7 +77,7 @@ export class Trail {
 	}
 
 	fetch(id): TrailData {
-		const trails = this._load(sessionStorage);
+		const trails = this._load(getSessionStorage());
 		return trails[id];
 	}
 
@@ -90,4 +90,3 @@ export class Trail {
 		storage.setItem(this.key, JSON.stringify(data));
 	}
 }
-
