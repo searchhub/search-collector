@@ -39,10 +39,11 @@ export class InstantSearchQueryCollector extends AbstractCollector {
 	 * when the event occurs
 	 *
 	 * @param {object} writer - The writer to send the data to
+	 * @param log
 	 */
-	attach(writer) {
+	attach(writer, log) {
 		const type = this.getType();
-		const handler = (searchBox, e, writer) => {
+		const handler = (e, searchBox) => {
 			// Ignore shift, ctrl, etc. presses, react only on characters
 			if (e.which === 0) {
 				return;
@@ -68,9 +69,11 @@ export class InstantSearchQueryCollector extends AbstractCollector {
 		// "sentinel (default)" - works on elements inserted in the DOM anytime, but interferes with CSS animations on these elements
 		if (this.listenerType === ListenerType.Dom) {
 			const nodeList = this.getDocument().querySelectorAll(this.selectorExpression);
-			nodeList.forEach(el => el.addEventListener("keyup", ev => handler(el, ev, writer)));
+			nodeList.forEach(el => el.addEventListener("keyup", this.logWrapHandler(handler, log, el)));
 		} else {
-			new Sentinel(this.getDocument()).on(this.selectorExpression, el => el.addEventListener("keyup", ev => handler(el, ev, writer)));
+			new Sentinel(this.getDocument()).on(this.selectorExpression, (el) => {
+				el.addEventListener("keyup", this.logWrapHandler(handler, log, el));
+			});
 		}
 	}
 }

@@ -41,7 +41,7 @@ export class CheckoutClickCollector extends AbstractCollector {
 		const doc = this.getDocument();
 
 		// Activates on click of the element selected using the clickSelector
-		const handler = (element: HTMLElement, event: Event) => {
+		const handler = (event: Event) => {
 			const elements = doc.querySelectorAll<HTMLElement>(this.contentSelector);
 			elements.forEach(element => {
 				const id = this.resolve(this.idResolver, log, element, event);
@@ -71,10 +71,10 @@ export class CheckoutClickCollector extends AbstractCollector {
 		// "sentinel (default)" - works on elements inserted in the DOM anytime, but interferes with CSS animations on these elements
 		if (this.listenerType === ListenerType.Dom) {
 			const nodeList = doc.querySelectorAll(this.clickSelector);
-			nodeList.forEach((el: HTMLElement) => el.addEventListener("click", ev => handler(el, ev)));
+			nodeList.forEach((el: HTMLElement) => el.addEventListener("click", this.logWrapHandler(handler, log)));
 		} else {
 			const sentinel = new Sentinel(this.getDocument());
-			sentinel.on(this.clickSelector, el => el.addEventListener("click", ev => handler(el, ev)));
+			sentinel.on(this.clickSelector, el => el.addEventListener("click", this.logWrapHandler(handler, log)));
 		}
 	}
 }
