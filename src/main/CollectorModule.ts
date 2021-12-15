@@ -6,6 +6,7 @@ import {TransportLogger} from "./logger/TransportLogger";
 import {Context} from "./utils/Context";
 import {ConsoleWriter} from "./writers/ConsoleWriter";
 import {Logger} from "./logger/Logger";
+import {ConsoleTransport} from "./logger";
 
 type CollectorOptions = {
 	writer?: Writer,
@@ -80,6 +81,8 @@ export class CollectorModule {
 		if (!this.transports || this.transports.length === 0) {
 			console.warn("ATTENTION-SEARCH-COLLECTOR-WARNING");
 			console.warn("search-collector: no LoggerTransport configured while using the default TransportLogger. Please add a transport CollectorModule#addLogTransport or CollectorModule#setTransports");
+			console.warn("search-collector: will FALLBACK to ConsoleTransport");
+			return new TransportLogger([new ConsoleTransport()]);
 		}
 
 		return new TransportLogger(this.transports);
