@@ -69,7 +69,7 @@ export class CollectorModule {
 		try {
 			collector.attach(writer, log);
 		} catch (e) {
-			log.error("Unexpected Exception during collector attach: ", e);
+			log.error(`[${collector.constructor.name}] Unexpected Exception during collector attach: `, e);
 		}
 	}
 
