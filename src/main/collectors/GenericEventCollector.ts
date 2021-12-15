@@ -26,13 +26,14 @@ export class GenericEventCollector extends AbstractCollector {
 	 * the data when the event triggers
 	 *
 	 * @param {object} writer - The writer to send the data to
+	 * @param log
 	 */
-	attach(writer) {
-		this.getWindow().addEventListener(this.eventName, (e: CustomEvent) => {
+	attach(writer, log) {
+		this.getWindow().addEventListener(this.eventName, this.logWrapHandler((e: CustomEvent) => {
 			writer.write({
 				"type": e.detail.type,
 				...e.detail.data
 			});
-		})
+		}, log));
 	}
 }

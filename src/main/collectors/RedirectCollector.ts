@@ -1,6 +1,7 @@
 import {AbstractCollector} from "./AbstractCollector";
 import {Context} from "../utils/Context";
 import {BooleanResolver, CallbackResolver} from "../resolvers/Resolver";
+import {getSessionStorage} from "../utils";
 
 /**
  * Keep track of human triggered searches followed by a redirect to a page different than the search result page
@@ -33,17 +34,15 @@ export class RedirectCollector extends AbstractCollector {
 	 * @param log
 	 */
 	attach(writer, log) {
-		const win = this.context.getWindow();
-
 		this.resolve(this.triggerResolver, log, keyword => {
-			win.sessionStorage.setItem(RedirectCollector.STORAGE_KEY, keyword);
+			getSessionStorage().setItem(RedirectCollector.STORAGE_KEY, keyword);
 		});
 
 		// Fetch the latest search if any
-		const lastSearch = win.sessionStorage.getItem(RedirectCollector.STORAGE_KEY);
+		const lastSearch = getSessionStorage().getItem(RedirectCollector.STORAGE_KEY);
 		if (lastSearch) {
 			// Remove the search action, as we're either on a search result page or we've redirected
-			win.sessionStorage.removeItem(RedirectCollector.STORAGE_KEY);
+			getSessionStorage().removeItem(RedirectCollector.STORAGE_KEY);
 
 			// If we have not landed on the expected search page, it must have been (looove) a redirect
 			if (!this.resolve(this.expectedPageResolver, log)) {

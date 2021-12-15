@@ -50,7 +50,6 @@ export class ImpressionCollector extends AbstractCollector {
 				}));
 			}))
 				.catch(err => log.error("Could not drain queue: ", err));
-
 		}, 250);
 
 		const handler = element => {
@@ -64,6 +63,6 @@ export class ImpressionCollector extends AbstractCollector {
 			});
 		};
 
-		new Sentinel(this.getDocument()).on(this.selectorExpression, handler);
+		new Sentinel(this.getDocument()).on(this.selectorExpression, this.logWrapHandler(handler, log));
 	}
 }

@@ -36,6 +36,24 @@ export class AbstractCollector {
 	}
 
 	/**
+	 * Used to log if a handler fails its execution
+	 * Usage: document.addEventListener("click", this.logWrapHandler(yourhandler, logger))
+	 * @param handler
+	 * @param log
+	 * @param handlerArgs
+	 * @protected
+	 */
+	protected logWrapHandler(handler: Function, log: Logger, ...handlerArgs) {
+		return (...args) => {
+			try {
+				return handler(...args, ...handlerArgs);
+			} catch (e) {
+				log.error(`[${this.constructor.name}] Unexpected error during resolver execution: `, e);
+			}
+		}
+	}
+
+	/**
 	 * Used to execute resolver functions.
 	 * Logs a debug message if the value is undefined or logs an error if an exception is thrown by the resolver
 	 * @param resolver A resolver function

@@ -44,7 +44,7 @@ export class ClickCollector extends AbstractCollector {
 	 * @param log
 	 */
 	attach(writer, log) {
-		const handler = (element: HTMLElement, event: Event) => {
+		const handler = (event: Event, element: HTMLElement) => {
 			const payload = this.collect(element, event, log);
 			if (payload) {
 				writer.write({
@@ -61,10 +61,10 @@ export class ClickCollector extends AbstractCollector {
 		// "sentinel (default)" - works on elements inserted in the DOM anytime, but interferes with CSS animations on these elements
 		if (this.listenerType === ListenerType.Dom) {
 			const nodeList = this.getDocument().querySelectorAll(this.selectorExpression);
-			nodeList.forEach((el: HTMLElement) => el.addEventListener("click", ev => handler(el, ev)));
+			nodeList.forEach((el: HTMLElement) => el.addEventListener("click", this.logWrapHandler(handler, log, el)));
 		} else {
 			const sentinel = new Sentinel(this.getDocument());
-			sentinel.on(this.selectorExpression, el => el.addEventListener("click", ev => handler(el, ev)));
+			sentinel.on(this.selectorExpression, el => el.addEventListener("click", this.logWrapHandler(handler, log, el)));
 		}
 	}
 }

@@ -68,7 +68,7 @@ export class AssociatedProductCollector extends AbstractCollector {
 		}
 
 		const handler = el => {
-			el.addEventListener("click", ev => {
+			el.addEventListener("click", this.logWrapHandler(ev => {
 				const payload = collect(el);
 				if (payload) {
 					writer.write({
@@ -76,7 +76,7 @@ export class AssociatedProductCollector extends AbstractCollector {
 						...payload
 					});
 				}
-			});
+			}, log));
 		}
 
 		new Sentinel(this.getDocument()).on(this.selectorExpression, handler);
