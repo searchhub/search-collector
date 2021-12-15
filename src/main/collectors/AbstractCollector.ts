@@ -52,7 +52,7 @@ export class AbstractCollector {
 				return val;
 			}
 		} catch (e) {
-			log.error("Unexpected error during resolver execution: ", e);
+			log.error(`[${this.constructor.name}] Unexpected error during resolver execution: `, e);
 		}
 	}
 }

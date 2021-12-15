@@ -6,6 +6,7 @@ import {TransportLogger} from "./logger/TransportLogger";
 import {Context} from "./utils/Context";
 import {ConsoleWriter} from "./writers/ConsoleWriter";
 import {Logger} from "./logger/Logger";
+import {ConsoleTransport} from "./logger";
 
 type CollectorOptions = {
 	writer?: Writer,
@@ -68,12 +69,23 @@ export class CollectorModule {
 		try {
 			collector.attach(writer, log);
 		} catch (e) {
-			log.error("Unexpected Exception during collector attach: ", e);
+			log.error(`[${collector.constructor.name}] Unexpected Exception during collector attach: `, e);
 		}
 	}
 
 	private getLogger() {
-		return this.logger || new TransportLogger(this.transports);
+		const hasLogger = !!this.logger;
+		if (hasLogger)
+			return this.logger;
+
+		if (!this.transports || this.transports.length === 0) {
+			console.warn("ATTENTION-SEARCH-COLLECTOR-WARNING");
+			console.warn("search-collector: no LoggerTransport configured while using the default TransportLogger. Please add a transport CollectorModule#addLogTransport or CollectorModule#setTransports");
+			console.warn("search-collector: will FALLBACK to ConsoleTransport");
+			return new TransportLogger([new ConsoleTransport()]);
+		}
+
+		return new TransportLogger(this.transports);
 	}
 
 	private getWriter() {
