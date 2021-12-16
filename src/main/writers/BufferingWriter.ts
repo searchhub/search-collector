@@ -14,11 +14,13 @@ export class BufferingWriter implements Writer {
 	queue: LocalStorageQueue;
 	timer: NodeJS.Timeout;
 	id: string;
+	timerMs: number;
 
-	constructor(delegate: Writer, id: string) {
+	constructor(delegate: Writer, id: string, timerMs = 1000) {
 		this.delegate = delegate;
 		this.queue = new LocalStorageQueue(id);
-		this.timer = setTimeout(this.flush.bind(this), 1000);
+		this.timerMs = timerMs;
+		this.timer = setTimeout(this.flush.bind(this), timerMs);
 		this.id = id;
 	}
 
@@ -34,7 +36,7 @@ export class BufferingWriter implements Writer {
 		}
 
 		if (!cancelTimer) {
-			this.timer = setTimeout(this.flush.bind(this), 1000);
+			this.timer = setTimeout(this.flush.bind(this), this.timerMs);
 		}
 	}
 }
