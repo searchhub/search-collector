@@ -1,4 +1,5 @@
 import {LoggerTransport} from "../LoggerTransport";
+import {base64Encode} from "../../utils";
 
 /**
  * Only adds error messages to an sqs queue
@@ -18,7 +19,12 @@ export class SQSErrorTransport implements LoggerTransport {
 			// TODO when enough information is present to uniquely identify a message, switch the deduplication id to a message hash
 			src += "&MessageGroupId=1&MessageDeduplicationId=" + Math.random();
 		}
-		src += "&MessageBody=" + JSON.stringify(data);
+
+		if (typeof data !== "string") {
+			data = JSON.stringify(data);
+		}
+
+		src += "&MessageBody=" + base64Encode(encodeURIComponent(data));
 
 		img.src = src;
 	}
