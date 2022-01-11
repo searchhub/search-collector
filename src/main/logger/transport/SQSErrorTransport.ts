@@ -1,5 +1,6 @@
 import {LoggerTransport} from "../LoggerTransport";
 import {base64Encode} from "../../utils";
+import {StringResolver} from "../../resolvers";
 
 /**
  * Only adds error messages to an sqs queue
@@ -7,6 +8,8 @@ import {base64Encode} from "../../utils";
 export class SQSErrorTransport implements LoggerTransport {
 
 	constructor(private readonly queue: string,
+							private readonly channel: string,
+							private readonly sessionResolver: StringResolver,
 							private readonly fifo = false) {}
 
 	protected send(data) {
@@ -18,6 +21,10 @@ export class SQSErrorTransport implements LoggerTransport {
 		if (this.fifo) {
 			// TODO when enough information is present to uniquely identify a message, switch the deduplication id to a message hash
 			src += "&MessageGroupId=1&MessageDeduplicationId=" + Math.random();
+		}
+
+		if (!Array.isArray(data) && typeof data !== "string") {
+			data = [data];
 		}
 
 		if (typeof data !== "string") {
@@ -33,6 +40,9 @@ export class SQSErrorTransport implements LoggerTransport {
 		this.send({
 			type: "error",
 			msg,
+			channel: this.channel,
+			session: this.sessionResolver(),
+			timestamp: new Date().getTime(),
 			...dataArgs
 		})
 	};
