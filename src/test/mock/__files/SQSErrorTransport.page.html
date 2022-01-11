@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>E2E Testing</title>
+    <script defer src="/dist/index.window.bundle.js"></script>
+    <script>
+		window.Date = class D {
+			getTime() {
+				return 555;
+			}
+		};
+
+		document.addEventListener("DOMContentLoaded", () => {
+			const {SQSErrorTransport} = window.SearchCollector;
+			const transport = new SQSErrorTransport("http://localhost:8081/error-transport", "default-writer-channel", () => "my-session");
+			transport.error("some error message");
+		});
+    </script>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        .product {
+            width: 100%;
+            background: blue;
+            margin: 10px;
+            color: white;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+</body>
+</html>
