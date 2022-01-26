@@ -31,6 +31,7 @@ describe('RedirectCollector Suite', () => {
 				const trackingData = JSON.parse(params.data.values[0]);
 				expect(trackingData.type).toBe("redirect");
 				expect(trackingData.keywords).toBe("THE REDIRECT QUERY");
+				expect(trackingData.query).toBe("$s=THE REDIRECT QUERY/");
 			})
 			.verify();
 	});
