@@ -2,6 +2,7 @@ import {AbstractCollector} from "./AbstractCollector";
 import {Context} from "../utils/Context";
 import {BooleanResolver, CallbackResolver} from "../resolvers/Resolver";
 import {getSessionStorage} from "../utils";
+import {Query} from "../query";
 
 /**
  * Keep track of human triggered searches followed by a redirect to a page different than the search result page
@@ -47,9 +48,13 @@ export class RedirectCollector extends AbstractCollector {
 			// If we have not landed on the expected search page, it must have been (looove) a redirect
 			if (!this.resolve(this.expectedPageResolver, log)) {
 				// Thus record the redirect
+				const query = new Query();
+				query.setSearch(lastSearch);
+
 				writer.write({
 					type: "redirect",
-					keywords: lastSearch
+					keywords: lastSearch,
+					query: query.toString()
 				});
 			}
 		}
