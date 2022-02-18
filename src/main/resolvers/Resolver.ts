@@ -30,7 +30,7 @@ export const cookieResolver = (name: string = ""): string => getCookie(name);
  *
  * @param name the name of the session cookie
  */
-export const cookieSessionResolver = (name = "SearchCollectorSession"): string => cookieResolver(name) || setCookie(name, generateId(), MINUTES_HALF_HOUR);
+export const cookieSessionResolver = (name = "SearchCollectorSession"): string => setCookie(name, cookieResolver(name) || generateId(), MINUTES_HALF_HOUR);
 
 /**
  * Find the position of a DOM element relative to other DOM elements of the same type.
