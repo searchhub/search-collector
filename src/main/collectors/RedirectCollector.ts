@@ -54,7 +54,8 @@ export class RedirectCollector extends AbstractCollector {
 				writer.write({
 					type: "redirect",
 					keywords: lastSearch,
-					query: query.toString()
+					query: query.toString(),
+					url: window.location.href
 				});
 			}
 		}
