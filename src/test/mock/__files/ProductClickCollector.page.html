@@ -14,7 +14,7 @@
 			} = window.SearchCollector;
 
 			const collector = new CollectorModule({
-				writer: new RestEventWriter("http://localhost:8081/product-click-collector-channel")
+				writer: new RestEventWriter(location.origin + "/product-click-collector-channel")
 			});
 
 			if (new URLSearchParams(window.location.search).get("collector") === "none") {

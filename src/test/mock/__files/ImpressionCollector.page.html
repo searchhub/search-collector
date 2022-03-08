@@ -14,7 +14,7 @@
 			} = window.SearchCollector;
 
 			const collector = new CollectorModule({
-				writer: new RestEventWriter("http://localhost:8081/impression-collector-channel")
+				writer: new RestEventWriter(location.origin + "/impression-collector-channel")
 			});
 
 			collector.add(

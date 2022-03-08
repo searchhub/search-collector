@@ -1,9 +1,18 @@
 import {Page} from "puppeteer";
-import {createStubAsserter, shutdownMockServer, startMockServer, verifyNoUnmatchedRequests, wait} from "../wiremock";
+import {createMockServer} from "../wiremock";
+import {wait} from "../util";
 
 declare const page: Page;
 
 describe('FiredSearchCollector Suite', () => {
+
+	const {
+		startMockServer,
+		shutdownMockServer,
+		verifyNoUnmatchedRequests,
+		createStubAsserter,
+		getHost
+	} = createMockServer();
 
 	beforeAll(async () => {
 		await startMockServer();
@@ -20,7 +29,7 @@ describe('FiredSearchCollector Suite', () => {
 	test('track impression data', async () => {
 		const stubAsserter = await createStubAsserter("FiredSearchCollectorTracking.json");
 
-		await page.goto("http://localhost:8081/FiredSearchCollector.page.html", {waitUntil: 'load'});
+		await page.goto(getHost() + "/FiredSearchCollector.page.html", {waitUntil: 'load'});
 		await page.click("#searchButton");
 
 		await wait(100); // wait for the request to settle

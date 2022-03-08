@@ -1,9 +1,7 @@
 module.exports = {
 	preset: "jest-puppeteer",
 	testTimeout: 15000,
-	globals: {
-		URL: "http://localhost:8081"
-	},
+	globals: {},
 	testMatch: [
 		"**/test/**/*.test.ts"
 	],

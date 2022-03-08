@@ -14,7 +14,7 @@
 			} = window.SearchCollector;
 
 			const collector = new CollectorModule({
-				writer: new RestEventWriter("http://localhost:8081/fired-search-collector-channel")
+				writer: new RestEventWriter(location.origin + "/fired-search-collector-channel")
 			});
 
 			const firedSearchCallback = (callback) => {

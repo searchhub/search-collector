@@ -14,7 +14,7 @@
 			} = window.SearchCollector;
 
 			const collector = new CollectorModule({
-				writer: new RestEventWriter("http://localhost:8081/browser-collector-channel")
+				writer: new RestEventWriter(location.origin + "/browser-collector-channel")
 			});
 
 			collector.add(new BrowserCollector({recordReferrer: true, recordUrl: false, recordLanguage: false}));

@@ -1,9 +1,18 @@
 import {Page} from "puppeteer";
-import {createStubAsserter, shutdownMockServer, startMockServer, verifyNoUnmatchedRequests, wait} from "../wiremock";
+import {createMockServer} from "../wiremock";
+import {wait} from "../util";
 
 declare const page: Page;
 
 describe('InstantSearchQueryCollector Suite', () => {
+
+	const {
+		startMockServer,
+		shutdownMockServer,
+		verifyNoUnmatchedRequests,
+		createStubAsserter,
+		getHost
+	} = createMockServer();
 
 	beforeAll(async () => {
 		await startMockServer();
@@ -20,7 +29,7 @@ describe('InstantSearchQueryCollector Suite', () => {
 	test('track instant search data', async () => {
 		const stubAsserter = await createStubAsserter("InstantSearchQueryCollectorTracking.json");
 
-		await page.goto("http://localhost:8081/InstantSearchQueryCollector.page.html", {waitUntil: 'load'});
+		await page.goto(getHost() + "/InstantSearchQueryCollector.page.html", {waitUntil: 'load'});
 		await page.click("#searchInput");
 		await page.keyboard.press('a');
 		await page.keyboard.press('b');

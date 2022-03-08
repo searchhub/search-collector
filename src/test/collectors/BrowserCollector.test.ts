@@ -1,9 +1,17 @@
 import {Page} from "puppeteer";
-import {createStubAsserter, shutdownMockServer, startMockServer, verifyNoUnmatchedRequests} from "../wiremock";
+import {createMockServer} from "../wiremock";
 
 declare const page: Page;
 
 describe('BrowserCollector Suite', () => {
+
+	const {
+		startMockServer,
+		shutdownMockServer,
+		verifyNoUnmatchedRequests,
+		createStubAsserter,
+		getHost
+	} = createMockServer();
 
 	beforeAll(async () => {
 		await startMockServer();
@@ -22,7 +30,7 @@ describe('BrowserCollector Suite', () => {
 		const recordReferrerAsserter = await createStubAsserter("BrowserCollectorTracking.recordReferrer.json");
 		const recordLanguageAsserter = await createStubAsserter("BrowserCollectorTracking.recordLanguage.json");
 
-		await page.goto("http://localhost:8081/BrowserCollector.page.html", {waitUntil: 'load'});
+		await page.goto(getHost() + "/BrowserCollector.page.html", {waitUntil: 'load'});
 		await page.waitForNetworkIdle();
 
 		await recordLanguageAsserter.verifyQueryParams(queryParams => {

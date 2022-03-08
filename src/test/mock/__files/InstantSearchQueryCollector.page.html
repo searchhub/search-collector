@@ -13,7 +13,7 @@
 			} = window.SearchCollector;
 
 			const collector = new CollectorModule({
-				writer: new RestEventWriter("http://localhost:8081/instant-search-query-collector-channel")
+				writer: new RestEventWriter(location.origin + "/instant-search-query-collector-channel")
 			});
 
 			collector.add(new InstantSearchQueryCollector("#searchInput"));

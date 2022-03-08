@@ -1,9 +1,18 @@
 import {Page} from "puppeteer";
-import {createStubAsserter, shutdownMockServer, startMockServer, verifyNoUnmatchedRequests, wait} from "../wiremock";
+import {createMockServer} from "../wiremock";
+import {wait} from "../util";
 
 declare const page: Page;
 
 describe('ProductClickCollector Suite', () => {
+
+	const {
+		startMockServer,
+		shutdownMockServer,
+		verifyNoUnmatchedRequests,
+		createStubAsserter,
+		getHost
+	} = createMockServer();
 
 	beforeAll(async () => {
 		await startMockServer();
@@ -20,7 +29,7 @@ describe('ProductClickCollector Suite', () => {
 	test('track all product click data', async () => {
 		const asserter = await createStubAsserter("ProductClickCollectorTracking.json");
 
-		await page.goto("http://localhost:8081/ProductClickCollector.page.html?collector=all", {waitUntil: 'load'});
+		await page.goto(getHost() + "/ProductClickCollector.page.html?collector=all", {waitUntil: 'load'});
 		await page.click("#clickMe");
 		await wait(100);
 
@@ -40,7 +49,7 @@ describe('ProductClickCollector Suite', () => {
 	test('track product click data', async () => {
 		const asserter = await createStubAsserter("ProductClickCollectorTracking.json");
 
-		await page.goto("http://localhost:8081/ProductClickCollector.page.html?collector=none", {waitUntil: 'load'});
+		await page.goto(getHost() + "/ProductClickCollector.page.html?collector=none", {waitUntil: 'load'});
 		await page.click("#clickMe");
 		await wait(100);
 
