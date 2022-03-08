@@ -13,7 +13,7 @@
 			} = window.SearchCollector;
 
 			const collector = new CollectorModule({
-				writer: new RestEventWriter("http://localhost:8081/search-result-collector-channel")
+				writer: new RestEventWriter(location.origin + "/search-result-collector-channel")
 			});
 
 			collector.add(new SearchResultCollector(

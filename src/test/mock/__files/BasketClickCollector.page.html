@@ -13,7 +13,7 @@
 			} = window.SearchCollector;
 
 			const collector = new CollectorModule({
-				writer: new RestEventWriter("http://localhost:8081/basket-click-collector-channel")
+				writer: new RestEventWriter(location.origin + "/basket-click-collector-channel")
 			});
 
 			collector.add(

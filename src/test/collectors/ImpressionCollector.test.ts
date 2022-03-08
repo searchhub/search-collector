@@ -1,9 +1,18 @@
 import {Page} from "puppeteer";
-import {createStubAsserter, shutdownMockServer, startMockServer, verifyNoUnmatchedRequests, wait} from "../wiremock";
+import {createMockServer} from "../wiremock";
+import {wait} from "../util";
 
 declare const page: Page;
 
 describe('ImpressionCollectorTracking Suite', () => {
+
+	const {
+		startMockServer,
+		shutdownMockServer,
+		verifyNoUnmatchedRequests,
+		createStubAsserter,
+		getHost
+	} = createMockServer();
 
 	beforeAll(async () => {
 		await startMockServer();
@@ -20,7 +29,7 @@ describe('ImpressionCollectorTracking Suite', () => {
 	test('track impression data', async () => {
 		const stubAsserter = await createStubAsserter("ImpressionCollectorTracking.json");
 
-		await page.goto("http://localhost:8081/ImpressionCollector.page.html", {waitUntil: 'load'});
+		await page.goto(getHost() + "/ImpressionCollector.page.html", {waitUntil: 'load'});
 		await page.click("#scrollTarget");//click scrolls the element into view
 
 		await wait(750); //ImpressionCollector is debounced, give it some more time

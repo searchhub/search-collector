@@ -1,9 +1,17 @@
 import {Page} from "puppeteer";
-import {createStubAsserter, shutdownMockServer, startMockServer, verifyNoUnmatchedRequests} from "../wiremock";
+import {createMockServer} from "../wiremock";
 
 declare const page: Page;
 
 describe('SearchResultCollector Suite', () => {
+
+	const {
+		startMockServer,
+		shutdownMockServer,
+		verifyNoUnmatchedRequests,
+		createStubAsserter,
+		getHost
+	} = createMockServer();
 
 	beforeAll(async () => {
 		await startMockServer();
@@ -20,7 +28,7 @@ describe('SearchResultCollector Suite', () => {
 	test('track search result data', async () => {
 		const stubAsserter = await createStubAsserter("SearchResultCollectorTracking.json");
 
-		await page.goto("http://localhost:8081/SearchResultCollector.page.html", {waitUntil: 'load'});
+		await page.goto(getHost() + "/SearchResultCollector.page.html", {waitUntil: 'load'});
 
 		await stubAsserter.verifyCallCount(1)
 			.verifyBody(body => expect(body).toBeDefined())

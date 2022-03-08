@@ -1,9 +1,18 @@
 import {Page} from "puppeteer";
-import {createStubAsserter, shutdownMockServer, startMockServer, verifyNoUnmatchedRequests, wait} from "../wiremock";
+import {createMockServer} from "../wiremock";
+import {wait} from "../util";
 
 declare const page: Page;
 
 describe('BasketClickCollector Suite', () => {
+
+	const {
+		startMockServer,
+		shutdownMockServer,
+		verifyNoUnmatchedRequests,
+		createStubAsserter,
+		getHost
+	} = createMockServer();
 
 	beforeAll(async () => {
 		await startMockServer();
@@ -20,7 +29,7 @@ describe('BasketClickCollector Suite', () => {
 	test('track a basket click', async () => {
 		const asserter = await createStubAsserter("BasketClickCollectorTracking.json");
 
-		await page.goto("http://localhost:8081/BasketClickCollector.page.html", {waitUntil: 'load'});
+		await page.goto(getHost() + "/BasketClickCollector.page.html", {waitUntil: 'load'});
 		await page.click("#clickMe");
 		await wait(100);
 

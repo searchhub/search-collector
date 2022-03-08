@@ -17,7 +17,7 @@
 				debug: true,
 				sqs: true,
 				channel: "default-writer-channel",
-				endpoint: "http://localhost:8081/default-writer-channel",
+				endpoint: location.origin + "/default-writer-channel",
 				resolver: {
 					queryResolver: () => new Query(),
 					sessionResolver: () => "my-session"

@@ -1,9 +1,18 @@
 import {Page} from "puppeteer";
-import {createStubAsserter, shutdownMockServer, startMockServer, verifyNoUnmatchedRequests, wait} from "../wiremock";
+import {createMockServer} from "../wiremock";
+import {wait} from "../util";
 
 declare const page: Page;
 
 describe('RedirectCollector Suite', () => {
+
+	const {
+		startMockServer,
+		shutdownMockServer,
+		verifyNoUnmatchedRequests,
+		createStubAsserter,
+		getHost
+	} = createMockServer();
 
 	beforeAll(async () => {
 		await startMockServer();
@@ -20,7 +29,7 @@ describe('RedirectCollector Suite', () => {
 	test('track redirect data', async () => {
 		const stubAsserter = await createStubAsserter("RedirectCollectorTracking.json");
 
-		await page.goto("http://localhost:8081/RedirectCollector.page.html", {waitUntil: 'load'});
+		await page.goto(getHost() + "/RedirectCollector.page.html", {waitUntil: 'load'});
 		page.click("#searchButton");
 		await page.waitForNavigation({waitUntil: "networkidle0"});
 
@@ -32,7 +41,7 @@ describe('RedirectCollector Suite', () => {
 				expect(trackingData.type).toBe("redirect");
 				expect(trackingData.keywords).toBe("THE REDIRECT QUERY");
 				expect(trackingData.query).toBe("$s=THE REDIRECT QUERY/");
-				expect(trackingData.url).toBe("http://localhost:8081/RedirectCollector.page.html?isSearchPage=false");
+				expect(trackingData.url).toBe(getHost() + "/RedirectCollector.page.html?isSearchPage=false");
 			})
 			.verify();
 	});

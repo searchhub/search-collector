@@ -13,7 +13,7 @@
 			} = window.SearchCollector;
 
 			const collector = new CollectorModule({
-				writer: new RestEventWriter("http://localhost:8081/redirect-collector-channel")
+				writer: new RestEventWriter(location.origin + "/redirect-collector-channel")
 			});
 
 			const firedSearchCallback = (callback) => {

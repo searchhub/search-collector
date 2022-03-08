@@ -1,9 +1,18 @@
 import {Page} from "puppeteer";
-import {createStubAsserter, shutdownMockServer, startMockServer, verifyNoUnmatchedRequests, wait} from "../wiremock";
+import {createMockServer} from "../wiremock";
+import {wait} from "../util";
 
 declare const page: Page;
 
 describe('SuggestSearchCollector Suite', () => {
+
+	const {
+		startMockServer,
+		shutdownMockServer,
+		verifyNoUnmatchedRequests,
+		createStubAsserter,
+		getHost
+	} = createMockServer();
 
 	beforeAll(async () => {
 		await startMockServer();
@@ -20,7 +29,7 @@ describe('SuggestSearchCollector Suite', () => {
 	test('track suggest search data', async () => {
 		const stubAsserter = await createStubAsserter("SuggestSearchCollectorTracking.json");
 
-		await page.goto("http://localhost:8081/SuggestSearchCollector.page.html", {waitUntil: 'load'});
+		await page.goto(getHost() + "/SuggestSearchCollector.page.html", {waitUntil: 'load'});
 		await page.click('[data-id="S5"]');
 
 		await wait(100); // wait for the request to settle

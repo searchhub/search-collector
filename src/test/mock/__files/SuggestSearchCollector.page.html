@@ -14,7 +14,7 @@
 			} = window.SearchCollector;
 
 			const collector = new CollectorModule({
-				writer: new RestEventWriter("http://localhost:8081/suggest-search-collector-channel")
+				writer: new RestEventWriter(location.origin + "/suggest-search-collector-channel")
 			});
 
 			collector.add(new SuggestSearchCollector((writer, type, context) => {

@@ -1,9 +1,18 @@
-import {createStubAsserter, shutdownMockServer, startMockServer, verifyNoUnmatchedRequests, wait} from "../wiremock";
+import {createMockServer} from "../wiremock";
 import {Page} from "puppeteer";
+import {wait} from "../util";
 
 declare var page: Page;
 
 describe('Test the SQSErrorTransport', () => {
+
+	const {
+		startMockServer,
+		shutdownMockServer,
+		verifyNoUnmatchedRequests,
+		createStubAsserter,
+		getHost
+	} = createMockServer();
 
 	beforeAll(async () => {
 		await startMockServer();
@@ -20,7 +29,7 @@ describe('Test the SQSErrorTransport', () => {
 	test('SQSErrortTransport', async () => {
 		const asserter = await createStubAsserter("SQSErrortTransport.json");
 
-		await page.goto("http://localhost:8081/SQSErrorTransport.page.html", {waitUntil: 'load'});
+		await page.goto(getHost() + "/SQSErrorTransport.page.html", {waitUntil: 'load'});
 		await wait(1200); // wait more than a second for the buffering writer
 
 		await asserter.verifyCallCount(1)
