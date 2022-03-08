@@ -32,6 +32,7 @@ describe('RedirectCollector Suite', () => {
 				expect(trackingData.type).toBe("redirect");
 				expect(trackingData.keywords).toBe("THE REDIRECT QUERY");
 				expect(trackingData.query).toBe("$s=THE REDIRECT QUERY/");
+				expect(trackingData.url).toBe("http://localhost:8081/RedirectCollector.page.html?isSearchPage=false");
 			})
 			.verify();
 	});
