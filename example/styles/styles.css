@@ -1,0 +1,106 @@
+header {
+    width: 100%;
+    height: 90px;
+    background-color: #232a35;
+}
+
+img, form {
+    width: 100%;
+}
+
+input {
+    max-width: 800px;
+}
+
+select.custom-select {
+    background: white;
+    min-width: 50px;
+    text-align: center;
+}
+
+button.btn.btn-elegant {
+    color: white;
+    background: #f84545;
+    margin-left: 10px;
+}
+
+.centerHorizontal {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.centerHorizontalStart {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    flex-direction: column;
+}
+
+body.basket {
+    background: #eeeeee;;
+}
+
+.sCard {
+    background: white;
+    padding: 15px;
+    border-radius: 6px;
+    box-shadow: rgb(0 0 0 / 20%) 0px 2px 1px -1px, rgb(0 0 0 / 14%) 0px 1px 1px 0px, rgb(0 0 0 / 12%) 0px 1px 3px 0px;
+}
+
+main.order img {
+    width: 50%;
+}
+
+.basketItem {
+    margin-bottom: 25px;
+}
+
+.basketSummary {
+    margin-left: 15px;
+    margin-bottom: 25px;
+}
+
+.features {
+    margin-left: 25px;
+}
+
+.logo {
+    width: 120px;
+}
+
+.large {
+    width: 90%;
+}
+
+hr {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    border: 0;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+a {
+    color: inherit; /* blue colors for links too */
+    text-decoration: inherit; /* no underline */
+}
+
+main.products h5 {
+    font-weight: bold;
+}
+
+main.products img {
+    padding: 0 10% 0 10%;
+}
+
+.price {
+    color: #6c6969;
+}
+
+.centerHorizontalBetween {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: row;
+}

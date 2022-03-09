@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Product Listing Page</title>
+
+    <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1,user-scalable=yes">
+
+    <link rel="stylesheet" href="styles/bootstrap.min.css">
+    <link rel="stylesheet" href="styles/reset.css">
+    <link rel="stylesheet" href="styles/styles.css">
+
+    <script defer src="scripts.js"></script>
+</head>
+<body>
+
+<header class="d-flex justify-content-center align-items-center p-3">
+    <a class="logoContainer d-none d-md-block" href="">
+        <img class="logo" src="images/SearchHub_weiss.png" alt="searchhub logo">
+    </a>
+    <form class="d-flex justify-content-center align-items-center">
+        <input type="search" class="form-control" placeholder="Search..." data-track-id="searchBox">
+        <button type="submit" class="btn btn-elegant" data-track-id="searchButton">Search</button>
+    </form>
+</header>
+
+<main class="container pdp pt-4">
+    <section class="row pt-4">
+        <div class="col-12 col-md-6">
+            <img src="images/pink_dress.png" alt="product image">
+        </div>
+        <div class="col-12 col-md-6">
+            <h3 class="pb-3">Pink Dress</h3>
+            <div class="price" data-track-id="priceContainer">19,99 €</div>
+            <hr class="mt-5"/>
+
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">Size</span>
+                </div>
+                <select class="custom-select">
+                    <option value="S" selected>S</option>
+                    <option value="M">M</option>
+                    <option value="L">L</option>
+                </select>
+            </div>
+            <hr/>
+
+            <div class="input-group input-group-sm mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">Quantitiy</span>
+                </div>
+                <input type="number" class="form-control" style="width: 50px" value="1">
+            </div>
+            <hr/>
+
+            <button type="submit" class="btn btn-elegant mb-4 large" data-track-id="addToCartPDP">Add to Cart</button>
+
+            <div class="text">
+                <h5 class="mb-2">Description</h5>
+                <p class="mb-3">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor
+                    invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo
+                    duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor
+                    sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor
+                    invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.</p>
+
+                <h5 class="mb-2">Features</h5>
+                <div class="mb-3 features">
+                    <ul>
+                        <li>lorem ipsum dolor sit amet</li>
+                        <li>lorem ipsum dolor sit amet</li>
+                        <li>lorem ipsum dolor sit amet</li>
+                        <li>lorem ipsum dolor sit amet</li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+    </section>
+</main>
+</body>
+</html>

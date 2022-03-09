@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Basket Overview</title>
+
+    <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1,user-scalable=yes">
+
+    <link rel="stylesheet" href="styles/bootstrap.min.css">
+    <link rel="stylesheet" href="styles/reset.css">
+    <link rel="stylesheet" href="styles/styles.css">
+
+    <script defer src="scripts.js"></script>
+</head>
+<body class="basket">
+
+<header class="d-flex justify-content-center align-items-center p-3">
+    <a class="logoContainer d-none d-md-block" href="">
+        <img class="logo" src="images/SearchHub_weiss.png" alt="searchhub logo">
+    </a>
+    <form class="d-flex justify-content-center align-items-center">
+        <input type="search" class="form-control" placeholder="Search..." data-track-id="searchBox">
+        <button type="submit" class="btn btn-elegant" data-track-id="searchButton">Search</button>
+    </form>
+</header>
+
+<main class="container basket pt-4 d-flex justify-content-center align-items-center flex-column">
+    <h1 class="pb-3">Basket</h1>
+    <section>
+        <div class="row">
+            <div class="col-8">
+                <div class="row sCard basketItem">
+                    <div class="col-3 centerHorizontal">
+                        <img src="images/pink_dress.png" alt="product image">
+                    </div>
+                    <div class="col-3 centerHorizontalStart">
+                        <h5>Pink Dress</h5>
+                        <small class="text-muted">Lorem ipsum dolor.</small>
+                    </div>
+                    <div class="col-3 centerHorizontal">
+                        <input type="number" class="form-control" style="width: 50px" value="1">
+                    </div>
+                    <div class="col-3 centerHorizontal">
+                        <div class="price">19,99 €</div>
+                    </div>
+                </div>
+
+                <div class="row sCard basketItem">
+                    <div class="col-3 centerHorizontal">
+                        <img src="images/blue_high_heel.png" alt="product image">
+                    </div>
+                    <div class="col-3 centerHorizontalStart">
+                        <h5>Blue High Heels</h5>
+                        <small class="text-muted">Lorem ipsum dolor.</small>
+                    </div>
+                    <div class="col-3 centerHorizontal">
+                        <input type="number" class="form-control" style="width: 50px" value="1">
+                    </div>
+                    <div class="col-3 centerHorizontal">
+                        <div class="price">19,99 €</div>
+                    </div>
+                </div>
+
+                <div class="row sCard basketItem">
+                    <div class="col-3 centerHorizontal">
+                        <img src="images/green_dress.png" alt="product image">
+                    </div>
+                    <div class="col-3 centerHorizontalStart">
+                        <h5>Green Dress</h5>
+                        <small class="text-muted">Lorem ipsum dolor.</small>
+                    </div>
+                    <div class="col-3 centerHorizontal">
+                        <input type="number" class="form-control" style="width: 50px" value="1">
+                    </div>
+                    <div class="col-3 centerHorizontal">
+                        <div class="price">19,99 €</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="basketSummary sCard">
+                    <h3 class="mb-3">Summary</h3>
+                    <div class="pb-1 centerHorizontalBetween">
+                        <div>Sum</div>
+                        <div>59,97 €</div>
+                    </div>
+                    <div class="pb-1 centerHorizontalBetween">
+                        <div>Delivery charge</div>
+                        <div>4,98 €</div>
+                    </div>
+                    <hr/>
+                    <div class="centerHorizontalBetween">
+                        <h5>Total</h5>
+                        <h4 class="fw-bold">64,95 €</h4>
+                    </div>
+                    <div class="pt-4"></div>
+                    <button type="submit" class="btn btn-elegant mb-4 large">Make purchase</button>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+</body>
+</html>
