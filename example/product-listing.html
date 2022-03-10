@@ -10,7 +10,9 @@
     <link rel="stylesheet" href="styles/reset.css">
     <link rel="stylesheet" href="styles/styles.css">
 
-    <script defer src="scripts.js"></script>
+    <script defer src="util.js"></script>
+    <script defer src="index.window.bundle.js"></script>
+    <script defer src="collector-integration.js"></script>
 </head>
 <body>
 
@@ -20,18 +22,25 @@
     </a>
     <form class="d-flex justify-content-center align-items-center">
         <input type="search" class="form-control" placeholder="Search..." data-track-id="searchBox">
-        <button type="submit" class="btn btn-elegant" data-track-id="searchButton">Search</button>
+        <button type="button" class="btn btn-elegant" data-track-id="searchButton">Search</button>
     </form>
 </header>
 
 <main class="container products">
+    <section class="pt-5 d-flex justify-content-center align-items-center" style="font-size: 20px">
+        Your search for&nbsp;<span id="searchPhrase" class="fw-bold"></span>&nbsp;produced&nbsp;<span
+            data-track-id="resultCountContainer" class="fw-bold">9</span>&nbsp;results
+    </section>
+    <script>
+		document.querySelector("#searchPhrase").textContent = new URLSearchParams(window.location.search).get("query");
+    </script>
     <section class="row">
         <div class="col-12 col-md-6 col-xl-4 p-5">
             <a href="/product-detail-page.html" class="d-flex flex-column align-items-center justify-content-center"
                data-track-id="product" data-product-id="1234">
-                <img src="images/purple_dress.png" alt="product image">
-                <h5 class="m-2">Purple Dress</h5>
-                <div data-track-id="priceContainer" class="price">19,99 €</div>
+                <img src="images/pink_dress.png" alt="product image">
+                <h5 class="m-2">Pink Dress</h5>
+                <div data-track-id="priceContainer" class="price">19.99 €</div>
             </a>
         </div>
         <div class="col-12 col-md-6 col-xl-4 p-5">
@@ -39,15 +48,15 @@
                data-track-id="product" data-product-id="1235">
                 <img src="images/pink_high_heel.png" alt="product image">
                 <h5 class="m-2">Pink High Heel</h5>
-                <div data-track-id="priceContainer" class="price">19,99 €</div>
+                <div data-track-id="priceContainer" class="price">19.99 €</div>
             </a>
         </div>
         <div class="col-12 col-md-6 col-xl-4 p-5">
             <a href="/product-detail-page.html" class="d-flex flex-column align-items-center justify-content-center"
                data-track-id="product" data-product-id="1236">
                 <img src="images/purple_boot.png" alt="product image">
-                <h5 class="m-2">Golden Jeans</h5>
-                <div data-track-id="priceContainer" class="price">19,99 €</div>
+                <h5 class="m-2">Purple Boot</h5>
+                <div data-track-id="priceContainer" class="price">19.99 €</div>
             </a>
         </div>
         <div class="col-12 col-md-6 col-xl-4 p-5">
@@ -55,7 +64,7 @@
                data-track-id="product" data-product-id="1237">
                 <img src="images/green_leather_shoe.png" alt="product image">
                 <h5 class="m-2">Green Leather Shoe</h5>
-                <div data-track-id="priceContainer" class="price">19,99 €</div>
+                <div data-track-id="priceContainer" class="price">19.99 €</div>
             </a>
         </div>
         <div class="col-12 col-md-6 col-xl-4 p-5">
@@ -63,7 +72,7 @@
                data-track-id="product" data-product-id="1238">
                 <img src="images/grey_polo.png" alt="product image">
                 <h5 class="m-2">Grey Polo</h5>
-                <div data-track-id="priceContainer" class="price">19,99 €</div>
+                <div data-track-id="priceContainer" class="price">19.99 €</div>
             </a>
         </div>
         <div class="col-12 col-md-6 col-xl-4 p-5">
@@ -71,33 +80,33 @@
                data-track-id="product" data-product-id="1239">
                 <img src="images/yellow_sneaker.png" alt="product image">
                 <h5 class="m-2">Yellow Sneaker</h5>
-                <div data-track-id="priceContainer" class="price">19,99 €</div>
+                <div data-track-id="priceContainer" class="price">19.99 €</div>
             </a>
         </div>
         <div class="col-12 col-md-6 col-xl-4 p-5">
             <a href="/product-detail-page.html" class="d-flex flex-column align-items-center justify-content-center"
                data-track-id="product" data-product-id="1240">
                 <img src="images/grey_tshirt.png" alt="product image">
-                <h5 class="m-2">Purple Dress</h5>
-                <div data-track-id="priceContainer" class="price">19,99 €</div>
+                <h5 class="m-2">Grey Shirt</h5>
+                <div data-track-id="priceContainer" class="price">19.99 €</div>
             </a>
         </div>
         <div class="col-12 col-md-6 col-xl-4 p-5">
             <a href="/product-detail-page.html" class="d-flex flex-column align-items-center justify-content-center"
-               data-track-id="product" data-product-id="1237">
+               data-track-id="product" data-product-id="1241">
                 <img src="images/blue_trousers.png" alt="product image">
-                <h5 class="m-2">Title</h5>
+                <h5 class="m-2">Blue Trousers</h5>
                 <p>LOREM IPSUM</p>
-                <div data-track-id="priceContainer" class="price">19,99 €</div>
+                <div data-track-id="priceContainer" class="price">19.99 €</div>
             </a>
         </div>
         <div class="col-12 col-md-6 col-xl-4 p-5">
             <a href="/product-detail-page.html" class="d-flex flex-column align-items-center justify-content-center"
-               data-track-id="product" data-product-id="1237">
+               data-track-id="product" data-product-id="1242">
                 <img src="images/green_coat.png" alt="product image">
-                <h5 class="m-2">Title</h5>
+                <h5 class="m-2">Green Coat</h5>
                 <p>LOREM IPSUM</p>
-                <div data-track-id="priceContainer" class="price">19,99 €</div>
+                <div data-track-id="priceContainer" class="price">19.99 €</div>
             </a>
         </div>
     </section>

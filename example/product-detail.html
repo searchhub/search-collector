@@ -10,7 +10,9 @@
     <link rel="stylesheet" href="styles/reset.css">
     <link rel="stylesheet" href="styles/styles.css">
 
-    <script defer src="scripts.js"></script>
+    <script src="util.js"></script>
+    <script defer src="index.window.bundle.js"></script>
+    <script defer src="collector-integration.js"></script>
 </head>
 <body>
 
@@ -20,18 +22,22 @@
     </a>
     <form class="d-flex justify-content-center align-items-center">
         <input type="search" class="form-control" placeholder="Search..." data-track-id="searchBox">
-        <button type="submit" class="btn btn-elegant" data-track-id="searchButton">Search</button>
+        <button type="button" class="btn btn-elegant" data-track-id="searchButton">Search</button>
     </form>
 </header>
 
 <main class="container pdp pt-4">
-    <section class="row pt-4">
+    <section id="container" class="row pt-4"></section>
+    <script>
+		const id = new URLSearchParams(window.location.search).get("id");
+		const item = items[id];
+		document.querySelector("#container").innerHTML = `
         <div class="col-12 col-md-6">
-            <img src="images/pink_dress.png" alt="product image">
+            <img src="${item.image}" alt="product image">
         </div>
         <div class="col-12 col-md-6">
-            <h3 class="pb-3">Pink Dress</h3>
-            <div class="price" data-track-id="priceContainer">19,99 €</div>
+            <h3 class="pb-3">${item.name}</h3>
+            <div class="price" data-track-id="priceContainer">19.99 €</div>
             <hr class="mt-5"/>
 
             <div class="input-group mb-3">
@@ -50,11 +56,14 @@
                 <div class="input-group-prepend">
                     <span class="input-group-text">Quantitiy</span>
                 </div>
-                <input type="number" class="form-control" style="width: 50px" value="1">
+                <input type="number" class="form-control" style="width: 50px" value="1" disabled="disabled">
             </div>
             <hr/>
 
-            <button type="submit" class="btn btn-elegant mb-4 large" data-track-id="addToCartPDP">Add to Cart</button>
+            <button type="submit" class="btn btn-elegant mb-4 large"
+                    data-track-id="addToCartPDP"
+                    data-product-id="${item.id}">Add to Cart
+            </button>
 
             <div class="text">
                 <h5 class="mb-2">Description</h5>
@@ -76,7 +85,8 @@
             </div>
 
         </div>
-    </section>
+        `;
+    </script>
 </main>
 </body>
 </html>

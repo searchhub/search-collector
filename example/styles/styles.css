@@ -38,7 +38,7 @@ button.btn.btn-elegant {
     flex-direction: column;
 }
 
-body.basket {
+body.basket, body.thankyou {
     background: #eeeeee;;
 }
 
@@ -103,4 +103,8 @@ main.products img {
     justify-content: space-between;
     align-items: center;
     flex-direction: row;
+}
+
+h1, h2, h3, h4 {
+    text-align: center;
 }

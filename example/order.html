@@ -5,12 +5,17 @@
     <title>Order Summary</title>
 
     <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1,user-scalable=yes">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"/>
+    <meta http-equiv="Pragma" content="no-cache"/>
+    <meta http-equiv="Expires" content="0"/>
 
     <link rel="stylesheet" href="styles/bootstrap.min.css">
     <link rel="stylesheet" href="styles/reset.css">
     <link rel="stylesheet" href="styles/styles.css">
 
-    <script defer src="scripts.js"></script>
+    <script src="util.js"></script>
+    <script defer src="index.window.bundle.js"></script>
+    <script defer src="collector-integration.js"></script>
 </head>
 <body class="basket">
 
@@ -20,16 +25,15 @@
     </a>
     <form class="d-flex justify-content-center align-items-center">
         <input type="search" class="form-control" placeholder="Search..." data-track-id="searchBox">
-        <button type="submit" class="btn btn-elegant" data-track-id="searchButton">Search</button>
+        <button type="button" class="btn btn-elegant" data-track-id="searchButton">Search</button>
     </form>
 </header>
 
-<main class="container order pt-4 d-flex justify-content-center align-items-center flex-column">
+<main class="container order pt-4">
     <h1 class="pb-3">Order Summary</h1>
-
     <section>
         <div class="row">
-            <div class="col-8">
+            <div id="itemsContainer" class="col-8">
                 <section class="row sCard mb-3">
                     <div class="col-6">
                         <h5 class="pb-2">Delivery Address</h5>
@@ -44,55 +48,33 @@
                         <small class="pb-1">55555 Entenhausen</small>
                     </div>
                 </section>
-
-                <div class="row sCard mb-2">
-                    <div class="col-3 centerHorizontal">
-                        <img src="images/pink_dress.png" alt="product image">
-                    </div>
-                    <div class="col-3 centerHorizontalStart">
-                        <h5>Pink Dress</h5>
-                        <small class="text-muted">Lorem ipsum dolor.</small>
-                    </div>
-                    <div class="col-3 centerHorizontal">
-                        <input type="number" class="form-control" style="width: 50px" value="1" disabled="disabled">
-                    </div>
-                    <div class="col-3 centerHorizontal">
-                        <div class="price">19,99 €</div>
-                    </div>
-                </div>
-
-                <div class="row sCard mb-2">
-                    <div class="col-3 centerHorizontal">
-                        <img src="images/blue_high_heel.png" alt="product image">
-                    </div>
-                    <div class="col-3 centerHorizontalStart">
-                        <h5>Blue High Heels</h5>
-                        <small class="text-muted">Lorem ipsum dolor.</small>
-                    </div>
-                    <div class="col-3 centerHorizontal">
-                        <input type="number" class="form-control" style="width: 50px" value="1" disabled="disabled">
-                    </div>
-                    <div class="col-3 centerHorizontal">
-                        <div class="price">19,99 €</div>
-                    </div>
-                </div>
-
-                <div class="row sCard mb-2">
-                    <div class="col-3 centerHorizontal">
-                        <img src="images/green_dress.png" alt="product image">
-                    </div>
-                    <div class="col-3 centerHorizontalStart">
-                        <h5>Green Dress</h5>
-                        <small class="text-muted">Lorem ipsum dolor.</small>
-                    </div>
-                    <div class="col-3 centerHorizontal">
-                        <input type="number" class="form-control" style="width: 50px" value="1" disabled="disabled">
-                    </div>
-                    <div class="col-3 centerHorizontal">
-                        <div class="price">19,99 €</div>
-                    </div>
-                </div>
             </div>
+            <script>
+				const basketItems = basket.toItems();
+				const tplContainer = document.querySelector("#itemsContainer");
+
+				tplContainer.innerHTML = tplContainer.innerHTML + basketItems.map(item => `
+                         <div class="row sCard mb-2" data-track-id="checkoutProduct" data-product-id="${item.id}">
+                            <div class="col-3 centerHorizontal">
+                                <img src="${item.image}" alt="product image">
+                            </div>
+                            <div class="col-3 centerHorizontalStart">
+                                <h5>Pink Dress</h5>
+                                <small class="text-muted">Lorem ipsum dolor.</small>
+                            </div>
+                            <div class="col-3 centerHorizontal">
+                                <input type="number" class="form-control"
+                                       data-track-id="checkoutQuantity"
+                                       style="width: 50px"
+                                       value="${item.quantity}" disabled="disabled">
+                            </div>
+                            <div class="col-3 centerHorizontal">
+                                <div class="price" data-track-id="priceContainer">19.99 €</div>
+                            </div>
+                        </div>
+                    `)
+					.reduce((acc, tpl) => acc + tpl, "");
+            </script>
             <div class="col-4">
                 <div class="basketSummary sCard">
                     <h3 class="mb-3">Summary</h3>
@@ -110,7 +92,7 @@
                         <h4 class="fw-bold">64,95 €</h4>
                     </div>
                     <div class="pt-4"></div>
-                    <button type="submit" data-track-id="checkoutButton" class="btn btn-elegant mb-4">
+                    <button type="button" data-track-id="checkoutButton" class="btn btn-elegant large mb-4">
                         Commit and Buy
                     </button>
                 </div>
