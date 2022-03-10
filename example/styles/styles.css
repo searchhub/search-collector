@@ -45,6 +45,8 @@ body.basket, body.thankyou {
 .sCard {
     background: white;
     padding: 15px;
+    margin-left: 10px;
+    margin-right: 10px;
     border-radius: 6px;
     box-shadow: rgb(0 0 0 / 20%) 0px 2px 1px -1px, rgb(0 0 0 / 14%) 0px 1px 1px 0px, rgb(0 0 0 / 12%) 0px 1px 3px 0px;
 }
@@ -107,4 +109,13 @@ main.products img {
 
 h1, h2, h3, h4 {
     text-align: center;
+}
+
+pre, code {
+    max-width: 100%;
+    overflow-x: scroll;
+}
+
+#events {
+    width: 100%;
 }

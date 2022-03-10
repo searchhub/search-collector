@@ -32,7 +32,7 @@
 <main class="container basket pt-4">
     <h1 class="pb-3">Basket</h1>
     <div class="row">
-        <div id="basketItems" class="col-8"></div>
+        <div id="basketItems" class="col-12 col-md-8"></div>
         <script>
 			const basketItems = basket.toItems();
 			const container = document.querySelector("#basketItems");
@@ -54,7 +54,7 @@
                                 </div>`)
 				.reduce((acc, template) => acc + template, "");
         </script>
-        <div class="col-4">
+        <div class="col-12 col-md-4">
             <div class="basketSummary sCard">
                 <h3 class="mb-3">Summary</h3>
                 <div class="pb-1 centerHorizontalBetween" data-track-id="priceContainer">
