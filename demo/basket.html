@@ -43,11 +43,17 @@
 <main class="container basket pt-4">
     <h1 class="pb-3">Basket</h1>
     <div class="row">
-        <div id="basketItems" class="col-12 col-md-8"></div>
+        <div id="basketItems" class="col-12 col-md-8">
+            <div class="row sCard basketItem">
+                <div class="col-12 centerHorizontal">
+                    No items
+                </div>
+            </div>
+        </div>
         <script>
 			const basketItems = basket.toItems();
 			const container = document.querySelector("#basketItems");
-			container.innerHTML = basketItems.map(item => `
+			const resultHTML = basketItems.map(item => `
         				       <div class="row sCard basketItem">
                                     <div class="col-3 centerHorizontal">
                                         <img src="${item.image}" alt="product image">
@@ -64,6 +70,9 @@
                                     </div>
                                 </div>`)
 				.reduce((acc, template) => acc + template, "");
+
+			if (resultHTML)
+				container.innerHTML = resultHTML;
         </script>
         <div class="col-12 col-md-4">
             <div class="basketSummary sCard">
@@ -82,11 +91,17 @@
                     <h4 class="fw-bold">64,95 €</h4>
                 </div>
                 <div class="pt-4"></div>
-                <button type="submit" class="btn btn-elegant mb-4 large" data-track-id="addToBasketButtonPDP">Make
+                <button type="submit" class="btn btn-elegant mb-4 large" data-track-id="addToBasketButtonPDP" disabled>
+                    Make
                     purchase
                 </button>
             </div>
         </div>
+        <script>
+			const btn = document.querySelector('[data-track-id="addToBasketButtonPDP"]');
+			if (basketItems.length !== 0)
+				btn.removeAttribute("disabled");
+        </script>
     </div>
 </main>
 </body>
