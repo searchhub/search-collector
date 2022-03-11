@@ -124,7 +124,7 @@ export class StubAsserter {
 	}
 
 	private async deleteStubMapping(id: string) {
-		const res: Response = await fetch(`http://localhost:${this.serverPort}/__admin/mappings/${id}`, {
+		const res = await fetch(`http://localhost:${this.serverPort}/__admin/mappings/${id}`, {
 			method: "DELETE"
 		});
 
@@ -212,7 +212,7 @@ export const createMockServer = (port = getRandomInt(49152, 65535)) => {
 
 	const isWiremockReady = async () => {
 		try {
-			const res: Response = await fetch(`http://localhost:${port}/__healthcheck`, {
+			const res = await fetch(`http://localhost:${port}/__healthcheck`, {
 				method: "GET"
 			});
 

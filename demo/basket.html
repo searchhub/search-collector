@@ -79,9 +79,12 @@
         </div>
         <script>
 			const summaryContainer = document.querySelector("#summary");
-			const sum = basketItems.reduce((acc, item) => {
+			let sum = basketItems.reduce((acc, item) => {
 				return acc + item.quantity * 19.99;
 			}, 0);
+			sum = Math.round(sum * 100) / 100;
+			const withOrder = Math.round((sum + 4.98) * 100) / 100;
+
 			const disabled = basketItems.length !== 0 ? "" : "disabled";
 			summaryContainer.innerHTML = `
 			    <div class="basketSummary sCard">
@@ -97,7 +100,7 @@
                     <hr/>
                     <div class="centerHorizontalBetween">
                         <h5>Total</h5>
-                        <h4 class="fw-bold">${sum + 4.98} €</h4>
+                        <h4 class="fw-bold">${withOrder} €</h4>
                     </div>
                     <div class="pt-4"></div>
                     <button type="submit" class="btn btn-elegant mb-4 large" data-track-id="addToBasketButtonPDP" ${disabled}>
