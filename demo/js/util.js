@@ -88,7 +88,13 @@ document.addEventListener("DOMContentLoaded", () => {
 		document.location.reload();
 	});
 
+	/**
+	 * BasketContainer click
+	 */
+	document.querySelector(".basketContainer")?.addEventListener("click", () => redirect("/basket.html"));
+
 	document.querySelector('[data-track-id="searchBox"]').value = new URLSearchParams(location.search).get("query");
+	updateBasketAmount();
 })
 
 function sanitize(textContent = "") {
@@ -100,6 +106,12 @@ function extractPrice(text) {
 	const regexRexResult = sanitize(text)?.match(priceRegex);
 	if (regexRexResult && regexRexResult.length > 0)
 		return Number(regexRexResult[0]);
+}
+
+function updateBasketAmount() {
+	const container = document.querySelector("#basketAmountContainer");
+	if (container)
+		container.innerText = basket.list().length;
 }
 
 const basket = {

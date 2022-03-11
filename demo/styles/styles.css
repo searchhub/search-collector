@@ -129,3 +129,14 @@ p, li {
     line-height: 1.4em;
     font-size: 1em;
 }
+
+.basketContainer {
+    cursor: pointer;
+    color: white;
+    text-align: center;
+}
+
+img.svg {
+    width: 24px;
+    height: 24px;
+}
