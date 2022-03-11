@@ -119,3 +119,13 @@ pre, code {
 #events {
     width: 100%;
 }
+
+.link {
+    color: darkblue;
+    text-decoration: underline;
+}
+
+p, li {
+    line-height: 1.4em;
+    font-size: 1em;
+}
