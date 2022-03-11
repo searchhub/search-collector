@@ -86,28 +86,38 @@
                     `)
 					.reduce((acc, tpl) => acc + tpl, "");
             </script>
-            <div class="col-12 col-md-4">
-                <div class="basketSummary sCard">
+            <div id="summary" class="col-12 col-md-4">
+
+            </div>
+            <script>
+				const summaryContainer = document.querySelector("#summary");
+				const sum = basketItems.reduce((acc, item) => {
+					return acc + item.quantity * 19.99;
+				}, 0);
+				const disabled = basketItems.length !== 0 ? "" : "disabled";
+				summaryContainer.innerHTML = `
+			    <div class="basketSummary sCard">
                     <h3 class="mb-3">Summary</h3>
-                    <div class="pb-1 centerHorizontalBetween">
+                    <div class="pb-1 centerHorizontalBetween" data-track-id="priceContainer">
                         <div>Sum</div>
-                        <div>59,97 €</div>
+                        <div>${sum} €</div>
                     </div>
                     <div class="pb-1 centerHorizontalBetween">
                         <div>Delivery charge</div>
-                        <div>4,98 €</div>
+                        <div>4.98 €</div>
                     </div>
                     <hr/>
                     <div class="centerHorizontalBetween">
                         <h5>Total</h5>
-                        <h4 class="fw-bold">64,95 €</h4>
+                        <h4 class="fw-bold">${sum + 4.98} €</h4>
                     </div>
                     <div class="pt-4"></div>
                     <button type="button" data-track-id="checkoutButton" class="btn btn-elegant large mb-4">
                         Commit and Buy
                     </button>
                 </div>
-            </div>
+			`;
+            </script>
         </div>
     </section>
 </main>
