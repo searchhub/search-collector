@@ -1,79 +1,39 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-  <link rel="stylesheet" href="css/main.css">
-  <script type="text/javascript" src="js/search-engine.js"></script>
-  <script type="text/javascript" src="js/render.js"></script>
-  <script type="text/javascript" src="js/basket.js"></script>
-  <script type="text/javascript" src="js/collector-integration.js"></script>
-  <script>
-    let engine = new SearchEngine();
-    let render = new Render();
-    let basket = new Basket();
+    <meta charset="UTF-8">
+    <title>Home Page</title>
 
-    function search(phrase, filter) {
-      let result = engine.search(phrase, filter);
+    <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1,user-scalable=yes">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"/>
+    <meta http-equiv="Pragma" content="no-cache"/>
+    <meta http-equiv="Expires" content="0"/>
 
-      let productContainter = document.getElementById('product-grid');
-      while (productContainter.firstChild) {
-        productContainter.removeChild(productContainter.firstChild);
-      }
+    <link rel="stylesheet" href="styles/bootstrap.min.css">
+    <link rel="stylesheet" href="styles/reset.css">
+    <link rel="stylesheet" href="styles/styles.css">
 
-      for (let item of result) {
-        render.product(productContainter, item);
-      }
-
-      let facetContainer = document.getElementById('facet-container');
-      while (facetContainer.firstChild) {
-        facetContainer.removeChild(facetContainer.firstChild);
-      }
-
-      for (let facet of engine.facets(result)) {
-        render.facets(facetContainer, facet, filter => {
-          search(phrase, filter);
-        });
-      }
-
-      return result;
-    }
-
-    function doSearch(words) {
-      let phrase = words || document.getElementById('search-box').value;
-      window.dispatchEvent(new CustomEvent("fired-search", {"detail" : {"keywords" : phrase}}));
-
-      // Simulate redirect
-      if (phrase == "basket") {
-        window.location.href = "basket.html";
-        return;
-      }
-
-      let result = search(phrase);
-      window.dispatchEvent(new CustomEvent("search", {"detail" : {"keywords" : phrase, "count" : result.length}}));
-    }
-    
-    window.addEventListener('load', e => {
-      document.getElementById('search-button').addEventListener("click", e => {
-        doSearch();
-      });
-      document.getElementById('basket-count').innerText = '(' + basket.list().length + ')';
-
-      search();
-    });
-  </script>
+    <script src="js/util.js"></script>
+    <script defer src="js/index.window.bundle.js"></script>
+    <script defer src="js/collector-integration.js"></script>
 </head>
 <body>
-  <div class="page">
-      <header>
-        <input id="search-box" type="search" placeholder="Search the catalog"><button id="search-button">Search</button> suggestion : <a href="javascript:doSearch('dress')" id="suggestion" style="cursor: pointer; text-decoration: underline">dress</a>
-        <a href="basket.html" style="float: right">Basket <span id="basket-count"></span></a>
-      </header>
 
-      <aside id="facet-container">
-      </aside>
+<header class="d-flex justify-content-center align-items-center p-3">
+    <a class="logoContainer d-none d-md-block" href="">
+        <img class="logo" src="images/SearchHub_weiss.png" alt="searchhub logo">
+    </a>
+    <form class="d-flex justify-content-center align-items-center">
+        <input type="search" class="form-control" placeholder="Search..." data-track-id="searchBox">
+        <button type="button" class="btn btn-elegant" data-track-id="searchButton">Search</button>
+    </form>
+</header>
 
-      <section class="product-grid" id="product-grid">
-      </section>
-</div>
-<script type="text/javascript" src="search-collector.js"></script>
+<main class="container pt-4 d-flex justify-content-center align-items-center flex-column">
+    <h1 class="pb-3">Search Collector Demo</h1>
+    <p>
+        This static html example demonstrates the use of the search-collector library.
+    </p>
+</main>
 </body>
 </html>
