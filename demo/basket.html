@@ -1,48 +1,82 @@
-<html>
-  <head>
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-    <link rel="stylesheet" href="css/main.css">
-    <script type="text/javascript" src="js/search-engine.js"></script>
-    <script type="text/javascript" src="js/render.js"></script>
-    <script type="text/javascript" src="js/basket.js"></script>
-    <script type="text/javascript" src="js/collector-integration.js"></script>
-    <script>
-      window.addEventListener('load', e => {
-        let engine = new SearchEngine();
-        let basket = new Basket();
-        let render = new Render();
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Basket Overview</title>
 
-        let container = document.getElementById('basket-content');
-        for (let id of basket.list()) {
-          let item = engine.get(id);
-          render.basketEntry(container, item);
-        }
-      });
-    </script>
-  </head>
-<body>
-  <div class="details">
-      <header><h2>Basket</h2></header>
+    <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1,user-scalable=yes">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"/>
+    <meta http-equiv="Pragma" content="no-cache"/>
+    <meta http-equiv="Expires" content="0"/>
 
-      <table class="basket">
-          <thead>
-              <tr>
-                  <th>Item</th>
-                  <th>Name</th>
-                  <th>Price</th>
-              </tr>
-          </thead>
-          <tbody id="basket-content">
-          </tbody>
-          <tfoot>
-            <tr>
-              <td colspan="3" align="right">
-                <a href="index.html">Back to catalog</a> | <a href="checkout.html">Finalize order</a>
-              </td>
-            </tr>
-          </tfoot>
-      </table>
-  </div>
-  <script type="text/javascript" src="search-collector.js"></script>
+    <link rel="stylesheet" href="styles/bootstrap.min.css">
+    <link rel="stylesheet" href="styles/reset.css">
+    <link rel="stylesheet" href="styles/styles.css">
+
+    <script src="js/util.js"></script>
+    <script defer src="js/index.window.bundle.js"></script>
+    <script defer src="js/collector-integration.js"></script>
+</head>
+<body class="basket">
+
+<header class="d-flex justify-content-center align-items-center p-3">
+    <a class="logoContainer d-none d-md-block" href="">
+        <img class="logo" src="images/SearchHub_weiss.png" alt="searchhub logo">
+    </a>
+    <form class="d-flex justify-content-center align-items-center">
+        <input type="search" class="form-control" placeholder="Search..." data-track-id="searchBox">
+        <button type="button" class="btn btn-elegant" data-track-id="searchButton">Search</button>
+    </form>
+</header>
+
+<main class="container basket pt-4">
+    <h1 class="pb-3">Basket</h1>
+    <div class="row">
+        <div id="basketItems" class="col-12 col-md-8"></div>
+        <script>
+			const basketItems = basket.toItems();
+			const container = document.querySelector("#basketItems");
+			container.innerHTML = basketItems.map(item => `
+        				       <div class="row sCard basketItem">
+                                    <div class="col-3 centerHorizontal">
+                                        <img src="${item.image}" alt="product image">
+                                    </div>
+                                    <div class="col-3 centerHorizontalStart">
+                                        <h5>${item.name}</h5>
+                                        <small class="text-muted">Lorem ipsum dolor.</small>
+                                    </div>
+                                    <div class="col-3 centerHorizontal">
+                                        <input type="number" class="form-control" style="width: 50px" value="${item.quantity}"  disabled="disabled">
+                                    </div>
+                                    <div class="col-3 centerHorizontal">
+                                        <div class="price">19.99 €</div>
+                                    </div>
+                                </div>`)
+				.reduce((acc, template) => acc + template, "");
+        </script>
+        <div class="col-12 col-md-4">
+            <div class="basketSummary sCard">
+                <h3 class="mb-3">Summary</h3>
+                <div class="pb-1 centerHorizontalBetween" data-track-id="priceContainer">
+                    <div>Sum</div>
+                    <div>59,97 €</div>
+                </div>
+                <div class="pb-1 centerHorizontalBetween">
+                    <div>Delivery charge</div>
+                    <div>4,98 €</div>
+                </div>
+                <hr/>
+                <div class="centerHorizontalBetween">
+                    <h5>Total</h5>
+                    <h4 class="fw-bold">64,95 €</h4>
+                </div>
+                <div class="pt-4"></div>
+                <button type="submit" class="btn btn-elegant mb-4 large" data-track-id="addToBasketButtonPDP">Make
+                    purchase
+                </button>
+            </div>
+        </div>
+    </div>
+</main>
 </body>
 </html>

@@ -25,7 +25,8 @@ has loaded.
 
 # Getting started
 
-Checkout the <a href="https://github.com/searchhub/search-collector-blueprint" target="_blank">Blueprint</a>
+Checkout the <a href="https://www.searchhub.io/search-collector/demo/" target="_blank">Demo</a>
+and <a href="https://github.com/searchhub/search-collector-blueprint" target="_blank">Blueprint</a>
 or `npm i -S search-collector`
 
 # Concepts

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Thank you Page</title>
+
+    <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1,user-scalable=yes">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+
+    <link rel="stylesheet" href="styles/bootstrap.min.css">
+    <link rel="stylesheet" href="styles/reset.css">
+    <link rel="stylesheet" href="styles/styles.css">
+
+    <script src="js/util.js"></script>
+    <script defer src="js/index.window.bundle.js"></script>
+    <script defer src="js/collector-integration.js"></script>
+</head>
+<body class="thankyou">
+
+<header class="d-flex justify-content-center align-items-center p-3">
+    <a class="logoContainer d-none d-md-block" href="">
+        <img class="logo" src="images/SearchHub_weiss.png" alt="searchhub logo">
+    </a>
+    <form class="d-flex justify-content-center align-items-center">
+        <input type="search" class="form-control" placeholder="Search..." data-track-id="searchBox">
+        <button type="button" class="btn btn-elegant" data-track-id="searchButton">Search</button>
+    </form>
+</header>
+
+<main class="container pt-4 d-flex justify-content-center align-items-center flex-column">
+    <h1 class="pb-5">Thank you for purchasing</h1>
+    <div class="d-flex justify-content-center align-items-center flex-row pb-3">
+        <button id="clearEvents" type="button" class="btn btn-elegant" style="margin-right: 15px">Clear Events</button>
+        <h2>
+            Your tracked events:
+        </h2>
+    </div>
+
+    <section id="events"></section>
+    <script>
+		const events = JSON.parse(localStorage.getItem("____localstorageWriter") || "[]");
+		events.sort((e1, e2) => e1.timestamp - e2.timestamp);
+		const eventsContainer = document.getElementById("events");
+
+
+		eventsContainer.innerHTML = events.map(e => {
+			return `
+                <code class="p-4">
+                    <pre class="sCard">${JSON.stringify(e, null, 2)}</pre>
+                </code>
+			`;
+		}).reduce((acc, curr) => acc + curr, "");
+    </script>
+</main>
+</body>
+</html>

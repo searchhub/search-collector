@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Order Summary</title>
+
+    <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1,user-scalable=yes">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"/>
+    <meta http-equiv="Pragma" content="no-cache"/>
+    <meta http-equiv="Expires" content="0"/>
+
+    <link rel="stylesheet" href="styles/bootstrap.min.css">
+    <link rel="stylesheet" href="styles/reset.css">
+    <link rel="stylesheet" href="styles/styles.css">
+
+    <script src="js/util.js"></script>
+    <script defer src="js/index.window.bundle.js"></script>
+    <script defer src="js/collector-integration.js"></script>
+</head>
+<body class="basket">
+
+<header class="d-flex justify-content-center align-items-center p-3">
+    <a class="logoContainer d-none d-md-block" href="">
+        <img class="logo" src="images/SearchHub_weiss.png" alt="searchhub logo">
+    </a>
+    <form class="d-flex justify-content-center align-items-center">
+        <input type="search" class="form-control" placeholder="Search..." data-track-id="searchBox">
+        <button type="button" class="btn btn-elegant" data-track-id="searchButton">Search</button>
+    </form>
+</header>
+
+<main class="container order pt-4">
+    <h1 class="pb-3">Order Summary</h1>
+    <section>
+        <div class="row">
+            <div id="itemsContainer" class="col-12 col-md-8">
+                <section class="row sCard mb-3">
+                    <div class="col-12 col-md-6">
+                        <h5 class="pb-2">Delivery Address</h5>
+                        <small class="pb-1">Ms. Schmidt</small><br>
+                        <small class="pb-1">Some Street 5</small><br>
+                        <small class="pb-1">55555 Entenhausen</small>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <h5 class="pb-2">Invoice Address</h5>
+                        <small class="pb-1">Ms. Schmidt</small> <br>
+                        <small class="pb-1">Some Street 5</small> <br>
+                        <small class="pb-1">55555 Entenhausen</small>
+                    </div>
+                </section>
+            </div>
+            <script>
+				const basketItems = basket.toItems();
+				const tplContainer = document.querySelector("#itemsContainer");
+
+				tplContainer.innerHTML = tplContainer.innerHTML + basketItems.map(item => `
+                         <div class="row sCard mb-2" data-track-id="checkoutProduct" data-product-id="${item.id}">
+                            <div class="col-3 centerHorizontal">
+                                <img src="${item.image}" alt="product image">
+                            </div>
+                            <div class="col-3 centerHorizontalStart">
+                                <h5>Pink Dress</h5>
+                                <small class="text-muted">Lorem ipsum dolor.</small>
+                            </div>
+                            <div class="col-3 centerHorizontal">
+                                <input type="number" class="form-control"
+                                       data-track-id="checkoutQuantity"
+                                       style="width: 50px"
+                                       value="${item.quantity}" disabled="disabled">
+                            </div>
+                            <div class="col-3 centerHorizontal">
+                                <div class="price" data-track-id="priceContainer">19.99 €</div>
+                            </div>
+                        </div>
+                    `)
+					.reduce((acc, tpl) => acc + tpl, "");
+            </script>
+            <div class="col-12 col-md-4">
+                <div class="basketSummary sCard">
+                    <h3 class="mb-3">Summary</h3>
+                    <div class="pb-1 centerHorizontalBetween">
+                        <div>Sum</div>
+                        <div>59,97 €</div>
+                    </div>
+                    <div class="pb-1 centerHorizontalBetween">
+                        <div>Delivery charge</div>
+                        <div>4,98 €</div>
+                    </div>
+                    <hr/>
+                    <div class="centerHorizontalBetween">
+                        <h5>Total</h5>
+                        <h4 class="fw-bold">64,95 €</h4>
+                    </div>
+                    <div class="pt-4"></div>
+                    <button type="button" data-track-id="checkoutButton" class="btn btn-elegant large mb-4">
+                        Commit and Buy
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+</body>
+</html>
