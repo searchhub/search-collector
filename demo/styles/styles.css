@@ -4,14 +4,6 @@ header {
     background-color: #232a35;
 }
 
-img, form {
-    width: 100%;
-}
-
-input {
-    max-width: 800px;
-}
-
 select.custom-select {
     background: white;
     min-width: 50px;
@@ -22,6 +14,22 @@ button.btn.btn-elegant {
     color: white;
     background: #f84545;
     margin-left: 10px;
+}
+
+body.basket, body.thankyou {
+    background: #eeeeee;;
+}
+
+main.order img {
+    width: 50%;
+}
+
+main.products h5 {
+    font-weight: bold;
+}
+
+main.products img {
+    padding: 0 10% 0 10%;
 }
 
 .centerHorizontal {
@@ -38,8 +46,11 @@ button.btn.btn-elegant {
     flex-direction: column;
 }
 
-body.basket, body.thankyou {
-    background: #eeeeee;;
+.centerHorizontalBetween {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: row;
 }
 
 .sCard {
@@ -51,8 +62,12 @@ body.basket, body.thankyou {
     box-shadow: rgb(0 0 0 / 20%) 0px 2px 1px -1px, rgb(0 0 0 / 14%) 0px 1px 1px 0px, rgb(0 0 0 / 12%) 0px 1px 3px 0px;
 }
 
-main.order img {
-    width: 50%;
+img, form {
+    width: 100%;
+}
+
+input {
+    max-width: 800px;
 }
 
 .basketItem {
@@ -88,23 +103,8 @@ a {
     text-decoration: inherit; /* no underline */
 }
 
-main.products h5 {
-    font-weight: bold;
-}
-
-main.products img {
-    padding: 0 10% 0 10%;
-}
-
 .price {
     color: #6c6969;
-}
-
-.centerHorizontalBetween {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-direction: row;
 }
 
 h1, h2, h3, h4 {
