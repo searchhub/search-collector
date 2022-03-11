@@ -175,7 +175,7 @@ export const createMockServer = (port = getRandomInt(49152, 65535)) => {
 		return !!allowedUrls.find(allowedUrl => url.indexOf(allowedUrl) > -1);
 	}
 
-	const waitForReadiness = async (delay: number = 100, retries: number = 50) => {
+	const waitForReadiness = async (delay: number = 250, retries: number = 50) => {
 		const origRetries = retries;
 		while (retries > 0) {
 			const isReady = await isWiremockReady();
