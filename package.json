@@ -10,7 +10,7 @@
     "build-ts": "tsc",
     "prepare-publish": "cp -r dist/* .",
     "build-bundles": "webpack --mode production",
-    "test": "npm run build-bundles && npm run copy-dist && jest --config ./jest.unit.config.js && jest --runInBand",
+    "test": "npm run build-bundles && npm run copy-dist && jest --config ./jest.unit.config.js && jest --runInBand --forceExit",
     "copy-dist": "rm -rf ./src/test/mock/__files/dist/ && cp -r ./dist/ ./src/test/mock/__files/",
     "test-instant": "cp -r ./dist/ ./src/test/mock/__files/ && jest --runInBand",
     "test-server": "npx wiremock --port 8081 --verbose --root-dir ./src/test/mock"
