@@ -5,6 +5,20 @@ function redirect(path) {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+	const searchBox = document.querySelector('[data-track-id="searchBox"]');
+	const suggestLayer = document.querySelector('#suggestLayer');
+	const suggestLayerTarget = document.querySelector('#suggestLayerTarget');
+
+	searchBox.addEventListener("focus", () => suggestLayer.style.opacity = "1");
+	searchBox.addEventListener("blur", () => requestAnimationFrame(() => suggestLayer.style.opacity = "0"))
+
+	Array.from(document.querySelectorAll(".searchTerm"))
+		.forEach(ele => ele.addEventListener("click", (event) => {
+			redirect(`/product-listing.html?query=${event.currentTarget.innerText}`);
+		}));
+});
+
+document.addEventListener("DOMContentLoaded", () => {
 	/**
 	 * Trigger Search
 	 */
