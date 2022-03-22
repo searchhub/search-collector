@@ -16,7 +16,7 @@
     "test-server": "npx wiremock --port 8081 --verbose --root-dir ./src/test/mock"
   },
   "dependencies": {
-    "scrollmonitor": "1.2.4"
+    "scrollmonitor": "1.2.9"
   },
   "devDependencies": {
     "@types/jest": "^27.0.2",

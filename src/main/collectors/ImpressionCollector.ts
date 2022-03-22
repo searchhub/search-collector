@@ -60,7 +60,7 @@ export class ImpressionCollector extends AbstractCollector {
 				});
 
 				flush();
-			});
+			}, true);
 		};
 
 		new Sentinel(this.getDocument()).on(this.selectorExpression, this.logWrapHandler(handler, log));
