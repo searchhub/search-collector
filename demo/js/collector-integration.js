@@ -23,7 +23,8 @@ const {
 	BasketClickCollector,
 	CheckoutClickCollector,
 	ConsoleTransport,
-	SuggestSearchCollector
+	SuggestSearchCollector,
+	AssociatedProductCollector
 } = window.SearchCollector;
 
 
@@ -111,6 +112,16 @@ collectorModule.add(new FiredSearchCollector((writer, type, context) => {
 		});
 	});
 }));
+
+collectorModule.add(
+	new AssociatedProductCollector(
+		"a.associated-product",
+		new URLSearchParams(location.search).get("id"),
+		{
+			idResolver: element => element.getAttribute("data-product-id"),
+			trail
+		}
+	));
 
 if (isSearchPage()) {
 	collectorModule.add(new SearchResultCollector(() => queryResolver().getSearch(), searchResultCountResolver));

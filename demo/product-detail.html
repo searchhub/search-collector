@@ -38,7 +38,7 @@
         | <a href="" onclick="redirect('/basket.html');return false;">Basket</a>
         | <a href="" onclick="redirect('/thankyou.html');return false;">Events</a>
     </nav>
-    <div id="suggestLayer" style="opacity: 0">
+    <div id="suggestLayer" style="opacity: 0;">
         <div class="row">
             <div class="col-12 col-md-4"></div>
             <div id="suggestLayerTarget" class="col-12 col-md-4" style="">
@@ -113,6 +113,39 @@
                 </div>
             </div>
 
+        </div>
+        <div class="col-12 pt-5">
+            <h3>Associated Products</h3>
+            <hr>
+            <div class="row pt-2 pb-4">
+                <div class="col-12 col-md-4">
+                    <a href="/product-detail-page.html?id=1243"
+                    class="d-flex flex-column align-items-center justify-content-center associated-product"
+                       data-track-id="product" data-product-id="1243">
+                        <img src="images/shirt.png" alt="product image">
+                        <h5 class="m-2">Shirt</h5>
+                        <div data-track-id="priceContainer" class="price">19.99 €</div>
+                    </a>
+                </div>
+                <div class="col-12 col-md-4">
+                    <a href="/product-detail-page.html?id=1244"
+                    class="d-flex flex-column align-items-center justify-content-center associated-product"
+                       data-track-id="product" data-product-id="1244">
+                        <img src="images/trousers.png" alt="product image">
+                        <h5 class="m-2">Shoe</h5>
+                        <div data-track-id="priceContainer" class="price">19.99 €</div>
+                    </a>
+                </div>
+                <div class="col-12 col-md-4">
+                    <a href="/product-detail-page.html?id=1245"
+                    class="d-flex flex-column align-items-center justify-content-center associated-product"
+                       data-track-id="product" data-product-id="1245">
+                        <img src="images/shoe.png" alt="product image">
+                        <h5 class="m-2">Shoe</h5>
+                        <div data-track-id="priceContainer" class="price">19.99 €</div>
+                    </a>
+                </div>
+            </div>
         </div>
         `;
     </script>

@@ -71,6 +71,16 @@ document.addEventListener("DOMContentLoaded", () => {
 		});
 	});
 
+	/**
+	 * Associated Product Click
+	 */
+	Array.from(document.querySelectorAll("a.associated-product")).forEach(anchor => {
+		anchor.addEventListener("click", (e) => {
+			e.preventDefault();
+			redirect(`/product-detail.html?id=${e.currentTarget.getAttribute("data-product-id")}`)
+		});
+	});
+
 
 	/**
 	 * AddToBasket Click
@@ -220,6 +230,18 @@ const items = {
 		id: "1242",
 		name: "Green Coat",
 		image: "images/green_coat.png"
+	}, "1243": {
+		id: "1243",
+		name: "Shirt",
+		image: "images/shirt.png"
+	}, "1244": {
+		id: "1244",
+		name: "Shoe",
+		image: "images/shoe.png"
+	}, "1245": {
+		id: "1245",
+		name: "Trousers",
+		image: "images/trousers.png"
 	}
 }
 

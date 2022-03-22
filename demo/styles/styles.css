@@ -173,7 +173,7 @@ nav a:hover {
     transition: opacity 200ms;
 }
 
-#suggestLayer[style="opacity: 0"] {
+#suggestLayer[style="opacity: 0;"] {
     display: none;
 }
 
@@ -188,3 +188,6 @@ nav a:hover {
     color: #f84545;
 }
 
+img[src="images/shirt.png"], img[src="images/trousers.png"], img[src="images/shoe.png"] {
+    background: black;
+}
