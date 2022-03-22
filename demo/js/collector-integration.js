@@ -115,7 +115,7 @@ collectorModule.add(new FiredSearchCollector((writer, type, context) => {
 
 collectorModule.add(
 	new AssociatedProductCollector(
-		"a.associated-product",
+		'[data-track-id="associatedProduct"]',
 		new URLSearchParams(location.search).get("id"),
 		{
 			idResolver: element => element.getAttribute("data-product-id"),
