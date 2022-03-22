@@ -9,8 +9,25 @@ document.addEventListener("DOMContentLoaded", () => {
 	const suggestLayer = document.querySelector('#suggestLayer');
 	const suggestLayerTarget = document.querySelector('#suggestLayerTarget');
 
-	searchBox.addEventListener("focus", () => suggestLayer.style.opacity = "1");
-	searchBox.addEventListener("blur", () => requestAnimationFrame(() => suggestLayer.style.opacity = "0"))
+	searchBox.addEventListener("focus", () => {
+		suggestLayer.style.opacity = "1";
+		toggleItems();
+	});
+	searchBox.addEventListener("blur", () => requestAnimationFrame(() => suggestLayer.style.opacity = "0"));
+
+	searchBox.addEventListener("input", () => {
+		toggleItems();
+	});
+
+	function toggleItems() {
+		if (searchBox.value.length !== 0) {
+			Array.from(document.querySelectorAll(".searchTerm"))
+				.forEach(ele => ele.style.opacity = "1");
+		} else {
+			Array.from(document.querySelectorAll(".searchTerm"))
+				.forEach(ele => ele.style.opacity = "0");
+		}
+	}
 
 	Array.from(document.querySelectorAll(".searchTerm"))
 		.forEach(ele => ele.addEventListener("click", (event) => {

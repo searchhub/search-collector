@@ -22,7 +22,8 @@ const {
 	SearchResultCollector,
 	BasketClickCollector,
 	CheckoutClickCollector,
-	ConsoleTransport
+	ConsoleTransport,
+	SuggestSearchCollector
 } = window.SearchCollector;
 
 
@@ -74,6 +75,18 @@ const collectorModule = new CollectorModule({
 collectorModule.addLogTransport(new ConsoleTransport());
 
 collectorModule.add(new InstantSearchQueryCollector('[data-track-id="searchBox"]'));
+
+collectorModule.add(new SuggestSearchCollector((writer, type, context) => {
+	new Sentinel(context.getDocument()).on('[data-track-id="suggestSearchTerm"]', (element) => {
+		element.addEventListener("mouseup", () => {
+			writer.write({
+				type,
+				keywords: sanitize(element.textContent)
+			});
+		})
+	});
+}));
+
 collectorModule.add(new RedirectCollector(firedSearchCallback, isSearchPage, context));
 collectorModule.add(
 	new BasketClickCollector('[data-track-id="addToCartPDP"]',
