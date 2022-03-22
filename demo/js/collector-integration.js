@@ -119,6 +119,8 @@ collectorModule.add(
 		new URLSearchParams(location.search).get("id"),
 		{
 			idResolver: element => element.getAttribute("data-product-id"),
+			positionResolver: element => positionResolver('[data-track-id="associatedProduct"]', element),
+			priceResolver: element => extractPrice(element.querySelector('[data-track-id="priceContainer"]')?.textContent),
 			trail
 		}
 	));
