@@ -10,6 +10,7 @@ export type CallbackResolver = (callback: (...params: any) => void) => void;
 export type WriterResolver = (writer: Writer, type: string, context: Context) => void
 export type BooleanResolver = (element?: HTMLElement, event?: Event) => boolean;
 export type StringResolver = (element?: HTMLElement, event?: Event) => string;
+export type AnyResolver = (element?: HTMLElement, event?: Event) => any;
 export type NumberResolver = (element?: HTMLElement, event?: Event) => number;
 export type QueryResolver = () => Query;
 

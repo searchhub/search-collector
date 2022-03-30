@@ -1,6 +1,6 @@
 import {ClickCollector} from "./ClickCollector";
 import {ListenerType} from "../utils/ListenerType";
-import {NumberResolver, StringResolver} from "../resolvers/Resolver";
+import {AnyResolver, NumberResolver, StringResolver} from "../resolvers/Resolver";
 import {Trail} from "../query/Trail";
 
 export type ProductClickCollectorResolver = {
@@ -8,7 +8,7 @@ export type ProductClickCollectorResolver = {
 	positionResolver?: NumberResolver,
 	priceResolver?: NumberResolver,
 	imageResolver?: StringResolver,
-	metadataResolver?: StringResolver,
+	metadataResolver?: AnyResolver,
 	trail?: Trail
 }
 
@@ -20,7 +20,7 @@ export class ProductClickCollector extends ClickCollector {
 	private readonly positionResolver: NumberResolver;
 	private readonly priceResolver: NumberResolver;
 	private readonly imageResolver: StringResolver;
-	private readonly metadataResolver: StringResolver;
+	private readonly metadataResolver: AnyResolver;
 	private readonly trail: Trail;
 
 	constructor(selector, resolvers: ProductClickCollectorResolver, listenerType = ListenerType.Sentinel) {
