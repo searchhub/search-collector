@@ -6,7 +6,7 @@ export class AbstractCollector {
 	protected type: string;
 	protected context: Context;
 
-	constructor(type: string, context: Context = new Context(window, document)) {
+	constructor(type: string, context?: Context) {
 		this.type = type;
 		this.context = context;
 	}
