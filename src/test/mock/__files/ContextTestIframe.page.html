@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>E2E Iframe Test</title>
+    <script defer src="/dist/index.window.bundle.js"></script>
+    <script>
+		document.addEventListener("DOMContentLoaded", () => {
+			const {
+				CollectorModule,
+				ProductClickCollector,
+				RestEventWriter,
+				positionResolver,
+				Context
+			} = window.SearchCollector;
+
+			const collector = new CollectorModule({
+				writer: new RestEventWriter(location.origin + "/iframe-collector-channel"),
+				context: new Context(window.top, window.top.document)
+			});
+
+			collector.add(new ProductClickCollector(".product", {
+				idResolver: element => element.getAttribute("data-id"),
+				positionResolver: element => positionResolver(".product", element, new Context(window.top, window.top.document))
+			}));
+
+			collector.start();
+		});
+    </script>
+</head>
+<body>
+
+</body>
+</html>

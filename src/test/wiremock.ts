@@ -238,7 +238,7 @@ export const createMockServer = (port = getRandomInt(49152, 65535)) => {
 		},
 		shutdownMockServer: async () => {
 			if (process) {
-				process.kill("SIGINT");
+				process.kill("SIGKILL");
 				process = void 0;
 			}
 

@@ -1,12 +1,7 @@
-import {SplitStreamWriter} from "./writers";
-import {Writer} from "./writers";
+import {ConsoleWriter, SplitStreamWriter, Writer} from "./writers";
 import {AbstractCollector} from "./collectors";
-import {LoggerTransport} from "./logger";
-import {TransportLogger} from "./logger";
+import {ConsoleTransport, Logger, LoggerTransport, TransportLogger} from "./logger";
 import {Context} from "./utils";
-import {ConsoleWriter} from "./writers";
-import {Logger} from "./logger";
-import {ConsoleTransport} from "./logger";
 
 type CollectorOptions = {
 	writer?: Writer,
@@ -29,8 +24,8 @@ export class CollectorModule {
 	}
 
 	add(collector: AbstractCollector) {
-		if (this.options.context && !collector.getContext())
-			collector.setContext(this.options.context);
+		if (!collector.getContext())
+			collector.setContext(this.options.context || new Context(window, document));
 
 		this.collectors.push(collector);
 

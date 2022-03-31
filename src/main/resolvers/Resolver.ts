@@ -39,9 +39,10 @@ export const cookieSessionResolver = (name = "SearchCollectorSession"): string =
  *
  * @param selectorExpression the css expression to query for other elements
  * @param element the element for which we want to know the position relative to the elements selected by selectorExpression
+ * @param ctx the context to use. defaults to new Context(window, document)
  */
-export const positionResolver = (selectorExpression: string, element: HTMLElement): number | undefined => {
-	return Array.from(document.querySelectorAll(selectorExpression))
+export const positionResolver = (selectorExpression: string, element: HTMLElement, ctx: Context = new Context(window, document)): number | undefined => {
+	return Array.from(ctx.getDocument().querySelectorAll(selectorExpression))
 		.reduce<number | undefined>((acc, node, index) => node === element ? index : acc, undefined);
 };
 
