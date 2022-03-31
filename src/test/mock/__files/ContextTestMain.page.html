@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>E2E Testing</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        .product {
+            width: 100%;
+            background: blue;
+            margin: 10px;
+            color: white;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+<!--search box-->
+<input id="searchInput" value="THE QUERY"/>
+
+<!--10-->
+<div class="product" data-id="1" data-price="1.99">Product</div>
+<div class="product" data-id="2" data-price="2.99">Product</div>
+<div class="product" data-id="3" data-price="3.99">Product</div>
+<div class="product" data-id="4" data-price="4.99">Product</div>
+<div id="clickMe" class="product" data-id="5" data-price="5.99">Product</div>
+<div class="product" data-id="6" data-price="6.99">Product</div>
+<div class="product" data-id="7" data-price="7.99">Product</div>
+<div class="product" data-id="8" data-price="8.99">Product</div>
+<div class="product" data-id="9" data-price="9.99">Product</div>
+<div class="product" data-id="10" data-price="10.99">Product</div>
+
+<script>
+	const debug = !!new URLSearchParams(location.search).get("debug");
+	const iframe = document.createElement("iframe");
+	iframe.src = location.origin + (debug ? "/search-collector/src/test/mock/__files/ContextTestIframe.page.html" : "/ContextTestIframe.page.html");
+	document.body.appendChild(iframe);
+</script>
+</body>
+</html>
