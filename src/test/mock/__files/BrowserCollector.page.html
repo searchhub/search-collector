@@ -20,6 +20,7 @@
 			collector.add(new BrowserCollector({recordReferrer: true, recordUrl: false, recordLanguage: false}));
 			collector.add(new BrowserCollector({recordReferrer: false, recordUrl: true, recordLanguage: false}));
 			collector.add(new BrowserCollector({recordReferrer: false, recordUrl: false, recordLanguage: true}));
+			collector.add(new BrowserCollector({recordReferrer: false, recordUrl: false, recordUserAgent: true}));
 
 			collector.start();
 		});

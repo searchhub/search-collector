@@ -16,12 +16,14 @@ export class BrowserCollector extends AbstractCollector {
 	private readonly recordUrl: boolean;
 	private readonly recordReferrer: boolean;
 	private readonly recordLanguage: boolean;
+	private readonly recordUserAgent: boolean;
 
-	constructor(options = {recordUrl: true, recordReferrer: true, recordLanguage: false}) {
+	constructor(options = {recordUrl: true, recordReferrer: true, recordLanguage: false, recordUserAgent: false}) {
 		super("browser");
 		this.recordUrl = options.recordUrl || false;
 		this.recordReferrer = options.recordReferrer || false;
 		this.recordLanguage = options.recordLanguage || false;
+		this.recordUserAgent = options.recordUserAgent || false;
 	}
 
 	/**
@@ -47,6 +49,9 @@ export class BrowserCollector extends AbstractCollector {
 
 		if (this.recordReferrer)
 			data.ref = doc.referrer;
+
+		if (this.recordUserAgent)
+			data.agent = window.navigator.userAgent;
 
 		writer.write(data);
 	}
