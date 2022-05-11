@@ -6,6 +6,16 @@
     <script defer src="/dist/index.window.bundle.js"></script>
     <script>
 		document.addEventListener("DOMContentLoaded", () => {
+			const ele = document.querySelector("#innerClick");
+			ele.addEventListener("click", event => {
+				// VueJs is often adding listeners to the most inner element,
+				// if stopPropagation is called then our click listeners don't execute if they aren't added during capturing phase.
+				// I added a stopPropagation to simulate this, our listeners should still be executed in this test.
+				event.stopPropagation();
+			}, false);
+		});
+
+		document.addEventListener("DOMContentLoaded", () => {
 			const {
 				CollectorModule,
 				ProductClickCollector,
@@ -59,7 +69,9 @@
 <div class="product" data-id="2" data-price="2.99">Product</div>
 <div class="product" data-id="3" data-price="3.99">Product</div>
 <div class="product" data-id="4" data-price="4.99">Product</div>
-<div id="clickMe" class="product" data-id="5" data-price="5.99">Product</div>
+<div id="clickMe" class="product" data-id="5" data-price="5.99">
+    <div id="innerClick">Click Me Product</div>
+</div>
 <div class="product" data-id="6" data-price="6.99">Product</div>
 <div class="product" data-id="7" data-price="7.99">Product</div>
 <div class="product" data-id="8" data-price="8.99">Product</div>

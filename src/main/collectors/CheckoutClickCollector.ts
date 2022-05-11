@@ -71,10 +71,16 @@ export class CheckoutClickCollector extends AbstractCollector {
 		// "sentinel (default)" - works on elements inserted in the DOM anytime, but interferes with CSS animations on these elements
 		if (this.listenerType === ListenerType.Dom) {
 			const nodeList = doc.querySelectorAll(this.clickSelector);
-			nodeList.forEach((el: HTMLElement) => el.addEventListener("click", this.logWrapHandler(handler, log)));
+			nodeList.forEach((el: HTMLElement) => el.addEventListener("click", this.logWrapHandler(handler, log), {
+				passive: true,
+				capture: true
+			}));
 		} else {
 			const sentinel = new Sentinel(this.getDocument());
-			sentinel.on(this.clickSelector, el => el.addEventListener("click", this.logWrapHandler(handler, log)));
+			sentinel.on(this.clickSelector, el => el.addEventListener("click", this.logWrapHandler(handler, log), {
+				passive: true,
+				capture: true
+			}));
 		}
 	}
 }
