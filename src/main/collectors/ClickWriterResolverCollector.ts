@@ -31,10 +31,16 @@ export class ClickWriterResolverCollector extends WriterResolverCollector {
 
 		if (this.listenerType === ListenerType.Dom) {
 			const nodeList = this.getDocument().querySelectorAll(this.selectorExpression);
-			nodeList.forEach(el => el.addEventListener("click", ev => this.logWrapHandler(handler, log, el, ev)()));
+			nodeList.forEach(el => el.addEventListener("click", ev => this.logWrapHandler(handler, log, el, ev)(), {
+				passive: true,
+				capture: true
+			}));
 		} else {
 			const sentinel = new Sentinel(this.getDocument());
-			sentinel.on(this.selectorExpression, el => el.addEventListener("click", ev => this.logWrapHandler(handler, log, el, ev)()));
+			sentinel.on(this.selectorExpression, el => el.addEventListener("click", ev => this.logWrapHandler(handler, log, el, ev)(), {
+				passive: true,
+				capture: true
+			}));
 		}
 	}
 }
