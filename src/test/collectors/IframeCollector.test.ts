@@ -31,7 +31,7 @@ describe('IframeCollector Suite', () => {
 
 		await page.goto(getHost() + "/ContextTestMain.page.html", {waitUntil: 'load'});
 		await page.click("#clickMe");
-		await wait(100);
+		await wait(1000);
 
 		await asserter.verifyCallCount(1)
 			.verifyQueryParams(params => {

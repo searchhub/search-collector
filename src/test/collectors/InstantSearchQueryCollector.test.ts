@@ -35,7 +35,7 @@ describe('InstantSearchQueryCollector Suite', () => {
 		await page.keyboard.press('b');
 		await page.keyboard.press('c');
 
-		await wait(600);//wait Collector delay (500) + request time
+		await wait(1000);//wait Collector delay (500) + request time
 
 		await stubAsserter.verifyCallCount(1)
 			.verifyQueryParams(params => {
