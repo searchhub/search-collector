@@ -240,11 +240,11 @@ export const createMockServer = (port = getRandomInt(49152, 65535)) => {
 			if (process) {
 				process.kill("SIGKILL");
 				process = void 0;
-			}
 
-			await shutdown();
-			await wait(100);
-			await waitForShutdown();
+				await shutdown();
+				await wait(100);
+				await waitForShutdown();
+			}
 		},
 		createStubAsserter: async (filename: string): Promise<StubAsserter> => {
 			const stub = await createStubMapping(filename);
