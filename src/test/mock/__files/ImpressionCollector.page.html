@@ -17,10 +17,22 @@
 				writer: new RestEventWriter(location.origin + "/impression-collector-channel")
 			});
 
-			collector.add(
-				new ImpressionCollector(".product",
-					element => element.getAttribute("data-id"),
-					element => positionResolver(".product", element)));
+
+			const params = new URLSearchParams(window.location.search);
+
+			if (!params.has("expectedPage")) {
+				collector.add(
+					new ImpressionCollector(".product",
+						element => element.getAttribute("data-id"),
+						element => positionResolver(".product", element)));
+			} else {
+				collector.add(
+					new ImpressionCollector(".product",
+						element => element.getAttribute("data-id"),
+						element => positionResolver(".product", element),
+						element => params.get("expectedPage") === "true"));
+			}
+
 
 			collector.start();
 		});
