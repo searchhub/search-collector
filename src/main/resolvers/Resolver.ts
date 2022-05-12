@@ -8,10 +8,10 @@ const MINUTES_HALF_HOUR = 30;
 
 export type CallbackResolver = (callback: (...params: any) => void) => void;
 export type WriterResolver = (writer: Writer, type: string, context: Context) => void
-export type BooleanResolver = (element?: HTMLElement, event?: Event) => boolean;
-export type StringResolver = (element?: HTMLElement, event?: Event) => string;
+export type BooleanResolver = (element?: HTMLElement, event?: Event) => boolean | undefined;
+export type StringResolver = (element?: HTMLElement, event?: Event) => string | undefined;
 export type AnyResolver = (element?: HTMLElement, event?: Event) => any;
-export type NumberResolver = (element?: HTMLElement, event?: Event) => number;
+export type NumberResolver = (element?: HTMLElement, event?: Event) => number | undefined;
 export type QueryResolver = () => Query;
 
 /**
