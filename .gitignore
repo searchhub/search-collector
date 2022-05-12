@@ -3,6 +3,7 @@ node_modules
 build
 dist
 .idea
+*.iml
 
 src/**/*.d.ts
 src/**/*.js
