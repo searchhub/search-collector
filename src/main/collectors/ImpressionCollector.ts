@@ -1,6 +1,6 @@
 import {AbstractCollector} from "./AbstractCollector";
 import {Sentinel} from "../utils/Sentinel";
-import {NumberResolver, StringResolver} from "../resolvers/Resolver";
+import {BooleanResolver, NumberResolver, StringResolver} from "../resolvers/Resolver";
 import ScrollMonitor from "scrollmonitor";
 import {LocalStorageQueue} from "../utils/LocalStorageQueue";
 import {debounce} from "../utils/Util";
@@ -15,6 +15,7 @@ export class ImpressionCollector extends AbstractCollector {
 	private readonly selectorExpression: string;
 	private readonly idResolver: StringResolver;
 	private readonly positionResolver: NumberResolver;
+	private readonly expectedPageResolver: BooleanResolver;
 	private readonly queue: LocalStorageQueue;
 
 
@@ -25,12 +26,14 @@ export class ImpressionCollector extends AbstractCollector {
 	 * @param {string} selectorExpression - Document query selector identifying the elements to attach to
 	 * @param idResolver - Resolve the id of the element
 	 * @param positionResolver - Resolve the position of the element in dom
+	 * @param expectedPageResolver - If supplied, impressions will only be tracked if this resolver returns true. Comes in handy for single page applications
 	 */
-	constructor(selectorExpression: string, idResolver: StringResolver, positionResolver: NumberResolver) {
+	constructor(selectorExpression: string, idResolver: StringResolver, positionResolver: NumberResolver, expectedPageResolver?: BooleanResolver) {
 		super("impression");
 		this.selectorExpression = selectorExpression;
 		this.idResolver = idResolver;
 		this.positionResolver = positionResolver;
+		this.expectedPageResolver = expectedPageResolver;
 		this.queue = new LocalStorageQueue("impressions");
 	}
 
@@ -54,6 +57,10 @@ export class ImpressionCollector extends AbstractCollector {
 
 		const handler = element => {
 			ScrollMonitor.create(element).enterViewport(() => {
+				if (this.expectedPageResolver && !this.expectedPageResolver()) {
+					return;
+				}
+
 				this.queue.push({
 					id: this.resolve(this.idResolver, log, element),
 					position: this.resolve(this.positionResolver, log, element)
