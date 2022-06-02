@@ -29,7 +29,7 @@ describe('RedirectCollector Suite', () => {
 	test('track redirect data', async () => {
 		const stubAsserter = await createStubAsserter("RedirectCollectorTracking.json");
 
-		await page.goto(getHost() + "/RedirectCollector.page.html", {waitUntil: 'load'});
+		await page.goto(getHost() + "/RedirectCollector.page.html", {waitUntil: 'networkidle0'});
 		page.click("#searchButton");
 		await page.waitForNavigation({waitUntil: "networkidle0"});
 

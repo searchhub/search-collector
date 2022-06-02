@@ -28,7 +28,7 @@ describe('SearchResultCollector Suite', () => {
 	test('track search result data', async () => {
 		const stubAsserter = await createStubAsserter("SearchResultCollectorTracking.json");
 
-		await page.goto(getHost() + "/SearchResultCollector.page.html", {waitUntil: 'load'});
+		await page.goto(getHost() + "/SearchResultCollector.page.html", {waitUntil: 'networkidle0'});
 
 		await stubAsserter.verifyCallCount(1)
 			.verifyBody(body => expect(body).toBeDefined())

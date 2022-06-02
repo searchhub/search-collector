@@ -29,7 +29,7 @@ describe('SuggestSearchCollector Suite', () => {
 	test('track suggest search data', async () => {
 		const stubAsserter = await createStubAsserter("SuggestSearchCollectorTracking.json");
 
-		await page.goto(getHost() + "/SuggestSearchCollector.page.html", {waitUntil: 'load'});
+		await page.goto(getHost() + "/SuggestSearchCollector.page.html", {waitUntil: 'networkidle0'});
 		await page.click('[data-id="S5"]');
 
 		await wait(100); // wait for the request to settle

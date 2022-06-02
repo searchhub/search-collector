@@ -29,7 +29,7 @@ describe('Test the SQSErrorTransport', () => {
 	test('SQSErrortTransport', async () => {
 		const asserter = await createStubAsserter("SQSErrortTransport.json");
 
-		await page.goto(getHost() + "/SQSErrorTransport.page.html", {waitUntil: 'load'});
+		await page.goto(getHost() + "/SQSErrorTransport.page.html", {waitUntil: 'networkidle0'});
 		await wait(1200); // wait more than a second for the buffering writer
 
 		await asserter.verifyCallCount(1)

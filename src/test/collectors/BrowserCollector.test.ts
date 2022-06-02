@@ -31,7 +31,7 @@ describe('BrowserCollector Suite', () => {
 		const recordLanguageAsserter = await createStubAsserter("BrowserCollectorTracking.recordLanguage.json");
 		const recordUserAgentAsserter = await createStubAsserter("BrowserCollectorTracking.recordUserAgent.json");
 
-		await page.goto(getHost() + "/BrowserCollector.page.html", {waitUntil: 'load'});
+		await page.goto(getHost() + "/BrowserCollector.page.html", {waitUntil: 'networkidle0'});
 		await page.waitForNetworkIdle();
 
 		await recordLanguageAsserter.verifyQueryParams(queryParams => {

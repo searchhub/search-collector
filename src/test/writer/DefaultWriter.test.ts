@@ -29,7 +29,7 @@ describe('Test the DefaultWriter', () => {
 	test('DefaultWriter', async () => {
 		const asserter = await createStubAsserter("DefaultWriter.json");
 
-		await page.goto(getHost() + "/DefaultWriter.page.html", {waitUntil: 'load'});
+		await page.goto(getHost() + "/DefaultWriter.page.html", {waitUntil: 'networkidle0'});
 		await wait(1200); // wait more than a second for the buffering writer
 
 		await asserter.verifyCallCount(1)

@@ -29,7 +29,7 @@ describe('ImpressionCollectorTracking Suite', () => {
 	test('track impression data', async () => {
 		const stubAsserter = await createStubAsserter("ImpressionCollectorTracking.json");
 
-		await page.goto(getHost() + "/ImpressionCollector.page.html", {waitUntil: 'load'});
+		await page.goto(getHost() + "/ImpressionCollector.page.html", {waitUntil: 'networkidle0'});
 		await page.click("#scrollTarget");//click scrolls the element into view
 
 		await wait(750); //ImpressionCollector is debounced, give it some more time
@@ -53,7 +53,7 @@ describe('ImpressionCollectorTracking Suite', () => {
 	test('track impression data with expected page false', async () => {
 		const stubAsserter = await createStubAsserter("ImpressionCollectorTracking_expected_false.json");
 
-		await page.goto(getHost() + "/ImpressionCollector.page.html?expectedPage=false", {waitUntil: 'load'});
+		await page.goto(getHost() + "/ImpressionCollector.page.html?expectedPage=false", {waitUntil: 'networkidle0'});
 		await page.click("#scrollTarget");//click scrolls the element into view
 
 		await wait(750); //ImpressionCollector is debounced, give it some more time
@@ -65,7 +65,7 @@ describe('ImpressionCollectorTracking Suite', () => {
 	test('track impression data with expected page true', async () => {
 		const stubAsserter = await createStubAsserter("ImpressionCollectorTracking_expected_true.json");
 
-		await page.goto(getHost() + "/ImpressionCollector.page.html?expectedPage=true", {waitUntil: 'load'});
+		await page.goto(getHost() + "/ImpressionCollector.page.html?expectedPage=true", {waitUntil: 'networkidle0'});
 		await page.click("#scrollTarget");//click scrolls the element into view
 
 		await wait(750); //ImpressionCollector is debounced, give it some more time

@@ -29,7 +29,7 @@ describe('InstantSearchQueryCollector Suite', () => {
 	test('track instant search data', async () => {
 		const stubAsserter = await createStubAsserter("InstantSearchQueryCollectorTracking.json");
 
-		await page.goto(getHost() + "/InstantSearchQueryCollector.page.html", {waitUntil: 'load'});
+		await page.goto(getHost() + "/InstantSearchQueryCollector.page.html", {waitUntil: 'networkidle0'});
 		await page.click("#searchInput");
 		await page.keyboard.press('a');
 		await page.keyboard.press('b');

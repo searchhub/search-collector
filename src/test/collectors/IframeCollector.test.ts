@@ -29,7 +29,7 @@ describe('IframeCollector Suite', () => {
 	test('execute from within iframe', async () => {
 		const asserter = await createStubAsserter("IframeCollectorTracking.json");
 
-		await page.goto(getHost() + "/ContextTestMain.page.html", {waitUntil: 'load'});
+		await page.goto(getHost() + "/ContextTestMain.page.html", {waitUntil: 'networkidle0'});
 		await page.click("#clickMe");
 		await wait(1000);
 

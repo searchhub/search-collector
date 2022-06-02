@@ -29,7 +29,7 @@ describe('FiredSearchCollector Suite', () => {
 	test('track impression data', async () => {
 		const stubAsserter = await createStubAsserter("FiredSearchCollectorTracking.json");
 
-		await page.goto(getHost() + "/FiredSearchCollector.page.html", {waitUntil: 'load'});
+		await page.goto(getHost() + "/FiredSearchCollector.page.html", {waitUntil: 'networkidle0'});
 		await page.click("#searchButton");
 
 		await wait(100); // wait for the request to settle

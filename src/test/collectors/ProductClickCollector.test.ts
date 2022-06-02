@@ -29,7 +29,7 @@ describe('ProductClickCollector Suite', () => {
 	test('track all product click data', async () => {
 		const asserter = await createStubAsserter("ProductClickCollectorTracking.json");
 
-		await page.goto(getHost() + "/ProductClickCollector.page.html?collector=all", {waitUntil: 'load'});
+		await page.goto(getHost() + "/ProductClickCollector.page.html?collector=all", {waitUntil: 'networkidle0'});
 		await page.click("#clickMe");
 		await wait(100);
 
@@ -49,7 +49,7 @@ describe('ProductClickCollector Suite', () => {
 	test('track product click data', async () => {
 		const asserter = await createStubAsserter("ProductClickCollectorTracking.json");
 
-		await page.goto(getHost() + "/ProductClickCollector.page.html?collector=none", {waitUntil: 'load'});
+		await page.goto(getHost() + "/ProductClickCollector.page.html?collector=none", {waitUntil: 'networkidle0'});
 		await page.click("#clickMe");
 		await wait(100);
 
