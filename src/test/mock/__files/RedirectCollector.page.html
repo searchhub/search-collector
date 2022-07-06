@@ -20,17 +20,27 @@
 				document.querySelector("#searchButton").addEventListener("mouseup", () => {
 					callback(document.querySelector("#searchInput").value);
 				});
+
+				document.querySelector("#triggerFiredSearchButton").addEventListener("mouseup", () => {
+					callback(document.querySelector("#searchInput").value);
+				});
 			}
 
 			collector.add(new RedirectCollector(firedSearchCallback, () => {
 				const params = new URLSearchParams(window.location.search);
-				return params.get("isSearchPage") !== "false";
+				return params.get("isSearchPage") === "true";
 			}));
 
 			document.querySelector("#searchButton").addEventListener("click", () => {
 				const params = new URLSearchParams(document.location.search);
+				params.delete("isSearchPage");
 				params.append("isSearchPage", "false");
 				document.location.href = document.location.origin + window.location.pathname + "?" + params.toString();
+			});
+
+			Object.defineProperty(document, 'referer', {
+				value: "https://www.google.dom",
+				writable: false
 			});
 
 			collector.start();
@@ -44,6 +54,8 @@
 <!--search box-->
 <input id="searchInput" value="THE REDIRECT QUERY"/>
 <button id="searchButton">search button</button>
+<button id="triggerFiredSearchButton">fired search button</button>
+
 
 <!--10-->
 <div class="product"></div>
