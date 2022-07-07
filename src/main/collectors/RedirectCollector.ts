@@ -45,19 +45,37 @@ export class RedirectCollector extends AbstractCollector {
 			// Remove the search action, as we're either on a search result page or we've redirected
 			getSessionStorage().removeItem(RedirectCollector.STORAGE_KEY);
 
-			// If we have not landed on the expected search page, it must have been (looove) a redirect
-			if (!this.resolve(this.expectedPageResolver, log)) {
-				// Thus record the redirect
-				const query = new Query();
-				query.setSearch(lastSearch);
+			if (shouldTrackRedirect(document.referrer)) {
+				// If we have not landed on the expected search page, it must have been (looove) a redirect
+				if (!this.resolve(this.expectedPageResolver, log)) {
+					// Thus record the redirect
+					const query = new Query();
+					query.setSearch(lastSearch);
 
-				writer.write({
-					type: "redirect",
-					keywords: lastSearch,
-					query: query.toString(),
-					url: window.location.href
-				});
+					writer.write({
+						type: "redirect",
+						keywords: lastSearch,
+						query: query.toString(),
+						url: window.location.href
+					});
+				}
 			}
 		}
 	}
+}
+
+
+function shouldTrackRedirect(referer: string) {
+	if (referer) {
+		try {
+			const refUrl = new URL(referer);
+			const currentUrl = new URL(window.location.href);
+			if (currentUrl.origin && refUrl.origin)
+				return refUrl.origin === currentUrl.origin;
+		} catch (e) {
+			console.error(e);
+		}
+	}
+
+	return true;
 }
