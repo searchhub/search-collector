@@ -1,8 +1,14 @@
 import {AbstractCollector} from "./AbstractCollector";
 import {Context} from "../utils/Context";
-import {BooleanResolver, CallbackResolver} from "../resolvers/Resolver";
+import {BooleanResolver, CallbackResolver, NumberResolver, QueryResolver} from "../resolvers/Resolver";
 import {getSessionStorage} from "../utils";
 import {Query} from "../query";
+
+type RedirectKpiCollectorParams = {
+	resultCountResolver?: NumberResolver
+	collectors?: Array<AbstractCollector>,
+	queryResolver?: QueryResolver,
+}
 
 /**
  * Keep track of human triggered searches followed by a redirect to a page different than the search result page
@@ -11,8 +17,9 @@ export class RedirectCollector extends AbstractCollector {
 
 	private static STORAGE_KEY = "__lastSearch";
 
-	private readonly triggerResolver: CallbackResolver;
-	private readonly expectedPageResolver: BooleanResolver;
+	private readonly resultCountResolver: NumberResolver;
+	private readonly collectors: Array<AbstractCollector>;
+	private readonly queryResolver: QueryResolver | ((phrase) => Query);
 
 	/**
 	 * Construct redirect collector
@@ -20,12 +27,29 @@ export class RedirectCollector extends AbstractCollector {
 	 * @constructor
 	 * @param {function} triggerResolver - Function that fires when a search happens, should return the keyword
 	 * @param {function} expectedPageResolver - Function that should return whether the page we load is the expected one
+	 * @param redirectKpiParams - Parameters for collecting KPI's after a redirect
 	 * @param context
 	 */
-	constructor(triggerResolver: CallbackResolver, expectedPageResolver: BooleanResolver, context?: Context) {
+	constructor(private readonly triggerResolver: CallbackResolver,
+							private readonly expectedPageResolver: BooleanResolver,
+							private readonly redirectKpiParams: RedirectKpiCollectorParams = {},
+							context?: Context) {
 		super("redirect", context);
 		this.triggerResolver = triggerResolver;
 		this.expectedPageResolver = expectedPageResolver;
+
+		this.collectors = redirectKpiParams.collectors || [];
+		this.resultCountResolver = redirectKpiParams.resultCountResolver || (_ => void 0);
+		this.queryResolver = redirectKpiParams.queryResolver || ((phrase) => {
+			const query = new Query();
+			query.setSearch(phrase);
+			return query;
+		});
+	}
+
+	public setContext(context: Context) {
+		super.setContext(context);
+		this.collectors.forEach(collector => collector.setContext(context));
 	}
 
 	/**
@@ -49,15 +73,22 @@ export class RedirectCollector extends AbstractCollector {
 				// If we have not landed on the expected search page, it must have been (looove) a redirect
 				if (!this.resolve(this.expectedPageResolver, log)) {
 					// Thus record the redirect
-					const query = new Query();
-					query.setSearch(lastSearch);
+					const query = this.queryResolver(lastSearch)
 
 					writer.write({
 						type: "redirect",
 						keywords: lastSearch,
 						query: query.toString(),
-						url: window.location.href
+						url: window.location.href,
+						resultCount: this.resolve(this.resultCountResolver, log)
 					});
+
+					// attach all collectors which are responsible to gather kpi's after the redirect
+					this.collectors.forEach(collector => collector.attach({
+						write(data) {
+							writer.write({...data, query: query.toString()});
+						}
+					}, log));
 				}
 			}
 		}
