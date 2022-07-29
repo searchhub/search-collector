@@ -2,6 +2,7 @@ import {AbstractCollector} from "./AbstractCollector";
 import {Sentinel} from "../utils/Sentinel";
 import {ListenerType} from "../utils/ListenerType";
 import {Logger} from "../logger/Logger";
+import {Context} from "../utils";
 
 /**
  * Collect clicks on elements matching a query selector. Handles both DOM elements
@@ -21,9 +22,13 @@ export class ClickCollector extends AbstractCollector {
 	 * @param {string} selectorExpression - Document query selector identifying the elements to attach to
 	 * @param {string} type - The type OF element click to report
 	 * @param {string} listenerType - Whether the listener should be a dom or sentinel listener
+	 * @param context
 	 */
-	constructor(selectorExpression: string, type = "click", listenerType = ListenerType.Sentinel) {
-		super(type);
+	constructor(selectorExpression: string,
+							type = "click",
+							listenerType = ListenerType.Sentinel,
+							context?: Context) {
+		super(type, context);
 		this.selectorExpression = selectorExpression;
 		this.listenerType = listenerType;
 	}
