@@ -9,7 +9,9 @@
 			const {
 				CollectorModule,
 				RedirectCollector,
-				RestEventWriter
+				RestEventWriter,
+				positionResolver,
+				ProductClickCollector
 			} = window.SearchCollector;
 
 			const collector = new CollectorModule({
@@ -27,9 +29,19 @@
 			}
 
 			collector.add(new RedirectCollector(firedSearchCallback, () => {
-				const params = new URLSearchParams(window.location.search);
-				return params.get("isSearchPage") === "true";
-			}));
+					const params = new URLSearchParams(window.location.search);
+					return params.get("isSearchPage") === "true";
+				},
+				{
+					resultCountResolver: () => 5,
+					collectors: [new ProductClickCollector(".product", {
+						idResolver: element => element.getAttribute("data-id"),
+						positionResolver: element => positionResolver(".product", element),
+						priceResolver: element => Number(element.getAttribute("data-price")),
+						imageResolver: element => "image.jpg",
+						metadataResolver: element => element.nodeName
+					})]
+				}));
 
 			document.querySelector("#searchButton").addEventListener("click", () => {
 				const params = new URLSearchParams(document.location.search);

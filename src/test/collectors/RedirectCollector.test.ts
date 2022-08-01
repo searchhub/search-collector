@@ -22,16 +22,21 @@ describe('RedirectCollector Suite', () => {
 		await shutdownMockServer();
 	})
 
+	afterEach(async () => {
+		await verifyNoUnmatchedRequests();
+	})
+
 	test('track redirect data', async () => {
-		const stubAsserter = await createStubAsserter("RedirectCollectorTracking.json");
+		const redirectStubAsserter = await createStubAsserter("RedirectCollectorTracking.json");
+		const clickStubAsserter = await createStubAsserter("RedirectProductClickCollectorTracking.json");
 
 		await page.goto(getHost() + "/RedirectCollector.page.html?isSearchPage=true", {waitUntil: 'networkidle0'});
 
 		await Promise.all([page.waitForNavigation({waitUntil: "networkidle0"}), page.click("#searchButton")]);
 
-		await wait(100); // wait for the request to settle
+		await wait(100);
 
-		await stubAsserter.verifyCallCount(1)
+		await redirectStubAsserter.verifyCallCount(1)
 			.verifyQueryParams(params => {
 				const trackingData = JSON.parse(params.data.values[0]);
 				expect(trackingData.type).toBe("redirect");
@@ -41,7 +46,47 @@ describe('RedirectCollector Suite', () => {
 			})
 			.verify();
 
-		await verifyNoUnmatchedRequests();
+		await clickStubAsserter.verifyCallCount(0)
+			.verify();
+	});
+
+	test('track redirect data with product clicks', async () => {
+		const redirectStubAsserter = await createStubAsserter("RedirectCollectorTracking.json");
+		const clickStubAsserter = await createStubAsserter("RedirectProductClickCollectorTracking.json");
+
+		await page.goto(getHost() + "/RedirectCollectorWithProductClicks.page.html?isSearchPage=true", {waitUntil: 'networkidle0'});
+
+		await Promise.all([page.waitForNavigation({waitUntil: "networkidle0"}), page.click("#searchButton")]);
+
+		await wait(100);
+
+		await page.click("#clickMe");
+
+		await wait(100);
+
+		await redirectStubAsserter.verifyCallCount(1)
+			.verifyQueryParams(params => {
+				const trackingData = JSON.parse(params.data.values[0]);
+				expect(trackingData.type).toBe("redirect");
+				expect(trackingData.keywords).toBe("THE REDIRECT QUERY");
+				expect(trackingData.query).toBe("$s=THE REDIRECT QUERY/");
+				expect(trackingData.url).toBe(getHost() + "/RedirectCollectorWithProductClicks.page.html?isSearchPage=false");
+				expect(trackingData.resultCount).toBe(5);
+			})
+			.verify();
+
+		await clickStubAsserter.verifyCallCount(1)
+			.verifyQueryParams(params => {
+				const trackingData = JSON.parse(params.data.values[0]);
+				expect(trackingData.type).toBe("product");
+				expect(trackingData.id).toBe("5");
+				expect(trackingData.position).toBe(4);
+				expect(trackingData.price).toBe(5.99);
+				expect(trackingData.query).toBe("$s=THE REDIRECT QUERY/");
+				expect(trackingData.image).toBe("image.jpg");
+				expect(trackingData.metadata).toBe("DIV");
+			})
+			.verify();
 	});
 
 	test('track redirect data different origin', async () => {
