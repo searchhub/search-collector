@@ -21,7 +21,23 @@
 				ProductClickCollector,
 				RestEventWriter,
 				positionResolver,
+				Trail,
+				TrailType,
+				Query
 			} = window.SearchCollector;
+
+			const params = new URLSearchParams(window.location.search);
+			const trail = new Trail(() => {
+				const q = new Query();
+				q.setSearch("THE QUERY");
+				return q;
+			}, () => "session1234");
+
+			if (params.has("useTrailQuery")) {
+				const q = new Query();
+				q.setSearch(params.get("useTrailQuery"))
+				trail.register(window.location.pathname, TrailType.Main, q.toString());
+			}
 
 			const collector = new CollectorModule({
 				writer: new RestEventWriter(location.origin + "/product-click-collector-channel")
@@ -29,7 +45,8 @@
 
 			if (new URLSearchParams(window.location.search).get("collector") === "none") {
 				collector.add(new ProductClickCollector(".product", {
-					idResolver: element => element.getAttribute("data-id")
+					idResolver: element => element.getAttribute("data-id"),
+					trail
 				}));
 			} else {
 				collector.add(new ProductClickCollector(".product", {
@@ -37,7 +54,8 @@
 					positionResolver: element => positionResolver(".product", element),
 					priceResolver: element => Number(element.getAttribute("data-price")),
 					imageResolver: element => "image.jpg",
-					metadataResolver: element => element.nodeName
+					metadataResolver: element => element.nodeName,
+					trail
 				}));
 			}
 

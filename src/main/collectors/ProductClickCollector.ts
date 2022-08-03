@@ -2,6 +2,7 @@ import {ClickCollector} from "./ClickCollector";
 import {ListenerType} from "../utils/ListenerType";
 import {AnyResolver, NumberResolver, StringResolver} from "../resolvers/Resolver";
 import {Trail} from "../query/Trail";
+import {TrailType} from "../query";
 
 export type ProductClickCollectorResolver = {
 	idResolver: StringResolver,
@@ -40,19 +41,28 @@ export class ProductClickCollector extends ClickCollector {
 	collect(element, event, log) {
 		const id = this.resolve(this.idResolver, log, element, event);
 		if (id) {
-			if (this.trail) {
-				// Register that this product journey into potential purchase started
-				// with this query
-				this.trail.register(id);
-			}
-
-			return {
+			const clickData: any = {
 				id,
 				position: this.resolve(this.positionResolver, log, element, event),
 				price: this.resolve(this.priceResolver, log, element, event),
 				image: this.resolve(this.imageResolver, log, element, event),
 				metadata: this.resolve(this.metadataResolver, log, element, event)
 			};
+
+			if (this.trail) {
+				// After a redirect a trail with the pathname is registered containing the query which triggered the redirect.
+				// If we have such a query we use it to build the trail.
+				const trailData = this.trail.fetch(location.pathname);
+				if (trailData) {
+					clickData.query = trailData.query;
+				}
+
+				// Register that this product journey into potential purchase started
+				// with this query
+				this.trail.register(id, TrailType.Main, trailData?.query);
+			}
+
+			return clickData;
 		}
 	}
 }
