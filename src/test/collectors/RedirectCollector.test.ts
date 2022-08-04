@@ -64,6 +64,13 @@ describe('RedirectCollector Suite', () => {
 
 		await wait(100);
 
+		// make sure a trail for that path exists
+		const trail = await page.evaluate(() => {
+			return localStorage.getItem("search-collector-trail");
+		});
+		const pathInfo = JSON.parse(trail)["/RedirectCollectorWithProductClicks.page.html"];
+		expect(pathInfo.query).toBe("$s=THE REDIRECT QUERY/");
+
 		await redirectStubAsserter.verifyCallCount(1)
 			.verifyQueryParams(params => {
 				const trackingData = JSON.parse(params.data.values[0]);
