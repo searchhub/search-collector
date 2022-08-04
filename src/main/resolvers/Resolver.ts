@@ -4,6 +4,7 @@ import {generateId, getCookie, getLocalStorage, setCookie} from "../utils/Util";
 import {Query} from "../query/Query";
 
 const MINUTES_ONE_DAY = 60 * 24;
+const MINUTES_TWO_DAYS = 60 * 24 * 2;
 const MINUTES_HALF_HOUR = 30;
 
 export type CallbackResolver = (callback: (...params: any) => void) => void;
@@ -31,7 +32,7 @@ export const cookieResolver = (name: string = ""): string => getCookie(name);
  *
  * @param name the name of the session cookie
  */
-export const cookieSessionResolver = (name = "SearchCollectorSession"): string => setCookie(name, cookieResolver(name) || generateId(), MINUTES_HALF_HOUR);
+export const cookieSessionResolver = (name = "SearchCollectorSession"): string => setCookie(name, cookieResolver(name) || generateId(), MINUTES_TWO_DAYS);
 
 /**
  * Find the position of a DOM element relative to other DOM elements of the same type.
