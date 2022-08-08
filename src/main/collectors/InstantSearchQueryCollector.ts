@@ -51,12 +51,13 @@ export class InstantSearchQueryCollector extends AbstractCollector {
 
 			// Delay the reaction of the event, clean the timeout if the event fires
 			// again and start counting from 0
-			delay(() => {
+			delay((timestamp) => {
 				const keywords = searchBox.value;
 				if (keywords && keywords.length >= this.minLength) {
 					writer.write({
 						"type": type,
-						"keywords": keywords
+						"keywords": keywords,
+						timestamp
 					});
 				}
 			}, this.delayMs);
@@ -80,8 +81,14 @@ export class InstantSearchQueryCollector extends AbstractCollector {
 
 const delay = (function () {
 	let timer;
+	let time;
 	return function (callback, ms) {
 		clearTimeout(timer);
-		timer = setTimeout(callback, ms);
+		if (!time)
+			time = new Date().getTime();
+		timer = setTimeout(() => {
+			callback(time)
+			time = null;
+		}, ms);
 	};
 })();

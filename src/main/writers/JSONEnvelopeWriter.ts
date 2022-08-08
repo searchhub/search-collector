@@ -11,7 +11,9 @@ export class JSONEnvelopeWriter implements Writer {
 							private readonly channel: string) {}
 
 	write(data: any) {
-		data.timestamp = new Date().getTime();
+		if (!data.timestamp)
+			data.timestamp = new Date().getTime();
+
 		data.session = this.sessionResolver();
 		data.channel = this.channel;
 
