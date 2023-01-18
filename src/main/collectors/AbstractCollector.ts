@@ -48,7 +48,8 @@ export class AbstractCollector {
 			try {
 				return handler(...args, ...handlerArgs);
 			} catch (e) {
-				log.error(`[${this.constructor.name}] Unexpected error during resolver execution: `, e);
+				if (log)
+					log.error(`[${this.constructor.name}] Unexpected error during resolver execution: `, e);
 			}
 		}
 	}
@@ -70,7 +71,9 @@ export class AbstractCollector {
 				return val;
 			}
 		} catch (e) {
-			log.error(`[${this.constructor.name}] Unexpected error during resolver execution: `, e);
+			if (log && log.error) {
+				log.error(`[${this.constructor.name}] Unexpected error during resolver execution: `, e);
+			}
 		}
 	}
 }
