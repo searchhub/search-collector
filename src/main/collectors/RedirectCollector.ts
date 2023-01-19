@@ -30,6 +30,7 @@ export class RedirectCollector extends AbstractCollector {
 	private readonly sessionResolver: StringResolver;
 	private readonly redirectTTL: number;
 	private readonly redirectTrail: Trail;
+	private isCollectorsAttached = false;
 
 	/**
 	 * Used to track if the trigger has been installed already in case attached is called multiple times
@@ -169,8 +170,10 @@ export class RedirectCollector extends AbstractCollector {
 		 * We have to do this because people can navigate away from the landing page and back again and we don't want to lose all subsequent clicks etc.
 		 */
 		const pathInfo = RedirectCollector.getRedirectPathInfo(this.getWindow().location.pathname);
-		if (pathInfo)
+		if (pathInfo && this.isCollectorsAttached !== true) {
 			this.attachCollectors(writer, log, pathInfo.query);
+			this.isCollectorsAttached = true;
+		}
 	}
 
 	private attachCollectors(writer, log, query) {
@@ -179,11 +182,12 @@ export class RedirectCollector extends AbstractCollector {
 			try {
 				collector.attach({
 					write(data) {
-						writer.write({...data, query});
+						writer.write({...data, query: data.query || query});
 					}
 				}, log)
 			} catch (e) {
-				log.error(e);
+				if (log)
+					log.error(e);
 			}
 		});
 	}
