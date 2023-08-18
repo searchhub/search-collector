@@ -13,6 +13,11 @@ import {Query, Trail, TrailType} from "../query";
 export type RedirectKpiCollectorParams = {
 	resultCountResolver?: NumberResolver
 	collectors?: Array<AbstractCollector>,
+	maxPathSegments?: number,
+	nestedRedirects?: {
+		subSelectors?: string[],
+		depth?: number
+	},
 	redirectTTLMillis?: number
 }
 
@@ -21,8 +26,17 @@ export type RedirectKpiCollectorParams = {
  */
 export class RedirectCollector extends AbstractCollector {
 
-	private static STORAGE_KEY = "__lastSearch";
+	/**
+	 * Key used to store the keywords of the last executed search
+	 */
+	private static LAST_SEARCH_STORAGE_KEY = "__lastSearch";
+
+	/**
+	 * Key used to store query information for a given redirect landing page (path of the url)
+	 */
 	private static PATH_STORAGE_KEY = "___pathStorage";
+
+	private static NESTED_REDIRECT_KEYWORDS_STORAGE_KEY = "___nestedRedirectKeywordsStorage";
 
 	private readonly resultCountResolver: NumberResolver;
 	private readonly collectors: Array<AbstractCollector>;
@@ -30,6 +44,31 @@ export class RedirectCollector extends AbstractCollector {
 	private readonly sessionResolver: StringResolver;
 	private readonly redirectTTL: number;
 	private readonly redirectTrail: Trail;
+
+	/**
+	 * Sub selectors to use when searching for elements which trigger redirects that are associated to the initial search query
+	 * @private
+	 */
+	private readonly subSelectors: string[];
+
+	/**
+	 * Maximum number of path segments to store in the path storage
+	 * @default -1 (unlimited)
+	 * @private
+	 */
+	private readonly maxPathSegments: number;
+
+	/**
+	 * Maximum depth of nested redirects to track
+	 * @default 1
+	 * @private
+	 */
+	private readonly depth: number;
+
+	/**
+	 * Used to track if the collectors have been attached already in case attached is called multiple times
+	 * @private
+	 */
 	private isCollectorsAttached = false;
 
 	/**
@@ -57,6 +96,10 @@ export class RedirectCollector extends AbstractCollector {
 		this.collectors = redirectKpiParams.collectors || [];
 		this.resultCountResolver = redirectKpiParams.resultCountResolver || (_ => void 0);
 		this.redirectTTL = this.redirectKpiParams.redirectTTLMillis || 86400000;
+		this.maxPathSegments = this.redirectKpiParams.maxPathSegments || -1;
+
+		this.subSelectors = this.redirectKpiParams.nestedRedirects?.subSelectors || [];
+		this.depth = this.redirectKpiParams.nestedRedirects?.depth || 1;
 
 		this.queryResolver = (phrase) => {
 			const query = new Query();
@@ -67,7 +110,7 @@ export class RedirectCollector extends AbstractCollector {
 		this.sessionResolver = () => cookieSessionResolver();
 
 		this.redirectTrail = new Trail(() => {
-			const pathInfo = RedirectCollector.getRedirectPathInfo(window.location.pathname);
+			const pathInfo = RedirectCollector.getRedirectPathInfo(this.getPathname());
 			return new Query(pathInfo?.query);
 		}, this.sessionResolver);
 	}
@@ -81,41 +124,43 @@ export class RedirectCollector extends AbstractCollector {
 	 * Marks this path as a redirect landing page.
 	 * @param path the pathname e.g. /some-path
 	 * @param query the query which lead to this path
+	 * @param key the key to store the redirect path in
 	 * @private
 	 */
-	private static setRedirectPath(path: string, query: string) {
+	private static setRedirectPath(path: string, query: string, key: string = RedirectCollector.PATH_STORAGE_KEY) {
 		const redirectPaths = this.getRedirectPaths();
 		redirectPaths[path] = {
 			query,
 			timestamp: new Date().getTime()
 		};
 
-		getSessionStorage().setItem(RedirectCollector.PATH_STORAGE_KEY, JSON.stringify(redirectPaths));
+		getSessionStorage().setItem(key, JSON.stringify(redirectPaths));
 	}
 
 	/**
 	 * Get all marked paths
 	 * @private
 	 */
-	private static getRedirectPaths() {
-		return JSON.parse(getSessionStorage().getItem(RedirectCollector.PATH_STORAGE_KEY) || "{}");
+	private static getRedirectPaths(key: string = RedirectCollector.PATH_STORAGE_KEY) {
+		return JSON.parse(getSessionStorage().getItem(key) || "{}");
 	}
 
 	/**
 	 * Retrieve data for the given path
 	 * @param path
+	 * @param key
 	 * @private
 	 */
-	private static getRedirectPathInfo(path: string) {
-		return this.getRedirectPaths()[path];
+	private static getRedirectPathInfo(path: string, key: string = RedirectCollector.PATH_STORAGE_KEY) {
+		return this.getRedirectPaths(key)[path];
 	}
 
 	/**
 	 * Delete all expired redirect paths
 	 * @private
 	 */
-	private expireRedirectPaths() {
-		const redirectPaths = RedirectCollector.getRedirectPaths();
+	private expireRedirectPaths(key: string = RedirectCollector.PATH_STORAGE_KEY) {
+		const redirectPaths = RedirectCollector.getRedirectPaths(key);
 		const now = new Date().getTime();
 		Object.keys(redirectPaths).forEach(path => {
 			const pathInfo = redirectPaths[path];
@@ -123,7 +168,7 @@ export class RedirectCollector extends AbstractCollector {
 				delete redirectPaths[path];
 			}
 		});
-		getSessionStorage().setItem(RedirectCollector.PATH_STORAGE_KEY, JSON.stringify(redirectPaths));
+		getSessionStorage().setItem(key, JSON.stringify(redirectPaths));
 	}
 
 	/**
@@ -134,17 +179,17 @@ export class RedirectCollector extends AbstractCollector {
 	 */
 	attach(writer, log) {
 		if (this.isTriggerInstalled === false) {
-			this.resolve(this.triggerResolver, log, keyword => getSessionStorage().setItem(RedirectCollector.STORAGE_KEY, keyword));
+			this.resolve(this.triggerResolver, log, keyword => getSessionStorage().setItem(RedirectCollector.LAST_SEARCH_STORAGE_KEY, keyword));
 			this.isTriggerInstalled = true;
 		}
 
 		this.expireRedirectPaths();
 
 		// Fetch the latest search if any
-		const lastSearch = getSessionStorage().getItem(RedirectCollector.STORAGE_KEY);
+		const lastSearch = getSessionStorage().getItem(RedirectCollector.LAST_SEARCH_STORAGE_KEY);
 
 		if (lastSearch) {
-			getSessionStorage().removeItem(RedirectCollector.STORAGE_KEY);
+			getSessionStorage().removeItem(RedirectCollector.LAST_SEARCH_STORAGE_KEY);
 
 			// If we have not landed on the expected search page, it must have been a redirect
 			if (shouldTrackRedirect(document.referrer) && !this.resolve(this.expectedPageResolver, log)) {
@@ -158,10 +203,21 @@ export class RedirectCollector extends AbstractCollector {
 				});
 
 				// mark as redirect landing page
-				RedirectCollector.setRedirectPath(window.location.pathname, query);
-				// register a trail with the pathname for subsequent click events. See ProductClickCollector.ts
+				RedirectCollector.setRedirectPath(this.getPathname(), query);
+
+				// register trail on the current pathname because the ProductClick collector doesn't know about the maxPathSegments property
 				this.redirectTrail.register(window.location.pathname, TrailType.Main, query);
 			}
+		}
+
+		const lastSearchNestedRedirect = getSessionStorage().getItem(RedirectCollector.NESTED_REDIRECT_KEYWORDS_STORAGE_KEY);
+		if (lastSearchNestedRedirect) {
+			getSessionStorage().removeItem(RedirectCollector.NESTED_REDIRECT_KEYWORDS_STORAGE_KEY);
+			const query = this.queryResolver(lastSearchNestedRedirect).toString();
+			RedirectCollector.setRedirectPath(this.getPathname(), query);
+
+			// register trail on the current pathname because the ProductClick collector doesn't know about the maxPathSegments property
+			this.redirectTrail.register(window.location.pathname, TrailType.Main, query);
 		}
 
 		/**
@@ -169,11 +225,31 @@ export class RedirectCollector extends AbstractCollector {
 		 * If valid, we have to attach the KPI collectors to gather KPIs for this landing page.
 		 * We have to do this because people can navigate away from the landing page and back again and we don't want to lose all subsequent clicks etc.
 		 */
-		const pathInfo = RedirectCollector.getRedirectPathInfo(this.getWindow().location.pathname);
+		const pathInfo = RedirectCollector.getRedirectPathInfo(this.getPathname());
 		if (pathInfo && this.isCollectorsAttached !== true) {
 			this.attachCollectors(writer, log, pathInfo.query);
 			this.isCollectorsAttached = true;
+
+			// register trail on the current pathname because the ProductClick collector doesn't know about the maxPathSegments property
+			this.redirectTrail.register(window.location.pathname, TrailType.Main, new Query(pathInfo.query).toString());
+
+			// if we have nested redirects, we have to carry the query parameters over to the next page
+			this.subSelectors.forEach(selector => {
+				document.querySelectorAll(selector).forEach(element => { // TODO configure sentinel or dom
+					element.addEventListener("click", (event) => {
+						getSessionStorage().setItem(RedirectCollector.NESTED_REDIRECT_KEYWORDS_STORAGE_KEY, new Query(pathInfo.query).getSearch());
+					});
+				});
+			});
 		}
+	}
+
+	private getPathname(): string {
+		if (this.maxPathSegments > 0) {
+			const pathSegments = this.getWindow().location.pathname.split("/");
+			return "/" + pathSegments.filter(s => !!s).slice(0, this.maxPathSegments).join("/");
+		}
+		return this.getWindow().location.pathname;
 	}
 
 	private attachCollectors(writer, log, query) {
