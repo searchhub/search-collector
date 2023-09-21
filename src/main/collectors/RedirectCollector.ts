@@ -7,7 +7,7 @@ import {
 	NumberResolver,
 	StringResolver
 } from "../resolvers/Resolver";
-import {getSessionStorage} from "../utils";
+import {getSessionStorage, ListenerType, Sentinel} from "../utils";
 import {Query, Trail, TrailType} from "../query";
 
 export type RedirectKpiCollectorParams = {
@@ -83,15 +83,18 @@ export class RedirectCollector extends AbstractCollector {
 	 * @param {function} triggerResolver - Function that fires when a search happens, should return the keyword
 	 * @param {function} expectedPageResolver - Function that should return whether the page we load is the expected one
 	 * @param redirectKpiParams - Parameters for collecting KPI's after a redirect
+	 * @param listenerType
 	 * @param context
 	 */
 	constructor(private readonly triggerResolver: CallbackResolver,
 							private readonly expectedPageResolver: BooleanResolver,
 							private readonly redirectKpiParams: RedirectKpiCollectorParams = {},
+							private readonly listenerType = ListenerType.Sentinel,
 							context?: Context) {
 		super("redirect", context);
 		this.triggerResolver = triggerResolver;
 		this.expectedPageResolver = expectedPageResolver;
+		this.listenerType = listenerType;
 
 		this.collectors = redirectKpiParams.collectors || [];
 		this.resultCountResolver = redirectKpiParams.resultCountResolver || (_ => void 0);
@@ -235,11 +238,20 @@ export class RedirectCollector extends AbstractCollector {
 
 			// if we have nested redirects, we have to carry the query parameters over to the next page
 			this.subSelectors.forEach(selector => {
-				document.querySelectorAll(selector).forEach(element => { // TODO configure sentinel or dom
-					element.addEventListener("click", (event) => {
-						getSessionStorage().setItem(RedirectCollector.NESTED_REDIRECT_KEYWORDS_STORAGE_KEY, new Query(pathInfo.query).getSearch());
+				function handleClick() {
+					getSessionStorage().setItem(RedirectCollector.NESTED_REDIRECT_KEYWORDS_STORAGE_KEY, new Query(pathInfo.query).getSearch());
+				}
+
+				if (this.listenerType === ListenerType.Sentinel) {
+					const sentinel = new Sentinel(this.getDocument());
+					sentinel.on(selector, element => {
+						element.addEventListener("click", handleClick);
+					})
+				} else {
+					document.querySelectorAll(selector).forEach(element => {
+						element.addEventListener("click", handleClick);
 					});
-				});
+				}
 			});
 		}
 	}
