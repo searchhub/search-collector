@@ -3,7 +3,6 @@ import fetch from "node-fetch";
 import {join} from "path";
 import {getRandomInt, wait} from "./util";
 
-
 export class StubAsserter {
 
 	private disposed: boolean;
@@ -44,9 +43,11 @@ export class StubAsserter {
 		return this;
 	}
 
-	private async _verifyBody(assertFn: (body: any) => void) {
-		const entry = await this.fetchJournalEntry();
-		await assertFn(entry.request.body);
+	private async _verifyBody(assertFn: (body: any, i: number) => void) {
+		const entries = await this.fetchJournalEntry();
+		for (let i = 0; i < entries.length; i++) {
+			await assertFn(entries[i].request.body, i);
+		}
 	}
 
 	verifyHeaders(assertFn: (headers: { [key: string]: string }) => void) {
@@ -56,9 +57,11 @@ export class StubAsserter {
 		return this;
 	}
 
-	private async _verifyHeaders(assertFn: (headers: { [key: string]: string }) => void) {
-		const entry = await this.fetchJournalEntry();
-		await assertFn(entry.request.headers);
+	private async _verifyHeaders(assertFn: (headers: { [key: string]: string }, i: number) => void) {
+		const entries = await this.fetchJournalEntry();
+		for (let i = 0; i < entries.length; i++) {
+			await assertFn(entries[i].request.headers, i);
+		}
 	}
 
 	verifyCookies(assertFn: (cookies: { [key: string]: string }) => void) {
@@ -68,9 +71,11 @@ export class StubAsserter {
 		return this;
 	}
 
-	private async _verifyCookies(assertFn: (cookies: { [key: string]: string }) => void) {
-		const entry = await this.fetchJournalEntry();
-		await assertFn(entry.request.cookies);
+	private async _verifyCookies(assertFn: (cookies: { [key: string]: string }, i: number) => void) {
+		const entries = await this.fetchJournalEntry();
+		for (let i = 0; i < entries.length; i++) {
+			await assertFn(entries[i].request.cookies, i);
+		}
 	}
 
 	verifyRequest(assertFn: (request: any) => void) {
@@ -80,32 +85,39 @@ export class StubAsserter {
 		return this;
 	}
 
-	private async _verifyRequest(assertFn: (request: any) => void) {
-		const entry = await this.fetchJournalEntry();
-		await assertFn(entry.request);
+	private async _verifyRequest(assertFn: (request: any, i: number) => void) {
+		const entries = await this.fetchJournalEntry();
+		for (let i = 0; i < entries.length; i++) {
+			await assertFn(entries[i].request, i);
+		}
 	}
 
-	verifyQueryParams(assertFn: (queryParams: { [key: string]: { key: string, values: Array<string> } }) => void) {
+	verifyQueryParams(assertFn: (queryParams: { [key: string]: { key: string, values: Array<string> } }, i:number) => void) {
 		this.testFunctions.push(async () => {
 			await this._verifyQueryParams(assertFn);
 		});
 		return this;
 	}
 
-	private async _verifyQueryParams(assertFn: (queryParams: { [key: string]: { key: string, values: Array<string> } }) => void) {
-		const entry = await this.fetchJournalEntry();
-		await assertFn(entry.request.queryParams);
+	private async _verifyQueryParams(assertFn: (queryParams: {
+		[key: string]: { key: string, values: Array<string> }
+	}, i: number) => void) {
+		const entries = await this.fetchJournalEntry();
+		for (let i = 0; i < entries.length; i++) {
+			await assertFn(entries[i].request.queryParams, i);
+		}
 	}
 
 	private async fetchJournalEntry() {
-		const entry = (await this.getJournal()).requests.find(entry => entry.stubMapping.id === this.stub.id);
-		if (!entry)
+		const requests = (await this.getJournal()).requests;
+		const entries = requests.filter(entry => entry.stubMapping.id === this.stub.id);
+		if (entries?.length == 0)
 			throw Error(`Could not find stub for id ${this.stub.id} with filename ${this.stub.__filename}, 
 			probably (1) your api-stub did not match your request or \n 
 			(2) there were no request at all or \n
 			(3) another stub matched your request.`);
 
-		return entry;
+		return entries;
 	}
 
 	private async dispose() {
@@ -233,6 +245,8 @@ export const createMockServer = (port = getRandomInt(49152, 65535)) => {
 				throw Error("mock server already started");
 
 			process = exec(`npx wiremock --port ${port} --verbose --root-dir ${__dirname + "/mock"}`);
+			process.stderr.on("data", data => console.error(data));
+			process.stdout.on("data", data => console.debug(data));
 			const readyTime = await waitForReadiness();
 			// console.debug(`wiremock ready after ${readyTime}ms`);
 		},

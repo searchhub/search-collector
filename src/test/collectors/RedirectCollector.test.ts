@@ -96,6 +96,66 @@ describe('RedirectCollector Suite', () => {
 			.verify();
 	});
 
+	test('track redirect product clicks after a subSelector click', async () => {
+		const redirectStubAsserter = await createStubAsserter("RedirectCollectorTracking.json");
+		const clickStubAsserter = await createStubAsserter("RedirectProductClickCollectorTracking.json");
+
+		await page.goto(getHost() + "/RedirectCollectorWithProductClicks.page.html?isSearchPage=true", {waitUntil: 'networkidle0'});
+
+		await Promise.all([page.waitForNavigation({waitUntil: "networkidle0"}), page.click("#searchButton")]);
+
+		await wait(100);
+
+		await page.click("#clickMe");
+
+		await wait(100);
+
+		// make sure a trail for that path exists
+		const trail = await page.evaluate(() => {
+			return localStorage.getItem("search-collector-trail");
+		});
+		const pathInfo = JSON.parse(trail)["/RedirectCollectorWithProductClicks.page.html"];
+		expect(pathInfo.query).toBe("$s=THE REDIRECT QUERY/");
+
+		await redirectStubAsserter.verifyCallCount(1)
+			.verifyQueryParams(params => {
+				const trackingData = JSON.parse(params.data.values[0]);
+				expect(trackingData.type).toBe("redirect");
+				expect(trackingData.keywords).toBe("THE REDIRECT QUERY");
+				expect(trackingData.query).toBe("$s=THE REDIRECT QUERY/");
+				expect(trackingData.url).toBe(getHost() + "/RedirectCollectorWithProductClicks.page.html?isSearchPage=false");
+				expect(trackingData.resultCount).toBe(5);
+			})
+			.verify();
+
+		await Promise.all([page.waitForNavigation({waitUntil: "networkidle0"}), page.click("#subSelector")]);
+
+		await wait(100);
+
+		await page.click("#clickMe");
+
+		await wait(100);
+
+
+		await clickStubAsserter.verifyCallCount(2)
+			.verifyQueryParams((params, i) => {
+				const trackingData = JSON.parse(params.data.values[0]);
+				expect(trackingData.type).toBe("product");
+				expect(trackingData.id).toBe("5");
+				expect(trackingData.position).toBe(4);
+				expect(trackingData.price).toBe(5.99);
+				expect(trackingData.query).toBe("$s=THE REDIRECT QUERY/");
+				expect(trackingData.image).toBe("image.jpg");
+				expect(trackingData.metadata).toBe("DIV");
+				if (i === 0)
+					expect(trackingData.url).toBe(getHost() + "/RedirectCollectorSubSelectorPage.page.html?isSearchPage=false");
+
+				if (i === 1)
+					expect(trackingData.url).toBe(getHost() + "/RedirectCollectorWithProductClicks.page.html?isSearchPage=false");
+			})
+			.verify();
+	});
+
 	test('track redirect data different origin', async () => {
 		const stubAsserter = await createStubAsserter("RedirectCollectorTracking.json");
 
