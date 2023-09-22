@@ -237,23 +237,27 @@ export class RedirectCollector extends AbstractCollector {
 			this.redirectTrail.register(window.location.pathname, TrailType.Main, new Query(pathInfo.query).toString());
 
 			// if we have nested redirects, we have to carry the query parameters over to the next page
-			this.subSelectors.forEach(selector => {
-				function handleClick() {
-					getSessionStorage().setItem(RedirectCollector.NESTED_REDIRECT_KEYWORDS_STORAGE_KEY, new Query(pathInfo.query).getSearch());
-				}
-
-				if (this.listenerType === ListenerType.Sentinel) {
-					const sentinel = new Sentinel(this.getDocument());
-					sentinel.on(selector, element => {
-						element.addEventListener("click", handleClick);
-					})
-				} else {
-					document.querySelectorAll(selector).forEach(element => {
-						element.addEventListener("click", handleClick);
-					});
-				}
-			});
+			this.attachSubSelectors(pathInfo);
 		}
+	}
+
+	private attachSubSelectors(pathInfo) {
+		this.subSelectors.forEach(selector => {
+			function handleClick() {
+				getSessionStorage().setItem(RedirectCollector.NESTED_REDIRECT_KEYWORDS_STORAGE_KEY, new Query(pathInfo.query).getSearch());
+			}
+
+			if (this.listenerType === ListenerType.Sentinel) {
+				const sentinel = new Sentinel(this.getDocument());
+				sentinel.on(selector, element => {
+					element.addEventListener("click", handleClick);
+				})
+			} else {
+				document.querySelectorAll(selector).forEach(element => {
+					element.addEventListener("click", handleClick);
+				});
+			}
+		});
 	}
 
 	private getPathname(): string {
