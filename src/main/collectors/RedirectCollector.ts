@@ -21,6 +21,11 @@ export type RedirectKpiCollectorParams = {
 	redirectTTLMillis?: number
 }
 
+interface NestedRedirect {
+	query: string,
+	depth: number
+}
+
 /**
  * Keep track of human triggered searches followed by a redirect to a page different than the search result page
  */
@@ -104,7 +109,10 @@ export class RedirectCollector extends AbstractCollector {
 		this.subSelectors = this.redirectKpiParams.nestedRedirects?.subSelectors || [];
 		this.depth = this.redirectKpiParams.nestedRedirects?.depth || 1;
 
-		this.queryResolver = (phrase) => {
+		this.queryResolver = (phrase: string) => {
+			if (phrase.indexOf("$s=") > -1) {
+				return new Query(phrase);
+			}
 			const query = new Query();
 			query.setSearch(phrase);
 			return query;
@@ -213,14 +221,15 @@ export class RedirectCollector extends AbstractCollector {
 			}
 		}
 
-		const lastSearchNestedRedirect = getSessionStorage().getItem(RedirectCollector.NESTED_REDIRECT_KEYWORDS_STORAGE_KEY);
+		// this is only  triggered when a subSelector item was clicked i.e. a nested redirect
+		const lastSearchNestedRedirect = this.getNestedRedirect();
 		if (lastSearchNestedRedirect) {
-			getSessionStorage().removeItem(RedirectCollector.NESTED_REDIRECT_KEYWORDS_STORAGE_KEY);
-			const query = this.queryResolver(lastSearchNestedRedirect).toString();
+			const query = this.queryResolver(lastSearchNestedRedirect.query).toString();
 			RedirectCollector.setRedirectPath(this.getPathname(), query);
-
 			// register trail on the current pathname because the ProductClick collector doesn't know about the maxPathSegments property
+
 			this.redirectTrail.register(window.location.pathname, TrailType.Main, query);
+			getSessionStorage().removeItem(RedirectCollector.NESTED_REDIRECT_KEYWORDS_STORAGE_KEY);
 		}
 
 		/**
@@ -237,14 +246,41 @@ export class RedirectCollector extends AbstractCollector {
 			this.redirectTrail.register(window.location.pathname, TrailType.Main, new Query(pathInfo.query).toString());
 
 			// if we have nested redirects, we have to carry the query parameters over to the next page
-			this.attachSubSelectors(pathInfo);
+			this.attachSubSelectors(pathInfo, lastSearchNestedRedirect?.depth || 0);
 		}
 	}
 
-	private attachSubSelectors(pathInfo) {
+	private getNestedRedirect(): NestedRedirect | undefined {
+		const payload = getSessionStorage().getItem(RedirectCollector.NESTED_REDIRECT_KEYWORDS_STORAGE_KEY);
+		if (payload) {
+			return JSON.parse(payload) as NestedRedirect;
+		}
+		return undefined;
+	}
+
+	private isMaxDepthExceeded(currentDepth: number = 0) {
+		return currentDepth >= this.depth;
+	}
+
+	private registerNestedRedirect(query: string, currentDepth: number = 0) {
+		if (this.isMaxDepthExceeded(currentDepth))
+			return;
+
+		const payload = {
+			query: query,
+			depth: currentDepth + 1
+		};
+
+		getSessionStorage().setItem(RedirectCollector.NESTED_REDIRECT_KEYWORDS_STORAGE_KEY, JSON.stringify(payload));
+	}
+
+	private attachSubSelectors(pathInfo, currentDepth: number) {
+		if (this.isMaxDepthExceeded(currentDepth))
+			return;
+
 		this.subSelectors.forEach(selector => {
-			function handleClick() {
-				getSessionStorage().setItem(RedirectCollector.NESTED_REDIRECT_KEYWORDS_STORAGE_KEY, new Query(pathInfo.query).getSearch());
+			const handleClick = () => {
+				this.registerNestedRedirect(pathInfo.query, currentDepth);
 			}
 
 			if (this.listenerType === ListenerType.Sentinel) {
