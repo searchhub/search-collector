@@ -26,6 +26,38 @@ describe('RedirectCollector Suite', () => {
 		await verifyNoUnmatchedRequests();
 	})
 
+	test('track redirect data maxPathSegments', async () => {
+		const redirectStubAsserter = await createStubAsserter("RedirectCollectorTracking.json");
+		const clickStubAsserter = await createStubAsserter("RedirectProductClickCollectorTracking.json");
+
+		await page.goto(getHost() + "/nested/path/RedirectCollector.page.html?isSearchPage=true", {waitUntil: 'networkidle0'});
+
+		await Promise.all([page.waitForNavigation({waitUntil: "networkidle0"}), page.click("#searchButton")]);
+
+		await wait(100);
+
+		await redirectStubAsserter.verifyCallCount(1)
+			.verifyQueryParams(params => {
+				const trackingData = JSON.parse(params.data.values[0]);
+				expect(trackingData.type).toBe("redirect");
+				expect(trackingData.keywords).toBe("THE REDIRECT QUERY");
+				expect(trackingData.query).toBe("$s=THE REDIRECT QUERY/");
+				expect(trackingData.url).toBe(getHost() + "/nested/path/RedirectCollector.page.html?isSearchPage=false");
+			})
+			.verify();
+
+		await clickStubAsserter.verifyCallCount(0)
+			.verify();
+
+		const trail = await page.evaluate(() => {
+			return sessionStorage.getItem("___pathStorage");
+		});
+
+		const redirectPaths = JSON.parse(trail);
+		expect(redirectPaths["/nested"]).toBeDefined();
+		expect(redirectPaths["/nested"].query).toBe("$s=THE REDIRECT QUERY/");
+	});
+
 	test('track redirect data', async () => {
 		const redirectStubAsserter = await createStubAsserter("RedirectCollectorTracking.json");
 		const clickStubAsserter = await createStubAsserter("RedirectProductClickCollectorTracking.json");
