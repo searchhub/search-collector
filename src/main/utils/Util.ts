@@ -9,6 +9,15 @@ export const parseQueryString = (queryString = window.location.search) => {
 	return new URLSearchParams(queryString);
 }
 
+export const normalizePathname = (path: string) => {
+	if (!path.startsWith("/"))
+		path = "/" + path;
+	if (path.endsWith("/"))
+		path = path.substring(0, path.length - 1);
+
+	return path;
+}
+
 /**
  * Some browser like Safari prevent accessing localStorage in private mode by throwing exceptions.
  * Use this method to retrieve a mock impl which will at least prevent errors.

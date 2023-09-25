@@ -7,7 +7,7 @@ import {
 	NumberResolver,
 	StringResolver
 } from "../resolvers/Resolver";
-import {getSessionStorage, ListenerType, Sentinel} from "../utils";
+import {getSessionStorage, ListenerType, normalizePathname, Sentinel} from "../utils";
 import {Query, Trail, TrailType} from "../query";
 
 export type RedirectKpiCollectorParams = {
@@ -198,6 +198,7 @@ export class RedirectCollector extends AbstractCollector {
 
 		// Fetch the latest search if any
 		const lastSearch = getSessionStorage().getItem(RedirectCollector.LAST_SEARCH_STORAGE_KEY);
+		const pathname = normalizePathname(this.getWindow().location.pathname);
 
 		if (lastSearch) {
 			getSessionStorage().removeItem(RedirectCollector.LAST_SEARCH_STORAGE_KEY);
@@ -217,7 +218,7 @@ export class RedirectCollector extends AbstractCollector {
 				RedirectCollector.setRedirectPath(this.getPathname(), query);
 
 				// register trail on the current pathname because the ProductClick collector doesn't know about the maxPathSegments property
-				this.redirectTrail.register(window.location.pathname, TrailType.Main, query);
+				this.redirectTrail.register(pathname, TrailType.Main);
 			}
 		}
 
@@ -227,8 +228,8 @@ export class RedirectCollector extends AbstractCollector {
 			const query = this.queryResolver(lastSearchNestedRedirect.query).toString();
 			RedirectCollector.setRedirectPath(this.getPathname(), query);
 			// register trail on the current pathname because the ProductClick collector doesn't know about the maxPathSegments property
+			this.redirectTrail.register(pathname, TrailType.Main);
 
-			this.redirectTrail.register(window.location.pathname, TrailType.Main, query);
 			getSessionStorage().removeItem(RedirectCollector.NESTED_REDIRECT_KEYWORDS_STORAGE_KEY);
 		}
 
@@ -237,13 +238,13 @@ export class RedirectCollector extends AbstractCollector {
 		 * If valid, we have to attach the KPI collectors to gather KPIs for this landing page.
 		 * We have to do this because people can navigate away from the landing page and back again and we don't want to lose all subsequent clicks etc.
 		 */
-		const pathInfo = RedirectCollector.getRedirectPathInfo(this.getPathname());
+		const pathInfo = this.redirectTrail.fetch(this.getPathname());
 		if (pathInfo && this.isCollectorsAttached !== true) {
 			this.attachCollectors(writer, log, pathInfo.query);
 			this.isCollectorsAttached = true;
 
 			// register trail on the current pathname because the ProductClick collector doesn't know about the maxPathSegments property
-			this.redirectTrail.register(window.location.pathname, TrailType.Main, new Query(pathInfo.query).toString());
+			this.redirectTrail.register(pathname, TrailType.Main);
 
 			// if we have nested redirects, we have to carry the query parameters over to the next page
 			this.attachSubSelectors(pathInfo, lastSearchNestedRedirect?.depth || 0);
@@ -286,7 +287,7 @@ export class RedirectCollector extends AbstractCollector {
 			if (this.listenerType === ListenerType.Sentinel) {
 				const sentinel = new Sentinel(this.getDocument());
 				sentinel.on(selector, element => {
-					const info = RedirectCollector.getRedirectPathInfo(this.getPathname());
+					const info = this.redirectTrail.fetch(this.getPathname());
 					if (info) { // the sentinel can trigger on any page, we need to make sure we attach subSelectors only on valid redirect paths
 						element.addEventListener("click", handleClick);
 					}
@@ -300,11 +301,12 @@ export class RedirectCollector extends AbstractCollector {
 	}
 
 	private getPathname(): string {
+		const pathname = normalizePathname(this.getWindow().location.pathname);
 		if (this.maxPathSegments > 0) {
-			const pathSegments = this.getWindow().location.pathname.split("/");
-			return "/" + pathSegments.filter(s => !!s).slice(0, this.maxPathSegments).join("/");
+			const pathSegments = pathname.split("/");
+			return normalizePathname(pathSegments.filter(s => !!s).slice(0, this.maxPathSegments).join("/"));
 		}
-		return this.getWindow().location.pathname;
+		return pathname;
 	}
 
 	private attachCollectors(writer, log, query) {

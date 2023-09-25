@@ -3,6 +3,7 @@ import {ListenerType} from "../utils/ListenerType";
 import {AnyResolver, NumberResolver, StringResolver} from "../resolvers/Resolver";
 import {Trail} from "../query/Trail";
 import {TrailType} from "../query";
+import {normalizePathname} from "../utils";
 
 export type ProductClickCollectorResolver = {
 	idResolver: StringResolver,
@@ -52,7 +53,7 @@ export class ProductClickCollector extends ClickCollector {
 			if (this.trail) {
 				// After a redirect a trail with the pathname is registered containing the query which triggered the redirect.
 				// If we have such a query we use it to build the trail.
-				const trailData = this.trail.fetch(location.pathname);
+				const trailData = this.trail.fetch(normalizePathname(location.pathname));
 				if (trailData) {
 					clickData.query = trailData.query;
 				}
