@@ -286,7 +286,10 @@ export class RedirectCollector extends AbstractCollector {
 			if (this.listenerType === ListenerType.Sentinel) {
 				const sentinel = new Sentinel(this.getDocument());
 				sentinel.on(selector, element => {
-					element.addEventListener("click", handleClick);
+					const info = RedirectCollector.getRedirectPathInfo(this.getPathname());
+					if (info) { // the sentinel can trigger on any page, we need to make sure we attach subSelectors only on valid redirect paths
+						element.addEventListener("click", handleClick);
+					}
 				})
 			} else {
 				document.querySelectorAll(selector).forEach(element => {
