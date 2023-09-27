@@ -71,7 +71,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	Array.from(document.querySelectorAll("main.products a")).forEach(anchor => {
 		anchor.addEventListener("click", (e) => {
 			e.preventDefault();
-			redirect(`/product-detail.html?id=${e.currentTarget.getAttribute("data-product-id")}`)
+			redirect(`/product-detail.html?id=${e.currentTarget.parentElement.getAttribute("data-product-id")}`)
 		});
 	});
 
@@ -89,10 +89,14 @@ document.addEventListener("DOMContentLoaded", () => {
 	/**
 	 * AddToBasket Click
 	 */
-	Array.from(document.querySelectorAll("main.pdp button")).forEach(anchor => {
+	Array.from(document.querySelectorAll("main.pdp button, main.products button")).forEach(anchor => {
 		anchor.addEventListener("click", (e) => {
 			e.preventDefault();
-			basket.add(e.currentTarget.getAttribute("data-product-id"));
+			if (e.currentTarget.hasAttribute("data-product-id")) {
+				basket.add(e.currentTarget.getAttribute("data-product-id"));
+			} else {
+				basket.add(e.currentTarget.parentElement.getAttribute("data-product-id"));
+			}
 			redirect(`/basket.html`)
 		});
 	});

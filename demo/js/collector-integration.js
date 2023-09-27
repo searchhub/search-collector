@@ -112,8 +112,17 @@ collectorModule.add(new RedirectCollector(firedSearchCallback, isSearchPage, {
 		subSelectors: ['[data-track-id="redirectSubSelector"]']
 	}
 }, ListenerType.Sentinel, context));
+
+// basket PDP
 collectorModule.add(
 	new BasketClickCollector('[data-track-id="addToCartPDP"]',
+		element => element.getAttribute('data-product-id'),
+		element => extractPrice(document.querySelector('[data-track-id="priceContainer"]').textContent))
+);
+
+// basket PLP
+collectorModule.add(
+	new BasketClickCollector('[data-track-id="addToCartPLP"]',
 		element => element.getAttribute('data-product-id'),
 		element => extractPrice(document.querySelector('[data-track-id="priceContainer"]').textContent))
 );
