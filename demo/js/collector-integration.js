@@ -24,7 +24,8 @@ const {
 	CheckoutClickCollector,
 	ConsoleTransport,
 	SuggestSearchCollector,
-	AssociatedProductCollector
+	AssociatedProductCollector,
+	ListenerType,
 } = window.SearchCollector;
 
 
@@ -88,7 +89,29 @@ collectorModule.add(new SuggestSearchCollector((writer, type, context) => {
 	});
 }));
 
-collectorModule.add(new RedirectCollector(firedSearchCallback, isSearchPage, context));
+const redirectProductClickCollector = new ProductClickCollector('[data-track-id="product"]', {
+	idResolver: element => element.getAttribute('data-product-id'),
+	positionResolver: element => positionResolver('[data-track-id="product"]', element),
+	priceResolver: element => extractPrice(element.querySelector('[data-track-id="priceContainer"]')?.textContent),
+	metadataResolver: element => void 0, // metadata can be anything
+	trail
+});
+
+const redirectImpressionCollector = new ImpressionCollector('[data-track-id="product"]',
+	element => element.getAttribute('data-product-id'),
+	element => positionResolver('[data-track-id="product"]', element));
+
+redirectProductClickCollector.setContext(context);
+redirectImpressionCollector.setContext(context);
+
+collectorModule.add(new RedirectCollector(firedSearchCallback, isSearchPage, {
+	resultCountResolver: searchResultCountResolver,
+	collectors: [redirectProductClickCollector, redirectImpressionCollector],
+	nestedRedirects: {
+		depth: 2,
+		subSelectors: ['[data-track-id="redirectSubSelector"]']
+	}
+}, ListenerType.Sentinel, context));
 collectorModule.add(
 	new BasketClickCollector('[data-track-id="addToCartPDP"]',
 		element => element.getAttribute('data-product-id'),

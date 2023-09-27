@@ -43,8 +43,12 @@ document.addEventListener("DOMContentLoaded", () => {
 		event.preventDefault();
 
 		const query = document.querySelector("input").value;
-		if (query)
+		if (query === "redirect" || query === '"redirect"') {
+			redirect(`/redirect-landing-page.html?query=${query}`);
+
+		} else if (query) {
 			redirect(`/product-listing.html?query=${query}`);
+		}
 	});
 	document.querySelector('[data-track-id="searchButton"]').addEventListener("click", event => {
 		const query = document.querySelector("input").value;
