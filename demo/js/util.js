@@ -43,8 +43,12 @@ document.addEventListener("DOMContentLoaded", () => {
 		event.preventDefault();
 
 		const query = document.querySelector("input").value;
-		if (query)
+		if (query === "redirect" || query === '"redirect"') {
+			redirect(`/redirect-landing-page.html?query=${query}`);
+
+		} else if (query) {
 			redirect(`/product-listing.html?query=${query}`);
+		}
 	});
 	document.querySelector('[data-track-id="searchButton"]').addEventListener("click", event => {
 		const query = document.querySelector("input").value;
@@ -67,7 +71,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	Array.from(document.querySelectorAll("main.products a")).forEach(anchor => {
 		anchor.addEventListener("click", (e) => {
 			e.preventDefault();
-			redirect(`/product-detail.html?id=${e.currentTarget.getAttribute("data-product-id")}`)
+			redirect(`/product-detail.html?id=${e.currentTarget.parentElement.getAttribute("data-product-id")}`)
 		});
 	});
 
@@ -85,10 +89,14 @@ document.addEventListener("DOMContentLoaded", () => {
 	/**
 	 * AddToBasket Click
 	 */
-	Array.from(document.querySelectorAll("main.pdp button")).forEach(anchor => {
+	Array.from(document.querySelectorAll("main.pdp button, main.products button")).forEach(anchor => {
 		anchor.addEventListener("click", (e) => {
 			e.preventDefault();
-			basket.add(e.currentTarget.getAttribute("data-product-id"));
+			if (e.currentTarget.hasAttribute("data-product-id")) {
+				basket.add(e.currentTarget.getAttribute("data-product-id"));
+			} else {
+				basket.add(e.currentTarget.parentElement.getAttribute("data-product-id"));
+			}
 			redirect(`/basket.html`)
 		});
 	});
