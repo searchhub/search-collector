@@ -1,6 +1,6 @@
 {
   "name": "search-collector",
-  "version": "1.0.0-alpha-25",
+  "version": "1.0.0-alpha-26",
   "description": "Search Collector - Search metrics collection SDK",
   "keywords": [],
   "scripts": {
