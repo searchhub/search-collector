@@ -82,6 +82,12 @@ export class RedirectCollector extends AbstractCollector {
 	private isTriggerInstalled = false;
 
 	/**
+	 * Used to skip the referer test for single page applications.
+	 * @private
+	 */
+	private initialHistoryLength = window.history.length;
+
+	/**
 	 * Construct redirect collector
 	 *
 	 * @constructor
@@ -204,7 +210,7 @@ export class RedirectCollector extends AbstractCollector {
 			getSessionStorage().removeItem(RedirectCollector.LAST_SEARCH_STORAGE_KEY);
 
 			// If we have not landed on the expected search page, it must have been a redirect
-			if (shouldTrackRedirect(document.referrer) && !this.resolve(this.expectedPageResolver, log)) {
+			if (shouldTrackRedirect(document.referrer, this.initialHistoryLength) && !this.resolve(this.expectedPageResolver, log)) {
 				const query = this.queryResolver(lastSearch).toString()
 				writer.write({
 					type: "redirect",
@@ -310,12 +316,16 @@ export class RedirectCollector extends AbstractCollector {
 	}
 
 	private attachCollectors(writer, log, query) {
+		const instance = this;
 		// attach all collectors which are responsible to gather kpi's after the redirect
 		this.collectors.forEach(collector => {
 			try {
 				collector.attach({
 					write(data) {
-						writer.write({...data, query: data.query || query});
+						const pathInfo = instance.redirectTrail.fetch(instance.getPathname());
+						if (pathInfo) { // check if this url path is marked as a redirect page to prevent wrongly tracked events
+							writer.write({...data, query: data.query || query});
+						}
 					}
 				}, log)
 			} catch (e) {
@@ -327,12 +337,13 @@ export class RedirectCollector extends AbstractCollector {
 }
 
 
-function shouldTrackRedirect(referer: string) {
+function shouldTrackRedirect(referer: string, initialHistoryLength: number) {
 	if (referer) {
 		try {
 			const refUrl = new URL(referer);
 			const currentUrl = new URL(window.location.href);
-			if (currentUrl.origin && refUrl.origin)
+			// compare the history length, if it does not equal we are on a an SPA and cant compare the referer
+			if (initialHistoryLength === history.length && currentUrl.origin && refUrl.origin)
 				return refUrl.origin === currentUrl.origin;
 		} catch (e) {
 			console.error(e);
