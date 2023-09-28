@@ -31,8 +31,9 @@ export const cookieResolver = (name: string = ""): string => getCookie(name);
  * set its own cookie.
  *
  * @param name the name of the session cookie
+ * @param ttlMinutes ttl of the cookie in minutes
  */
-export const cookieSessionResolver = (name = "SearchCollectorSession"): string => setCookie(name, cookieResolver(name) || generateId(), MINUTES_TWO_DAYS);
+export const cookieSessionResolver = (name = "SearchCollectorSession", ttlMinutes = MINUTES_TWO_DAYS): string => setCookie(name, cookieResolver(name) || generateId(), ttlMinutes);
 
 /**
  * Find the position of a DOM element relative to other DOM elements of the same type.
