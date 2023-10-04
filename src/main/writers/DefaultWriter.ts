@@ -33,23 +33,36 @@ export type DefaultWriterResolverOptions = {
 export class DefaultWriter implements Writer {
 
 	private readonly writer: Writer;
+	private readonly options: DefaultWriterOptions;
 
 	constructor(options: DefaultWriterOptions) {
-		const {endpoint, sqs} = options;
+		const {
+			endpoint,
+			sqs,
+			debug,
+			trail,
+			resolver,
+			channel,
+			recordReferrer,
+			recordUrl,
+			recordLanguage
+		} = options;
+
+		this.options = options;
 
 		// Writer pipeline, add/remove pieces according to use case
 		// This writer pipeline will send Base64 encoded array of json events
 		let writer: Writer = isSQS(endpoint, sqs) ? new SQSEventWriter(endpoint) : new RestEventWriter(endpoint);
 		writer = new Base64EncodeWriter(writer);
-		writer = new BufferingWriter(writer, "buffer:" + options.endpoint);
-		writer = new DebugWriter(writer, options.debug);
-		writer = new QueryWriter(writer, options.resolver.queryResolver);
-		writer = new TrailWriter(writer, options.trail || new Trail(options.resolver.queryResolver, options.resolver.sessionResolver), options.resolver.queryResolver);
-		writer = new JSONEnvelopeWriter(writer, options.resolver.sessionResolver, options.channel);
+		writer = new BufferingWriter(writer, "buffer:" + endpoint);
+		writer = new DebugWriter(writer, debug);
+		writer = new QueryWriter(writer, resolver.queryResolver);
+		writer = new TrailWriter(writer, trail || new Trail(resolver.queryResolver, resolver.sessionResolver), resolver.queryResolver);
+		writer = new JSONEnvelopeWriter(writer, resolver.sessionResolver, channel);
 		writer = new BrowserTrackingWriter(writer, {
-			recordReferrer: options.recordReferrer,
-			recordUrl: options.recordUrl,
-			recordLanguage: options.recordLanguage
+			recordReferrer,
+			recordUrl,
+			recordLanguage
 		});
 
 		this.writer = writer;
@@ -58,6 +71,15 @@ export class DefaultWriter implements Writer {
 	write(data) {
 		this.writer.write(data);
 	}
+
+	getOptions(): DefaultWriterOptions {
+		return {...this.options};
+	}
+
+	clone(): DefaultWriter {
+		return new DefaultWriter(this.getOptions());
+	}
+
 }
 
 function isSQS(endpoint: string, forceSQS: boolean) {
