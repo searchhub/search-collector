@@ -46,4 +46,16 @@ export class SQSErrorTransport implements LoggerTransport {
 			...dataArgs
 		})
 	};
+
+	info(msg: string, ...dataArgs) {
+		// nop
+	}
+
+	debug(msg: string, ...dataArgs) {
+		// nop
+	}
+
+	warn(msg: string, ...dataArgs) {
+		// nop
+	}
 }
