@@ -33,7 +33,7 @@ export class Sentinel {
 
 			// add animationstart event listener
 			//@ts-ignore
-			doc.addEventListener('animationstart', function (ev, callbacks, l, i) {
+			doc.addEventListener('animationstart', (ev, callbacks, l, i) => {
 				callbacks = animationCallbacks[ev.animationName];
 
 				// exit if callbacks haven't been registered
@@ -56,7 +56,7 @@ export class Sentinel {
 
 		// listify argument and add css rules/ cache callbacks
 		(isArray(cssSelectors) ? cssSelectors : [cssSelectors])
-			.map(function (selector, animId, isCustomName) {
+			.map((selector, animId, isCustomName) => {
 				animId = selectorToAnimationMap[selector];
 
 				if (!animId) {
@@ -69,18 +69,15 @@ export class Sentinel {
 							Math.random().toString(16).slice(2);
 
 					// add keyframe rule
-					cssRules[styleSheet.insertRule(
-						'@keyframes ' + animId +
-						'{from{transform:none;}to{transform:none;}}',
+					cssRules[this.insertRule(styleSheet,
+						'@keyframes ' + animId + '{from{transform:none;}to{transform:none;}}',
 						cssRules.length)]
 						._id = selector;
 
 					// add selector animation rule
 					if (!isCustomName) {
-						cssRules[styleSheet.insertRule(
-							selector + '{animation-duration:0.0001s;animation-name:' +
-							animId + ';}',
-							cssRules.length)]
+						cssRules[this.insertRule(styleSheet, selector + '{animation-duration:0.0001s;animation-name:' +
+							animId + ';}', cssRules.length)]
 							._id = selector;
 					}
 
@@ -92,6 +89,27 @@ export class Sentinel {
 				(animationCallbacks[animId] = animationCallbacks[animId] || [])
 					.push(callback);
 			});
+	}
+
+	/**
+	 * For unknown reasons CSSStyleSheet: insertRule() does not return an index on some environments..
+	 * This method ensures that an index will be returned.
+	 * @param styleSheet
+	 * @param name
+	 * @param index
+	 * @private
+	 */
+	private insertRule(styleSheet:CSSStyleSheet, name:string, index?:number) {
+		const prevLength = styleSheet.cssRules.length;
+		const i = styleSheet.insertRule(name, index);
+		if (isNaN(i)) {
+			if (!isNaN(index) && index < prevLength){
+				return index;
+			}
+
+			return  Math.max(styleSheet.cssRules.length-1, 0);
+		}
+		return i;
 	}
 
 	/**
