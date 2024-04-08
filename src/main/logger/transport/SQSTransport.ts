@@ -9,7 +9,7 @@ export class SQSTransport extends SQSErrorTransport {
 		this.send({
 			type: "debug",
 			msg,
-			...dataArgs
+			arguments: dataArgs
 		})
 	};
 
@@ -17,7 +17,7 @@ export class SQSTransport extends SQSErrorTransport {
 		this.send({
 			type: "info",
 			msg,
-			...dataArgs
+			arguments: dataArgs
 		})
 	};
 
@@ -25,7 +25,7 @@ export class SQSTransport extends SQSErrorTransport {
 		this.send({
 			type: "warning",
 			msg,
-			...dataArgs
+			arguments: dataArgs
 		})
 	};
 }

@@ -43,7 +43,10 @@ export class SQSErrorTransport implements LoggerTransport {
 			channel: this.channel,
 			session: this.sessionResolver(),
 			timestamp: new Date().getTime(),
-			...dataArgs
+			arguments: dataArgs,
+			url: window.location.href,
+			referrer: document.referrer,
+			lang: navigator.language
 		})
 	};
 
