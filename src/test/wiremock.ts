@@ -151,6 +151,10 @@ export class StubAsserter {
 		return true;
 	}
 
+	getPort() {
+		return this.serverPort;
+	}
+
 	private checkDisposed() {
 		if (this.disposed === true)
 			throw Error("This asserter is already disposed");
