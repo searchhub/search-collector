@@ -12,21 +12,21 @@ export class CheckoutClickCollector extends AbstractCollector {
 	private readonly contentSelector: string;
 	private readonly idResolver: StringResolver;
 	private readonly priceResolver: NumberResolver;
-	private readonly amountResolver: NumberResolver;
+	private readonly quantityResolver: NumberResolver;
 	private readonly listenerType: ListenerType;
 
 	constructor(clickSelector: string,
 							contentSelector: string,
 							idResolver: StringResolver,
 							priceResolver: NumberResolver,
-							amountResolver: NumberResolver,
+							quantityResolver: NumberResolver,
 							listenerType = ListenerType.Sentinel) {
 		super("checkout");
 		this.clickSelector = clickSelector
 		this.contentSelector = contentSelector;
 		this.idResolver = idResolver;
 		this.priceResolver = priceResolver;
-		this.amountResolver = amountResolver;
+		this.quantityResolver = quantityResolver;
 		this.listenerType = listenerType;
 	}
 
@@ -49,7 +49,7 @@ export class CheckoutClickCollector extends AbstractCollector {
 					const data: any = {
 						id,
 						price: this.resolve(this.priceResolver, log, element, event),
-						amount: this.resolve(this.amountResolver, log, element, event)
+						quantity: this.resolve(this.quantityResolver, log, element, event)
 					};
 
 					// We write each item separately - they may be coming from different queries
