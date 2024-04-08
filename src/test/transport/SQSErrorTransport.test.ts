@@ -1,6 +1,7 @@
 import {createMockServer} from "../wiremock";
 import {Page} from "puppeteer";
 import {wait} from "../util";
+import {base64Encode} from "../../main/utils/Util";
 
 declare var page: Page;
 
@@ -32,13 +33,25 @@ describe('Test the SQSErrorTransport', () => {
 		await page.goto(getHost() + "/SQSErrorTransport.page.html", {waitUntil: 'networkidle0'});
 		await wait(1200); // wait more than a second for the buffering writer
 
-		await asserter.verifyCallCount(1)
-			.verifyQueryParams(params => {
-				expect(params["MessageBody"].values.length).toBe(1);
-				// timestamp is shimmed in browser to always be 555, this way we can just assert the encoded string
-				expect(params["MessageBody"].values[0]).toBe("JTVCJTdCJTIydHlwZSUyMiUzQSUyMmVycm9yJTIyJTJDJTIybXNnJTIyJTNBJTIyc29tZSUyMGVycm9yJTIwbWVzc2FnZSUyMiUyQyUyMmNoYW5uZWwlMjIlM0ElMjJkZWZhdWx0LXdyaXRlci1jaGFubmVsJTIyJTJDJTIyc2Vzc2lvbiUyMiUzQSUyMm15LXNlc3Npb24lMjIlMkMlMjJ0aW1lc3RhbXAlMjIlM0E1NTUlMkMlMjJhcmd1bWVudHMlMjIlM0ElNUIlNUQlMkMlMjJ1cmwlMjIlM0ElMjJodHRwJTNBJTJGJTJGbG9jYWxob3N0JTNBNTE3MTklMkZTUVNFcnJvclRyYW5zcG9ydC5wYWdlLmh0bWwlMjIlMkMlMjJyZWZlcnJlciUyMiUzQSUyMiUyMiUyQyUyMmxhbmclMjIlM0ElMjJlbi1VUyUyMiU3RCU1RA==");
-			})
-			.verify();
-	})
+        const data = {
+            type: "error",
+            msg: "some error message",
+            channel: "default-writer-channel",
+            session: "my-session",
+            timestamp: 555,
+            arguments: [],
+            url: "http://localhost:{port}/SQSErrorTransport.page.html".replace("{port}", String(asserter.getPort())),
+            referrer: "",
+            lang: "en-US"
+        };
+
+        await asserter.verifyCallCount(1)
+            .verifyQueryParams(params => {
+                expect(params["MessageBody"].values.length).toBe(1);
+                // timestamp is shimmed in browser to always be 555, this way we can just assert the encoded string
+                expect(params["MessageBody"].values[0]).toBe(base64Encode(encodeURIComponent(`[${JSON.stringify(data)}]`)));
+            })
+            .verify();
+    })
 
 });
