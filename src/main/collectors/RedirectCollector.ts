@@ -246,7 +246,7 @@ export class RedirectCollector extends AbstractCollector {
 		 */
 		const pathInfo = this.redirectTrail.fetch(this.getPathname());
 		if (pathInfo && this.isCollectorsAttached !== true) {
-			this.attachCollectors(writer, log, pathInfo.query);
+			this.attachCollectors(writer, log);
 			this.isCollectorsAttached = true;
 
 			// register trail on the current pathname because the ProductClick collector doesn't know about the maxPathSegments property
@@ -315,7 +315,7 @@ export class RedirectCollector extends AbstractCollector {
 		return pathname;
 	}
 
-	private attachCollectors(writer, log, query) {
+	private attachCollectors(writer, log) {
 		const instance = this;
 		// attach all collectors which are responsible to gather kpi's after the redirect
 		this.collectors.forEach(collector => {
@@ -324,7 +324,7 @@ export class RedirectCollector extends AbstractCollector {
 					write(data) {
 						const pathInfo = instance.redirectTrail.fetch(instance.getPathname());
 						if (pathInfo) { // check if this url path is marked as a redirect page to prevent wrongly tracked events
-							writer.write({...data, query: data.query || query});
+							writer.write({...data, query: data.query || pathInfo.query});
 						}
 					}
 				}, log)
