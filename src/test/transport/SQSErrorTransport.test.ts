@@ -7,31 +7,31 @@ declare var page: Page;
 
 describe('Test the SQSErrorTransport', () => {
 
-	const {
-		startMockServer,
-		shutdownMockServer,
-		verifyNoUnmatchedRequests,
-		createStubAsserter,
-		getHost
-	} = createMockServer();
+    const {
+        startMockServer,
+        shutdownMockServer,
+        verifyNoUnmatchedRequests,
+        createStubAsserter,
+        getHost
+    } = createMockServer();
 
-	beforeAll(async () => {
-		await startMockServer();
-	})
+    beforeAll(async () => {
+        await startMockServer();
+    })
 
-	afterAll(async () => {
-		await shutdownMockServer();
-	})
+    afterAll(async () => {
+        await shutdownMockServer();
+    })
 
-	afterEach(async () => {
-		await verifyNoUnmatchedRequests();
-	})
+    afterEach(async () => {
+        await verifyNoUnmatchedRequests();
+    })
 
-	test('SQSErrortTransport', async () => {
-		const asserter = await createStubAsserter("SQSErrortTransport.json");
+    test('SQSErrortTransport', async () => {
+        const asserter = await createStubAsserter("SQSErrortTransport.json");
 
-		await page.goto(getHost() + "/SQSErrorTransport.page.html", {waitUntil: 'networkidle0'});
-		await wait(1200); // wait more than a second for the buffering writer
+        await page.goto(getHost() + "/SQSErrorTransport.page.html", {waitUntil: 'networkidle0'});
+        await wait(1200); // wait more than a second for the buffering writer
 
         const data = {
             type: "error",
@@ -42,7 +42,8 @@ describe('Test the SQSErrorTransport', () => {
             arguments: [],
             url: "http://localhost:{port}/SQSErrorTransport.page.html".replace("{port}", String(asserter.getPort())),
             referrer: "",
-            lang: "en-US"
+            lang: "en-US",
+            agent: "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/100.0.4889.0 Safari/537.36"
         };
 
         await asserter.verifyCallCount(1)
