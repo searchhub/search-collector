@@ -46,7 +46,8 @@ export class SQSErrorTransport implements LoggerTransport {
 			arguments: dataArgs,
 			url: window.location.href,
 			referrer: document.referrer,
-			lang: navigator.language
+			lang: navigator.language,
+			agent: navigator.userAgent
 		})
 	};
 
