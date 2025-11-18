@@ -14,14 +14,15 @@ jobs:
           echo "Ref ${{ github.ref }}"
           echo "Ref ${{ github }}"
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           ref: ${{ github.ref }}
       - name: npm setup
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v4
         with:
-          node-version: '12.x'
+          node-version: '20.x'
           registry-url: 'https://registry.npmjs.org'
+          cache: 'npm'
       - name: npm install
         run: |
           npm ci --slient
