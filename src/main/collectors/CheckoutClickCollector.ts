@@ -1,7 +1,7 @@
 import {AbstractCollector} from "./AbstractCollector";
-import {Sentinel} from "../utils/Sentinel";
 import {ListenerType} from "../utils/ListenerType";
 import {NumberResolver, StringResolver} from "../resolvers/Resolver";
+import {createSentinel} from "../utils/SentinelFactory";
 
 /**
  * Triggered by a clickSelector, the collector will fire the contentSelector to select elements to collect
@@ -64,23 +64,11 @@ export class CheckoutClickCollector extends AbstractCollector {
 		}
 
 
-		// The Sentiel library uses animationstart event listeners which may interfere with
-		// animations attached on elemenets. The in-library provided workaround mechanism does not work
-		// 100%, thus we provide the listenerType choice below. The tradeoffs
-		// "dom" - no animation interference, only onclick attached, but does not handle elements inserted in the DOM later
-		// "sentinel (default)" - works on elements inserted in the DOM anytime, but interferes with CSS animations on these elements
-		if (this.listenerType === ListenerType.Dom) {
-			const nodeList = doc.querySelectorAll(this.clickSelector);
-			nodeList.forEach((el: HTMLElement) => el.addEventListener("click", this.logWrapHandler(handler, log), {
-				passive: true,
-				capture: true
-			}));
-		} else {
-			const sentinel = new Sentinel(this.getDocument());
-			sentinel.on(this.clickSelector, el => el.addEventListener("click", this.logWrapHandler(handler, log), {
-				passive: true,
-				capture: true
-			}));
-		}
+		// Use factory to create the appropriate sentinel implementation
+		const sentinel = createSentinel(this.listenerType, this.getDocument());
+		sentinel.on(this.clickSelector, el => el.addEventListener("click", this.logWrapHandler(handler, log), {
+			passive: true,
+			capture: true
+		}));
 	}
 }

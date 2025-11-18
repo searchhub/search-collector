@@ -1,6 +1,6 @@
 import {WriterResolver} from "../resolvers/Resolver";
 import {ListenerType} from "../utils/ListenerType";
-import {Sentinel} from "../utils/Sentinel";
+import {createSentinel} from "../utils/SentinelFactory";
 import {WriterResolverCollector} from "./WriterResolverCollector";
 
 /**
@@ -29,18 +29,10 @@ export class ClickWriterResolverCollector extends WriterResolverCollector {
 			super.attach(writer, log);
 		}
 
-		if (this.listenerType === ListenerType.Dom) {
-			const nodeList = this.getDocument().querySelectorAll(this.selectorExpression);
-			nodeList.forEach(el => el.addEventListener("click", ev => this.logWrapHandler(handler, log, el, ev)(), {
-				passive: true,
-				capture: true
-			}));
-		} else {
-			const sentinel = new Sentinel(this.getDocument());
-			sentinel.on(this.selectorExpression, el => el.addEventListener("click", ev => this.logWrapHandler(handler, log, el, ev)(), {
-				passive: true,
-				capture: true
-			}));
-		}
+		const sentinel = createSentinel(this.listenerType, this.getDocument());
+		sentinel.on(this.selectorExpression, el => el.addEventListener("click", ev => this.logWrapHandler(handler, log, el, ev)(), {
+			passive: true,
+			capture: true
+		}));
 	}
 }
