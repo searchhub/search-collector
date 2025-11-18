@@ -1,3 +1,5 @@
+import {ISentinel} from "./ISentinel";
+
 /**
  * Cloned from https://github.com/muicss/sentineljs until a patched version
  * supporing iframes gets available
@@ -10,7 +12,24 @@ var isArray = Array.isArray,
 	styleSheet,
 	cssRules;
 
-export class Sentinel {
+/**
+ * Clear document state for testing purposes
+ * Note: The legacy Sentinel implementation uses global state, not per-document state
+ * This function resets the global state
+ */
+export function clearDocumentState(doc: Document): void {
+	// Legacy Sentinel uses global state, so we reset it regardless of document
+	selectorToAnimationMap = {};
+	animationCallbacks = {};
+	if (styleEl && styleEl.parentNode) {
+		styleEl.parentNode.removeChild(styleEl);
+	}
+	styleEl = undefined;
+	styleSheet = undefined;
+	cssRules = undefined;
+}
+
+export class Sentinel implements ISentinel {
 
 	document: Document;
 
@@ -117,7 +136,7 @@ export class Sentinel {
 	 * @param {array} cssSelectors - List of CSS selector strings
 	 * @param {Function} callback - The callback function (optional)
 	 */
-	off(cssSelectors, callback) {
+	off(cssSelectors, callback?) {
 		// listify argument and iterate through rules
 		(isArray(cssSelectors) ? cssSelectors : [cssSelectors])
 			//@ts-ignore
