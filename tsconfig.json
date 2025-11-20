@@ -7,12 +7,19 @@
     "moduleResolution": "node",
     "esModuleInterop": true,
     "declaration": true,
-    "allowJs": true
+    "declarationMap": true,
+    "sourceMap": true,
+    "allowJs": true,
+    "strict": false,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true
   },
   "include": [
     "src/main"
   ],
   "exclude": [
-    "dist"
+    "dist",
+    "node_modules",
+    "src/test"
   ]
 }

@@ -2,13 +2,26 @@
   "name": "search-collector",
   "version": "1.0.0-alpha-32",
   "description": "Search Collector - Search metrics collection SDK",
+  "type": "module",
   "keywords": [],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.commonjs.bundle.js"
+    }
+  },
+  "main": "./dist/index.commonjs.bundle.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "unpkg": "./dist/index.window.bundle.js",
+  "jsdelivr": "./dist/index.window.bundle.js",
+  "sideEffects": false,
   "scripts": {
     "dev": "tsc --watch --outDir ./dist --declarationDir ./dist",
     "dev-bundles": "webpack --mode development --watch",
     "build": "npm run build-ts && npm run build-bundles",
     "build-ts": "tsc",
-    "prepare-publish": "cp -r dist/* .",
     "build-bundles": "webpack --mode production",
     "test": "npm run build-bundles && npm run copy-dist && jest --config ./jest.unit.config.js && jest --runInBand --forceExit",
     "copy-dist": "rm -rf ./src/test/mock/__files/dist/ && cp -r ./dist/ ./src/test/mock/__files/",
@@ -36,7 +49,6 @@
     "wiremock": "^2.32.0"
   },
   "license": "MIT",
-  "types": "src/index.d.ts",
   "author": "CXP Commerce Experts GmbH",
   "homepage": "https://github.com/searchhub/search-collector",
   "repository": {
